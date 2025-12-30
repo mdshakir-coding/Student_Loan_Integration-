@@ -220,43 +220,29 @@ function buildHubSpotAffiliatePayload(data = {}) {
   const properties = cleanProps({
     first_name: data.first_name,
     last_name: data.last_name,
-    // affiliate_status: affiliateStatusMap[data.affiliate_status] || data.affiliate_status,
-    // industry: industryMap[data.industry] || data.industry,
-    // lead_source: leadSourceMap[data.lead_source] || data.lead_source,
-    // profession: professionMap[data.profession] || data.profession,
+   
+    
     receives_texts:
-      data.receives_texts === true || data.receives_texts === "true" ? "true" : "false",
-      vip_affiliate:
-        data.vip_affiliate === true || data.vip_affiliate === "true" ? "true" : "false",
-        primary_phone: data.primary_phone,
-        firm_name: data.firm_name,
-        primary_state: data.primary_state,
-        primary_zip_code: data.primary_zip_code,
-        email__business_type: data.email__business_type || data.email__personal_type,
-        // lead_owner: data.lead_owner,
-        has_referrals_in_mind_asa: data.has_referrals_in_mind_asa === "true" ? "true" : "false",
-        
-
-
-
-
+    data.receives_texts === true || data.receives_texts === "true" ? "true" : "false",
+    vip_affiliate:
+    data.vip_affiliate === true || data.vip_affiliate === "true" ? "true" : "false",    
+    primary_phone: data.primary_phone,
+    firm_name: data.firm_name,
+    primary_state: data.primary_state,
+    primary_zip_code: data.primary_zip_code,
+    email__business_type: data.email__business_type || data.email__personal_type,
+    has_referrals_in_mind_asa: data.has_referrals_in_mind_asa === "true" ? "true" : "false",
+    
+    
+    
+    // Error fields 
+    // affiliate_status: data.affiliate_status,
+    // industry: data.industry,
+    // lead_source:  data.lead_source,
+    // profession: data.profession,
     
 
-
-    // Uncomment if these properties exist in your HubSpot schema
-
-    // Dropdown fields - use mapped string values or fallback to data if already string
-
-    // Boolean flags as strings "true" / "false"
-
-    // Uncomment if property exists
-
-    // Owner ID - ensure it's valid HubSpot owner ID or remove
-
-    // Remove if this property does not exist in your schema
-    // affiliate_referral: "true",
-
-    // website: data.lead_description__specia0, // Remove if 'website' doesn't exist
+  
   });
 
   if (!Object.keys(properties).length) {

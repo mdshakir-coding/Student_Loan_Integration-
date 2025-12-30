@@ -19,8 +19,8 @@ const PORT = process.env.PORT || 3400;
 
 app.listen(PORT, () => {
 
-    // syncInquirer();
-    syncAffiliate();
+    syncInquirer();
+    // syncAffiliate();
     // syncActivity();
     // syncInvoices();
     // syncClients();

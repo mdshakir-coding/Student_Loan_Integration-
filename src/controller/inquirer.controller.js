@@ -30,53 +30,121 @@ function loadProgress() {
 
 // function call logic here
 
-async function syncInquirer() {
-  try {
-    const records = await fetchInquirerRecords(); // call the function
-    console.log("inquirerRecords", records.length);
+// async function syncInquirer() {
+//   try {
+//     const records = await fetchInquirerRecords(); // call the function
+//     console.log("inquirerRecords", records.length);
 
     
 
 
 
+//     let startIndex = loadProgress();
+
+//     for (let i = startIndex; i < records.length; i++) {
+
+      
+//       try {
+        
+//         const record = records[i];
+        
+//         let inquirerId = null;
+
+
+//        const Payloads = buildHubSpotInquirerPayload(record); // call the function 
+
+//         console.log (" Records", record);
+//         console.log("Payloads", Payloads);
+//         return; // todo remove after testing
+//         // await createInquirerInHubSpot(Payloads);
+
+
+
+
+
+
+
+//         // Save progress after successful processing
+//         // saveProgress(i + 1);
+//       } catch (error) {
+//         console.error(error);
+//         // saveProgress(i);
+//         // break; // todo remove after testing
+//       }
+//     }
+//     console.log ("👨‍🎓 All Inquirer Processed");
+//   } catch (error) {
+//     console.error("Error Fecting Inquirer Records", error);
+//     return;
+//   }
+// }
+
+// new Code
+
+async function syncInquirer() {
+  try {
+    const records = await fetchInquirerRecords(); // fetch all inquirer records
+    console.log("Inquirer Records:", records.length);
+
     let startIndex = loadProgress();
 
     for (let i = startIndex; i < records.length; i++) {
-
-      
       try {
-        
         const record = records[i];
-        
-        let inquirerId = null;
 
+        // Build HubSpot payload
+        const payload = buildHubSpotInquirerPayload(record);
 
-       const Payloads = buildHubSpotInquirerPayload(record); // call the function 
+        console.log("Record:", record);
+        console.log("Payload:", payload);
 
-        console.log (" Records", record);
-        console.log("Payloads", Payloads);
-        return; // todo remove after testing
-        // await createInquirerInHubSpot(Payloads);
+        // 🔍 Search existing inquirer (example: by email or name)
+        const searchResults = await searchInquirerInHubSpot(
+          record.first_name,
+          record.last_name
+          // OR record.email
+        );
 
+        if (searchResults && searchResults.length > 0) {
+          // Inquirer exists → update
+          const existingInquirerId = searchResults[0].id;
+          console.log(
+            `Inquirer exists with id ${existingInquirerId}, updating...`
+          );
 
+          const updated = await updateInquirerInHubSpot(
+            existingInquirerId,
+            payload
+          );
+          console.log("✅ Inquirer updated:", updated.id);
+        } else {
+          // Inquirer does not exist → create
+          const created = await createInquirerInHubSpot(payload);
+          console.log("✅ Inquirer created:", created.id);
+        }
 
-
-
-
-
-        // Save progress after successful processing
+        // Save progress after success
         // saveProgress(i + 1);
+
+        break; // ❗ remove after testing
       } catch (error) {
-        console.error(error);
+        console.error("Error processing record index", i, error);
+
+        // Save progress to resume later
         // saveProgress(i);
-        // break; // todo remove after testing
+
+        break; // ❗ remove after testing
       }
     }
-    console.log ("👨‍🎓 All Inquirer Processed");
+
+    console.log("👨‍🎓 All Inquirers Processed");
   } catch (error) {
-    console.error("Error Fecting Inquirer Records", error);
+    console.error("Error fetching inquirer records", error);
     return;
   }
 }
+
+
+
 
 export { syncInquirer };
