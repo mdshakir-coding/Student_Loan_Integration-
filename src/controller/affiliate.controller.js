@@ -86,7 +86,7 @@ async function syncAffiliate() {
 
     for (let i = startIndex; i < records.length; i++) {
       try {
-        const record = records[i];
+        const record = records[i]; 
 
         // Build payload
         const Payloads = buildHubSpotAffiliatePayload(record);
