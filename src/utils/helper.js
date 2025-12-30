@@ -117,70 +117,146 @@ function buildHubSpotInquirerPayload(data = {}) {
 
 // Create Affiliate Payload
 
-function buildHubSpotAffiliatePayload(data = {}) {
-  if (!data) {
-    throw new Error("HubSpot payload is empty");
-  }
-  const properties = cleanProps({
-    //Dummy Payload
-    first_name: `Dummy_${Date.now()}`,
-    last_name: "Contact",
-
-    /* =========================
-       STANDARD HUBSPOT FIELDS
-    ========================= */
+// function buildHubSpotAffiliatePayload(data = {}) {
+//   if (!data ||!data.first_name ) {
+//     console.warn("No data provided for Affiliate payload");
+//     return{};
+//   }
   
-    // firstname: data.first_name,
-    // lastname: data.last_name,
+//   const properties = cleanProps({
+//     //Dummy Payload
+//     first_name: data.first_name,
+//     last_name: data.last_name,
 
-    // phone: data.primary_phone,
-    // email: data.email__business_type || data.email__personal_type,
+//     /* =========================
+//        STANDARD HUBSPOT FIELDS
+//     ========================= */
 
-    // company: data.firm_name,
-    // state: data.primary_state,
-    // zip: data.primary_zip_code,
+//     // phone: data.primary_phone,
+//     // email: data.email__business_type || data.email__personal_type,
 
-    // /* =========================
-    //    AFFILIATE IDENTIFICATION
-    // ========================= */
+//     // company: data.firm_name,
+//     // state: data.primary_state,
+//     // zip: data.primary_zip_code,
+
+//     // /* =========================
+//     //    AFFILIATE IDENTIFICATION
+//     // ========================= */
+//     // affiliate_referral: "true",
+//     // affiliate_status: data.affiliate_status,
+//     // vip_affiliate:
+//     //   data.vip_affiliate === "true" || data.vip_affiliate === true
+//     //     ? "true"
+//     //     : "false",
+
+//     // /* =========================
+//     //    BUSINESS / SOURCE INFO
+//     // ========================= */
+//     // industry: data.industry,
+//     // lead_source: data.lead_source,
+//     // profession: data.profession,
+//     // website: data.lead_description__specia0,
+
+//     // /* =========================
+//     //    COMMUNICATION FLAGS
+//     // ========================= */
+//     // receives_texts:
+//     //   data.receives_texts === "true" || data.receives_texts === true
+//     //     ? "true"
+//     //     : "false",
+
+//     // has_referrals_in_mind:
+//     //   data.has_referrals_in_mind_asa === "true" ? "true" : "false",
+
+//     // /* =========================
+//     //    OWNERSHIP
+//     // ========================= */
+//     // hubspot_owner_id: data.lead_owner,
+
+//     /* =========================
+//        OPTIONAL BACKUP (DEBUG)
+//     ========================= */
+//     // affiliate_raw_payload: JSON.stringify({
+//     //     collection_id: data.collection_id,
+//     //     created_date: data.created_date
+//     //   })
+//   });
+
+//   if (!Object.keys(properties).length) {
+//     throw new Error("Affiliate payload is empty");
+//   }
+
+//   return { properties };
+// }
+
+// New code for Affiliate Payload
+
+function buildHubSpotAffiliatePayload(data = {}) {
+  if (!data || !data.first_name) {
+    console.warn("No data provided for Affiliate payload");
+    return {};
+  }
+
+  // Map numeric or code values to allowed HubSpot dropdown string options
+  // **You must fill these mappings with your real allowed option strings**
+
+  // const professionMap = {
+  //   "14384": "Chiropractor",
+    // Add all other mappings here
+  // };
+
+  
+
+  // const leadSourceMap = {
+  //   "14750": "Affiliate Referral",
+  //   // Add all other mappings here
+  // };
+
+  // const affiliateStatusMap = {
+  //   "14283": "New",
+  //   // Add all other mappings here
+  // };
+
+  const properties = cleanProps({
+    first_name: data.first_name,
+    last_name: data.last_name,
+    // affiliate_status: affiliateStatusMap[data.affiliate_status] || data.affiliate_status,
+    // industry: industryMap[data.industry] || data.industry,
+    // lead_source: leadSourceMap[data.lead_source] || data.lead_source,
+    // profession: professionMap[data.profession] || data.profession,
+    receives_texts:
+      data.receives_texts === true || data.receives_texts === "true" ? "true" : "false",
+      vip_affiliate:
+        data.vip_affiliate === true || data.vip_affiliate === "true" ? "true" : "false",
+        primary_phone: data.primary_phone,
+        firm_name: data.firm_name,
+        primary_state: data.primary_state,
+        primary_zip_code: data.primary_zip_code,
+        email__business_type: data.email__business_type || data.email__personal_type,
+        // lead_owner: data.lead_owner,
+        has_referrals_in_mind_asa: data.has_referrals_in_mind_asa === "true" ? "true" : "false",
+        
+
+
+
+
+    
+
+
+    // Uncomment if these properties exist in your HubSpot schema
+
+    // Dropdown fields - use mapped string values or fallback to data if already string
+
+    // Boolean flags as strings "true" / "false"
+
+    // Uncomment if property exists
+
+    // Owner ID - ensure it's valid HubSpot owner ID or remove
+
+    // Remove if this property does not exist in your schema
     // affiliate_referral: "true",
-    // affiliate_status: data.affiliate_status,
-    // vip_affiliate:
-    //   data.vip_affiliate === "true" || data.vip_affiliate === true
-    //     ? "true"
-    //     : "false",
 
-    // /* =========================
-    //    BUSINESS / SOURCE INFO
-    // ========================= */
-    // industry: data.industry,
-    // lead_source: data.lead_source,
-    // profession: data.profession,
-    // website: data.lead_description__specia0,
-
-    // /* =========================
-    //    COMMUNICATION FLAGS
-    // ========================= */
-    // receives_texts:
-    //   data.receives_texts === "true" || data.receives_texts === true
-    //     ? "true"
-    //     : "false",
-
-    // has_referrals_in_mind:
-    //   data.has_referrals_in_mind_asa === "true" ? "true" : "false",
-
-    // /* =========================
-    //    OWNERSHIP
-    // ========================= */
-    // hubspot_owner_id: data.lead_owner,
-
-    /* =========================
-       OPTIONAL BACKUP (DEBUG)
-    ========================= */
-    // affiliate_raw_payload: JSON.stringify({
-    //     collection_id: data.collection_id,
-    //     created_date: data.created_date
-    //   })
+    // website: data.lead_description__specia0, // Remove if 'website' doesn't exist
   });
 
   if (!Object.keys(properties).length) {
@@ -189,6 +265,8 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
   return { properties };
 }
+
+
 
 // Create Activity Payload
 

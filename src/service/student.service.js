@@ -101,45 +101,77 @@ async function updateAffiliateInHubSpot(affiliateId, payload) {
 // Create a search function for Affiliate in hubspot
 
 
+// async function searchAffiliateByInHubspot(firstName) {
+//   const url = "https://api.hubapi.com/crm/v3/objects/2-171942530/search";
+
+//   const payload = {
+//     filterGroups: [
+//       {
+//         filters: [
+//           {
+//             propertyName: "firstname",
+//             operator: "EQ",
+//             value: firstName,
+//           },
+//         ],
+//       },
+//     ],
+//     properties: ["firstname", "lastname", "phone"], // fields to return
+//     limit: 10,
+//     after: 0,
+//   };
+
+//   try {
+//     const response = await axios.post(url, payload, {
+//       headers: {
+//         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     console.log("✅ Search results:", response.data.results);
+//     return response.data.results;
+//   } catch (error) {
+//     console.error(
+//       "❌ Error searching affiliates by first name:",
+//       error.response?.data || error.message
+//     );
+//     return {};
+//   }
+// }
+
+// new code for search Affiliate
 async function searchAffiliateByInHubspot(firstName) {
-  const url = "https://api.hubapi.com/crm/v3/objects/2-171942530/search";
+  if (!firstName) return [];
 
   const payload = {
     filterGroups: [
       {
         filters: [
           {
-            propertyName: "firstname",
+            propertyName: "first_name", // EXACT internal name
             operator: "EQ",
-            value: firstName,
+            value: String(firstName),
           },
         ],
       },
     ],
-    properties: ["firstname", "lastname", "phone"], // fields to return
-    limit: 10,
-    after: 0,
+    limit: 1,
   };
 
-  try {
-    const response = await axios.post(url, payload, {
+  const response = await axios.post(
+    "https://api.hubapi.com/crm/v3/objects/2-171942530/search",
+    payload,
+    {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
       },
-    });
+    }
+  );
 
-    console.log("✅ Search results:", response.data.results);
-    return response.data.results;
-  } catch (error) {
-    console.error(
-      "❌ Error searching affiliates by first name:",
-      error.response?.data || error.message
-    );
-    return {};
-  }
+  return response.data.results || [];
 }
-
 
 
 
@@ -177,7 +209,8 @@ async function createActivityInHubSpot(data) {
   }
 }
 
-// Create a Insert Function
+
+
 
 
 
@@ -186,4 +219,5 @@ async function createActivityInHubSpot(data) {
 
 
 export {createInquirerInHubSpot,createAffiliateInHubSpot,
-  createActivityInHubSpot,updateAffiliateInHubSpot,searchAffiliateByInHubspot};
+  createActivityInHubSpot,updateAffiliateInHubSpot,
+  searchAffiliateByInHubspot,};
