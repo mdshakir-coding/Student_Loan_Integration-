@@ -356,54 +356,56 @@ function buildHubSpotClientPayload(data = {}) {
   console.log("Raw input data:", data);
 
   const properties = {
-    firstname: data.first_name || "",
-    lastname: data.last_name || "",
-    email: data.email_1 || data.email_address || "",
-    phone: data.primary_phone || data.primary_phone0 || "",
+    email_1: data.email_1,
 
-    company: data.employerbusiness_name || "",
+    // firstname: data.first_name || "",
+    // lastname: data.last_name || "",
+    // email: data.email_1 || data.email_address || "",
+    // phone: data.primary_phone || data.primary_phone0 || "",
 
-    address: data.address_1 || "",
-    city: data.city || "",
-    state: data.state || "",
-    zip: data.zip || "",
+    // company: data.employerbusiness_name || "",
 
-    createdate: toTimestamp(data.created_date || data.client_created_date),
-    lastmodifieddate: toTimestamp(data.modified_date),
+    // address: data.address_1 || "",
+    // city: data.city || "",
+    // state: data.state || "",
+    // zip: data.zip || "",
 
-    hubspot_owner_id: data.created_by || data.lead_owner || null,
+    // createdate: toTimestamp(data.created_date || data.client_created_date),
+    // lastmodifieddate: toTimestamp(data.modified_date),
 
-    referral: data.referral || null,
-    msa_sent_date: toTimestamp(data.msa_sent_),
-    msa_received_date: toTimestamp(data.msa_received0),
-    recert_date: toTimestamp(data.recert_date),
-    client_action_taken: toTimestamp(data.client_action_taken),
+    // hubspot_owner_id: data.created_by || data.lead_owner || null,
 
-    date_marked_inactive: toTimestamp(data.date_marked_inactive),
+    // referral: data.referral || null,
+    // msa_sent_date: toTimestamp(data.msa_sent_),
+    // msa_received_date: toTimestamp(data.msa_received0),
+    // recert_date: toTimestamp(data.recert_date),
+    // client_action_taken: toTimestamp(data.client_action_taken),
 
-    spouse_full_name: data.spouse__full_name_ || "",
-    spouse_email: data.spouse__email || "",
+    // date_marked_inactive: toTimestamp(data.date_marked_inactive),
 
-    status: data.status0 || data.status1 || "",
+    // spouse_full_name: data.spouse__full_name_ || "",
+    // spouse_email: data.spouse__email || "",
 
-    days_to_recert: data.days_to_recert || null,
-    aar_fee: data.aar_fee ? Number(data.aar_fee) : null,
+    // status: data.status0 || data.status1 || "",
+
+    // days_to_recert: data.days_to_recert || null,
+    // aar_fee: data.aar_fee ? Number(data.aar_fee) : null,
 
     // add more fields you want here...
 
-    created_via: "api",
+    // created_via: "api",
   };
 
-  // Remove properties only if strictly empty string, null, or undefined
-  Object.keys(properties).forEach((key) => {
-    if (
-      properties[key] === "" ||
-      properties[key] === null ||
-      properties[key] === undefined
-    ) {
-      delete properties[key];
-    }
-  });
+  // // Remove properties only if strictly empty string, null, or undefined
+  // Object.keys(properties).forEach((key) => {
+  //   if (
+  //     properties[key] === "" ||
+  //     properties[key] === null ||
+  //     properties[key] === undefined
+  //   ) {
+  //     delete properties[key];
+  //   }
+  // });
 
   console.log("Final payload properties:", properties);
 

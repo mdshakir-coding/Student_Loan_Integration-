@@ -73,7 +73,7 @@ async function createAffiliateInHubSpot(payload) {
   }
 }
 
-//Create a update Function for Affiliate in hubspot
+// Update Function for Affiliate in hubspot
 
 
 async function updateAffiliateInHubSpot(affiliateId, payload) {
@@ -85,7 +85,7 @@ async function updateAffiliateInHubSpot(affiliateId, payload) {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
       },
-    });
+    }); 
 
     console.log("✅ Affiliate updated:", response.data);
     return response.data;
@@ -209,8 +209,105 @@ async function createActivityInHubSpot(data) {
   }
 }
 
+// Search Client function
+async function searchClientInHubSpot(email) {
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "email",
+            operator: "EQ",
+            value: email
+          }
+        ]
+      }
+    ],
+    limit: 1
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const result = response.data.results || [];
+    console.log("✅ Client search result:", result.length);
+    return result;
+  } catch (error) {
+    console.error(
+      "❌ Error searching client:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
 
 
+// Create function in client
+async function createClientInHubSpot(data) {
+  const payload = {
+    properties: {
+      firstname: data.firstName,
+      lastname: data.lastName,
+      email: data.email,
+      phone: data.phone
+    }
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/contacts",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    console.log("✅ Client created:", response.data.id);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating client:",
+      error.response?.data || error.message
+    );
+    return {};
+  }
+}
+
+// Update client function 
+
+async function updateClientInHubSpot(clientId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/2-171843307/${clientId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Client updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating client:",
+      error.response?.data || error.message
+    );
+    throw error; // IMPORTANT
+  }
+}
 
 
 
@@ -220,4 +317,5 @@ async function createActivityInHubSpot(data) {
 
 export {createInquirerInHubSpot,createAffiliateInHubSpot,
   createActivityInHubSpot,updateAffiliateInHubSpot,
-  searchAffiliateByInHubspot,};
+  searchAffiliateByInHubspot,searchClientInHubSpot,
+  createClientInHubSpot,updateClientInHubSpot};
