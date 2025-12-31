@@ -114,7 +114,7 @@ async function syncAffiliate() {
           const created = await createAffiliateInHubSpot(Payloads);
           console.log("✅ Affiliate created:", created.id);
         }
-        break;
+        break; // todo remove after testing
 
         // Save progress after successful processing
         // saveProgress(i + 1);
