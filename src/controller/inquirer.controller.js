@@ -1,6 +1,8 @@
 import { fetchInquirerRecords } from "../service/student.loan.Hubspot.js";
-import {createInquirerInHubSpot} from "../service/student.service.js";
 import {buildHubSpotInquirerPayload} from "../utils/helper.js";
+import{searchInquirerInHubSpot} from "../service/student.service.js";
+import{updateInquirerInHubSpot} from "../service/student.service.js";
+import{createInquirerInHubSpot} from "../service/student.service.js";
 
 
 import { fileURLToPath } from "url";
@@ -100,9 +102,8 @@ async function syncInquirer() {
 
         // 🔍 Search existing inquirer (example: by email or name)
         const searchResults = await searchInquirerInHubSpot(
-          record.first_name,
-          record.last_name
-          // OR record.email
+          record.email,
+    
         );
 
         if (searchResults && searchResults.length > 0) {

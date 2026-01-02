@@ -4,51 +4,6 @@ dotenv.config();
 
 
 
-
-// Create Inquirer in Hubspot
-async function createInquirerInHubSpot(payload) {
-  const url = "https://api.hubapi.com/crm/v3/objects/contacts";
-
-  // const properties = cleanProps({
-  //   firstname: "Stephanie",
-  //   lastname: "Hart",
-  //   phone: "2398236353",
-  //   email: "stefb98@hotmail.com",
-
-  //   // Custom properties (must exist in HubSpot)
-  //   inquirer_status: "10265",
-  //   inquirer_current_monthly_payment: "596.08",
-  //   inquirer_last_year_agi: "3966.00",
-
-  //   lead_owner: "14",
-  //   marketing_source: "0",
-  //   convert_to_client: "true"
-  // });
-
-  // const payload = {
-  //   properties
-  // };
-
-  try {
-    const response = await axios.post(url, payload, {
-      headers: {
-        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
-        "Content-Type": "application/json"
-      }
-    });
-
-    console.log("✅ HubSpot Inquirer (Contact) created:", response.data.id);
-    return response.data;
-  } catch (error) {
-    console.error(
-      "❌ Error creating HubSpot inquirer:",
-      error.response?.data || error.message
-    );
-    return {};
-  }
-}
-
-
 // Create Affiliate in Hubspot
 
 async function createAffiliateInHubSpot(payload) {
@@ -210,15 +165,16 @@ async function createActivityInHubSpot(data) {
 }
 
 // Search Client function
-async function searchClientInHubSpot(email) {
+async function searchClientInHubSpot(Email) {
+  if (!Email) return [];
   const payload = {
     filterGroups: [
       {
         filters: [
           {
-            propertyName: "email",
+            propertyName: "email_1",
             operator: "EQ",
-            value: email
+            value: Email,
           }
         ]
       }
@@ -228,11 +184,11 @@ async function searchClientInHubSpot(email) {
 
   try {
     const response = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/contacts/search",
+      "https://api.hubapi.com/crm/v3/objects/2-171843307/search",
       payload,
       {
         headers: {
-          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
           "Content-Type": "application/json"
         }
       }
@@ -249,41 +205,82 @@ async function searchClientInHubSpot(email) {
     return [];
   }
 }
+// new code 
+
+// async function searchClientInHubSpot(email) {
+//   if (!email) return [];
+
+//   const searchableFields = ["email_1", "email", "hs_email"];
+
+//   for (const field of searchableFields) {
+//     try {
+//       const payload = {
+//         filterGroups: [
+//           {
+//             filters: [
+//               {
+//                 propertyName: field,
+//                 operator: "EQ",
+//                 value: String(email).trim(),
+//               },
+//             ],
+//           },
+//         ],
+//         limit: 1,
+//       };
+
+//       const response = await axios.post(
+//         "https://api.hubapi.com/crm/v3/objects/2-171945144/search",
+//         payload,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       if (response.data.results?.length) {
+//         console.log(`✅ Client found using ${field}`);
+//         return response.data.results;
+//       }
+//     } catch {
+//       // silently try next property
+//     }
+//   }
+
+//   console.warn("⚠️ Client not found using any email field");
+//   return [];
+// }
+
 
 
 // Create function in client
-async function createClientInHubSpot(data) {
-  const payload = {
-    properties: {
-      firstname: data.firstName,
-      lastname: data.lastName,
-      email: data.email,
-      phone: data.phone
-    }
-  };
+
+async function createClientInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/2-171843307";
+  
 
   try {
-    const response = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/contacts",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-    console.log("✅ Client created:", response.data.id);
+    console.log("✅ Client created:", response.data);
     return response.data;
   } catch (error) {
     console.error(
       "❌ Error creating client:",
-      error.response?.data || error.message
+      error.response?.data || error
     );
+    // throw error; // IMPORTANT (same as affiliate)
     return {};
   }
 }
+
 
 // Update client function 
 
@@ -309,13 +306,183 @@ async function updateClientInHubSpot(clientId, payload) {
   }
 }
 
+// Search function for Invoice in hubspot
+async function searchInvoiceInHubSpot(contractorInvoice) {
+  if (!contractorInvoice) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "contractor_invoice", // EXACT internal name
+            operator: "EQ",
+            value: String(contractorInvoice),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  const response = await axios.post(
+    "https://api.hubapi.com/crm/v3/objects/2-171945144/search",
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data.results || [];
+}
+
+// Create Invoice function in hubspot
+async function createInvoiceInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/2-171945144";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Invoice created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating invoice:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+
+// Update Invoice function in hubspot
+async function updateInvoiceInHubSpot(invoiceId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/2-171945144/${invoiceId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Invoice updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating invoice:",
+      error.response?.data || error.message
+    );
+    throw error; // IMPORTANT
+  }
+}
+
+// search Inquirer function in hubspot
+async function searchInquirerInHubSpot(email) {
+  if (!email) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "email", // EXACT internal name
+            operator: "EQ",
+            value: email,
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/0-1/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const result = response.data.results || [];
+    console.log("✅ Inquirer search result:", result.length);
+    return result;
+  } catch (error) {
+    console.error(
+      "❌ Error searching inquirer:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
+// Update Inquirer in Hubspot
+async function updateInquirerInHubSpot(inquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-1/${inquirerId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Inquirer updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating inquirer:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+// create Inquirer in Hubspot
+async function createInquirerInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/0-1";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Inquirer created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating inquirer:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
 
 
 
 
-
-
-export {createInquirerInHubSpot,createAffiliateInHubSpot,
+export {createAffiliateInHubSpot,
   createActivityInHubSpot,updateAffiliateInHubSpot,
   searchAffiliateByInHubspot,searchClientInHubSpot,
-  createClientInHubSpot,updateClientInHubSpot};
+  createClientInHubSpot,updateClientInHubSpot,searchInvoiceInHubSpot,createInvoiceInHubSpot,
+  updateInvoiceInHubSpot,
+  updateInquirerInHubSpot,searchInquirerInHubSpot,createInquirerInHubSpot};

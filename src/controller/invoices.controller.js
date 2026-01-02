@@ -1,5 +1,8 @@
 import { fetchInvoicesRecords } from "../service/student.loan.Hubspot.js";
 import {buildHubSpotInvoicePayload} from "../utils/helper.js";
+import{searchInvoiceInHubSpot} from "../service/student.service.js";
+import{createInvoiceInHubSpot} from "../service/student.service.js";
+import{updateInvoiceInHubSpot} from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -26,10 +29,49 @@ function loadProgress() {
   return 0;
 }
 
+// async function syncInvoices() {
+//   try {
+//     const records = await fetchInvoicesRecords();
+//     console.log("Invoices records", records.length);
+
+//     let startIndex = loadProgress();
+
+//     for (let i = startIndex; i < records.length; i++) {
+//       try {
+//         const record = records[i];
+
+//         let inquirerId = null;
+
+//         const Payloads = buildHubSpotInvoicePayload(record); // call the function
+
+//         console.log(" Records", record);
+//         console.log("Payloads", Payloads);
+//         return; // todo remove after testing
+//         // await createInquirerInHubSpot(Payloads);
+
+//         // Save progress after successful processing
+//         // saveProgress(i + 1);
+//       } catch (error) {
+//         console.error(error);
+//         // saveProgress(i);
+//         // break; // todo remove after testing
+//       }
+//     }
+//     console.log(" All Invoices Processed");
+//   } catch (error) {
+//     console.error("Error feching records", error);
+//     return;
+//   }
+// }
+
+
+// New code Client Invoices 
+
+
 async function syncInvoices() {
   try {
-    const records = await fetchInvoicesRecords();
-    console.log("Invoices records", records.length);
+    const records = await fetchInvoicesRecords(); // fetch all invoice records
+    console.log("Invoices Records:", records.length);
 
     let startIndex = loadProgress();
 
@@ -37,28 +79,53 @@ async function syncInvoices() {
       try {
         const record = records[i];
 
-        let inquirerId = null;
+        // Build HubSpot payload
+        const payload = buildHubSpotInvoicePayload(record);
 
-        const Payloads = buildHubSpotInvoicePayload(record); // call the function
+        console.log("Record:", record);
+        console.log("Payload:", payload);
 
-        console.log(" Records", record);
-        console.log("Payloads", Payloads);
-        return; // todo remove after testing
-        // await createInquirerInHubSpot(Payloads);
+        // 🔍 Search existing invoice using contractor_invoice
+        const searchResults = await searchInvoiceInHubSpot(
+          record.contractor_invoice
+        );
 
-        // Save progress after successful processing
+        if (searchResults && searchResults.length > 0) {
+          // Invoice exists → Update
+          const existingInvoiceId = searchResults[0].id;
+          console.log(
+            `Invoice exists with id ${existingInvoiceId}, updating...`
+          );
+
+          const updated = await updateInvoiceInHubSpot(
+            existingInvoiceId,
+            payload
+          );
+
+          console.log("✅ Invoice updated:", updated.id);
+        } else {
+          // Invoice does not exist → Create
+          const created = await createInvoiceInHubSpot(payload);
+          console.log("✅ Invoice created:", created.id);
+        }
+
+        break; // 🔥 remove after testing
+
         // saveProgress(i + 1);
+
       } catch (error) {
-        console.error(error);
+        console.error("Error processing invoice index", i, error);
+        break; // 🔥 remove after testing
         // saveProgress(i);
-        // break; // todo remove after testing
       }
     }
-    console.log(" All Invoices Processed");
+
+    console.log("🎄 All Invoices Processed");
   } catch (error) {
-    console.error("Error feching records", error);
+    console.error("Error fetching invoice records", error);
     return;
   }
 }
+
 
 export { syncInvoices };

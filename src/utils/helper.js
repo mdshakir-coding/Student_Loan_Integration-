@@ -127,7 +127,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
     inquirer_years_towards_fo: data.inquirer_years_towards_fo,
     already_enrolled_in_autop: data.already_enrolled_in_autop,
-    _of_subsidized_loans: data._of_subsidized_loans,
+    of_subsidized_loans: data.of_subsidized_loans, //Change _of to of
     inquirer_outstanding_prin: data.inquirer_outstanding_prin,
     inquirer_consolidation__0: data.inquirer_consolidation__0,
     inquirer_current_planidr: data.inquirer_current_planidr,
@@ -388,6 +388,8 @@ function buildHubSpotInvoicePayload(data = {}) {
     total_sale_amount: "0.00",
     first_name: "",
     last_name: "",
+
+    // Error fields for Invoices ----------------------------------------------------------------
     // "collection_id": "4",
     // "site_id": "1",
     // "fields_changed": "0,13792,0",/
@@ -421,6 +423,8 @@ function buildHubSpotInvoicePayload(data = {}) {
     // "aar_activity_commission": "13169",
     // "processing_activity": "13194",
     // "clients_tutor__only_sel0": "14"
+
+    //------------------------------------------------------------------------------------------
   });
 
   if (!Object.keys(properties).length) {
@@ -440,6 +444,7 @@ function buildHubSpotClientPayload(data = {}) {
   console.log("Raw input data:", data);
 
   const properties = cleanProps ({
+    
     collection_id: data.collection_id,
     site_id: data.site_id,
     fields_changed: data.fields_changed,

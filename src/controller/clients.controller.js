@@ -87,12 +87,17 @@ async function syncClients() {
         console.log("Record:", record);
         console.log("Payload:", Payloads);
 
+
+
         // 🔍 Search existing client (example: by email)
         const searchResults = await searchClientInHubSpot(
-          record.email
+          record.email_1
+          
         );
 
-        if (searchResults && searchResults.length > 0) {
+
+        if (searchResults && searchResults.length > 0)
+           {
           // Client exists → Update
           const existingClientId = searchResults[0].id;
           console.log(`Client exists with id ${existingClientId}, updating...`);
@@ -129,6 +134,10 @@ async function syncClients() {
     return;
   }
 }
+
+
+
+
 
 
 

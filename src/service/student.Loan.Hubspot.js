@@ -47,7 +47,7 @@ async function fetchInquirerRecords(perPage = 100) {
       console.log(`Fetched page ${page}, records: ${records.length}`);
 
       allRecords.push(...records);
-      // return allRecords; //todo remove after testing
+      return allRecords; //todo remove after testing
 
       // Stop if less than perPage records are returned => last page
       if (records.length < perPage) {
