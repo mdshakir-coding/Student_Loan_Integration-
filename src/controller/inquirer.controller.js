@@ -100,9 +100,9 @@ async function syncInquirer() {
         console.log("Record:", record);
         console.log("Payload:", payload);
 
-        // 🔍 Search existing inquirer (example: by email or name)
+        // 🔍 Search existing inquirer (example: by collection_id or name)
         const searchResults = await searchInquirerInHubSpot(
-          record.email,
+          record.collection_id
     
         );
 

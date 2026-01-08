@@ -94,9 +94,9 @@ async function syncAffiliate() {
         console.log("Record:", record);
         console.log("Payload:", Payloads);
 
-        // First, search existing affiliate by first and last name
+        // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
-          record.first_name,
+          record.collection_id,
           
         );
 

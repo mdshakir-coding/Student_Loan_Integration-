@@ -89,9 +89,9 @@ async function syncClients() {
 
 
 
-        // 🔍 Search existing client (example: by email)
+        // 🔍 Search existing client by collection_id
         const searchResults = await searchClientInHubSpot(
-          record.email_1
+          record.collection_id
           
         );
 

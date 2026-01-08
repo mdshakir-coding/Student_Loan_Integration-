@@ -85,9 +85,9 @@ async function syncInvoices() {
         console.log("Record:", record);
         console.log("Payload:", payload);
 
-        // 🔍 Search existing invoice using contractor_invoice
+        // 🔍 Search existing invoice using collection_id
         const searchResults = await searchInvoiceInHubSpot(
-          record.contractor_invoice
+          record.collection_id
         );
 
         if (searchResults && searchResults.length > 0) {

@@ -85,7 +85,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     // "date_became_client": "0000-00-00",
     // "contractor_referred_by": "0",
     // "inquirer_loan_servicer": "0",
-    // "inquirer_profession_if_o": "",
     // "podcast": "0",
     // "du_financial_planner": "0",
     // "affiliate_lead_owner": "0",
@@ -93,8 +92,14 @@ function buildHubSpotInquirerPayload(data = {}) {
     // "podcast": "0",
     // "du_financial_planner": "0",
     // "affiliate_lead_owner": "0",
+    // Missing object:-
     //------------------------------------------------------------------------------
-
+    
+    inquirer___last_year___agi: data.inquirer__last_year__ag,
+    eval___spouse_pay_frequency: data.eval__pay_frequency,
+    inquirer_profession_if_o: data.inquirer_profession_if_o,
+    
+    
     collection_id: data.collection_id,
     site_id: data.site_id,
     phone_2: data.phone_2,
@@ -124,22 +129,29 @@ function buildHubSpotInquirerPayload(data = {}) {
     spouse_fed_loans_payment: data.spouse_fed_loans_payment,
     orders: data.orders,
     inquirer_total_balance: data.inquirer_total_balance,
-    inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
-    inquirer_years_towards_fo: data.inquirer_years_towards_fo,
-    already_enrolled_in_autop: data.already_enrolled_in_autop,
-    of_subsidized_loans: data.of_subsidized_loans, //Change _of to of
-    inquirer_outstanding_prin: data.inquirer_outstanding_prin,
+
+    // Error Fields----------------------------------------------------------------------------
+    // inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
+    // inquirer_years_towards_fo: data.inquirer_years_towards_fo,
+    // already_enrolled_in_autop: data.already_enrolled_in_autop,
+    // inquirer_outstanding_prin: data.inquirer_outstanding_prin,
+    // counting_spouse_in_hh_siz: data.counting_spouse_in_hh_siz,
+    // add_other_dependents: data.add_other_dependents,
+    // add_child_dependents_in: data.add_child_dependents_in,
+    // spouse_annual_documented_: data.spouse_annual_documented_,
+    // total_streams_of_taxable_: data.total_streams_of_taxable_,
+    // sps__of_sub_loans: data.sps__of_sub_loans,
+    // sps_already_enrolled_in_: data.sps_already_enrolled_in_,
+    // notes_on_pricing_quoted_e: data.notes_on_pricing_quoted_e,
+   // ----------------------------------------------------------------------------------------
+   
+    of_subsidized_loans: data.of_subsidized_loans, 
     inquirer_consolidation__0: data.inquirer_consolidation__0,
     inquirer_current_planidr: data.inquirer_current_planidr,
     married: data.married,
     sps_total_balance: data.sps_total_balance,
-    counting_spouse_in_hh_siz: data.counting_spouse_in_hh_siz,
-    add_other_dependents: data.add_other_dependents,
-    add_child_dependents_in: data.add_child_dependents_in,
     household_size_notes: data.household_size_notes,
     annual_documented_income: data.annual_documented_income,
-    spouse_annual_documented_: data.spouse_annual_documented_,
-    total_streams_of_taxable_: data.total_streams_of_taxable_,
     adj_gross_amount_stream_: data.adj_gross_amount_stream_,
     pay_frequency_stream_1: data.pay_frequency_stream_1,
     adj_gross_amount_stream_0: data.adj_gross_amount_stream_0,
@@ -154,9 +166,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     loan_servicer_notes: data.loan_servicer_notes,
     sps_outstanding_principal: data.sps_outstanding_principal,
     sps_avg_interest_rate: data.sps_avg_interest_rate,
-    sps__of_sub_loans: data.sps__of_sub_loans,
     sps_years_towards_forgiv: data.sps_years_towards_forgiv,
-    sps_already_enrolled_in_: data.sps_already_enrolled_in_,
     sps_loan_types: data.sps_loan_types,
     sps_loan_servicers: data.sps_loan_servicers,
     inquirer_household_size_n: data.inquirer_household_size_n,
@@ -171,7 +181,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     linked_client: data.linked_client,
     copy_info: data.copy_info,
     calculator_results: data.calculator_results,
-    notes_on_pricing_quoted_e: data.notes_on_pricing_quoted_e,
     inquirer_calculator_repor: data.inquirer_calculator_repor,
     sps_calc_report_link: data.sps_calc_report_link,
     eval_notes: data.eval_notes,
@@ -237,6 +246,7 @@ function buildHubSpotInquirerPayload(data = {}) {
   return { properties };
 }
 
+
 //  code for Affiliate Payload
 
 function buildHubSpotAffiliatePayload(data = {}) {
@@ -246,6 +256,9 @@ function buildHubSpotAffiliatePayload(data = {}) {
   }
   const payload = {
     properties: {
+
+      // presenting_rep: data.presenting_rep,
+
       collection_id: data.collection_id,
       site_id: data.site_id,
       fields_changed: data.fields_changed,
@@ -264,8 +277,8 @@ function buildHubSpotAffiliatePayload(data = {}) {
       title: data.title,
       marital_status_s: data.marital_status_s,
       vip_affiliate: data.vip_affiliate,
-      of_registered_states: data. of_registered_states,
-      of_years_an_agent_new: data.of_years_an_agent_new,
+      of_registered_states: data. _of_registered_states,
+      of_years_an_agent_new: data._of_years_an_agent_new,
       of_years_an_agent_old: data. of_years_an_agent_old,
       email__personal_type: data.email__personal_type,
       linkedin: data.linkedin,
@@ -444,6 +457,15 @@ function buildHubSpotClientPayload(data = {}) {
   console.log("Raw input data:", data);
 
   const properties = cleanProps ({
+
+    servicer___username: data.servicer__username,
+    servicer___password: data.servicer__password,
+    client_avg__interest_rate: data.client_avg_interest_rate,
+    payment_problem_to_resolve: data.payment_problem_to_resolve,
+    collection_notes: data.collection_notes,
+    date_calculation_ran: data.date_calculation_ran,
+    // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
+    
     
     collection_id: data.collection_id,
     site_id: data.site_id,
@@ -540,7 +562,7 @@ function buildHubSpotClientPayload(data = {}) {
     email_1: data.email_1,
 
     // Error fields for Clients ---------------------------------------------------------------------------
-
+    //client_current_planidr_h: data.client_current_planidr_h,
     // "tutor_name": "33",
     // "processor_name": "55",
     // "primary_phone": "8013689828",
@@ -670,4 +692,6 @@ export {
   buildHubSpotActivityPayload,
   buildHubSpotInvoicePayload,
   buildHubSpotClientPayload,
+
+
 };
