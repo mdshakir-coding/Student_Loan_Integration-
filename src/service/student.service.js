@@ -236,7 +236,7 @@ async function searchInvoiceInHubSpot(collectionId) {
           {
             propertyName: "collection_id",
             operator: "EQ",
-            value: String(collectionId)
+            value: String(collectionId),
           }
         ]
       }
