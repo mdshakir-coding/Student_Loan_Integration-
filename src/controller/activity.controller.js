@@ -50,12 +50,14 @@ async function syncActivity() {
 
         let affiliateId = null;
 
-        const Payloads = buildHubSpotActivityPayload(record); // call the function 
+        const Payloads =  buildHubSpotActivityPayload(record); // call the function 
 
         console.log(" Records", record);
         console.log("Payloads", Payloads);
         return; // todo remove after testing
-        // await createInquirerInHubSpot(Payloads);
+        
+
+        
 
         // Save progress after successful processing
         // saveProgress(i + 1);

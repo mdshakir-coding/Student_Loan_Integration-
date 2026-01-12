@@ -101,26 +101,29 @@ async function syncInquirer() {
         console.log("Payload:", payload);
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
-        const searchResults = await searchInquirerInHubSpot(
+        let searchResults = null;
+         searchResults = await searchInquirerInHubSpot(
           record.collection_id
     
         );
 
         if (searchResults && searchResults.length > 0) {
           // Inquirer exists → update
-          const existingInquirerId = searchResults[0].id;
+          let existingInquirerId = null;
+           existingInquirerId = searchResults[0].id;
           console.log(
             `Inquirer exists with id ${existingInquirerId}, updating...`
           );
-
-          const updated = await updateInquirerInHubSpot(
+          let updated = null;
+           updated = await updateInquirerInHubSpot(
             existingInquirerId,
             payload
           );
           console.log("✅ Inquirer updated:", updated.id);
         } else {
           // Inquirer does not exist → create
-          const created = await createInquirerInHubSpot(payload);
+          let created = null;
+           created = await createInquirerInHubSpot(payload);
           console.log("✅ Inquirer created:", created.id);
         }
 
