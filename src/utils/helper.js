@@ -50,9 +50,223 @@ function cleanProps(obj) {
 }
 
 // Create Payload in Inquirer
+const loanStatusMapping = {
+  1: "Unknown",
+  2: "Current",
+  3: "Deferment or Forbearance",
+  4: "Default",
+  5: "Past Due",
+  6: "Garnishment",
+  7: "App in Process",
+};
+
+const enteredInfoMapping = {
+  1: "Yes",
+  2: "No",
+};
+const affiliateReferralMapping = {
+  1: "Yes",
+  2: "No",
+};
+
+const evalFederalMapping = {
+  1: "Less than $60k",
+  2: "$60k - $75k",
+  3: "$75k - $100k",
+  4: "$100k - $150k",
+  5: "$150k - $200k",
+  6: "$200k - $300k",
+  7: "$300k+",
+};
+
+const contractorReferredmapping = {
+  1: "Tony F.",
+};
+
+const duFinancialPlannerMapping = {
+  1: "Belle Ives (NM) - Tony",
+};
+
+const duSltOutereachMapping = {
+  1: "Not Listed yet",
+};
+const emloymenttypes = {
+  1: "Self Employed - Business Owner",
+  2: "Self Employed - No Entity Set Up Yet",
+  3: "W2 Employee",
+  4: "Multiple (Self Employed/W2)",
+  5: "Unemployed",
+  6: "Retired",
+  7: "Self Employed",
+  8: "W2",
+  9: "1099",
+  10: "	Multiple,",
+};
+const spounceHasMapping = {
+  1: "Yes",
+  2: "No",
+  3: "Unknown",
+};
+
+const evalTaxesmapping = {
+  1: "Jointly",
+  2: "Seperate",
+};
+
+const householdIncomeMapping = {
+  1: "HH1 - $22,590",
+  2: "HH2 - $30,660",
+  3: "HH3 - $38,730",
+  4: "HH4 - $46,800",
+  5: "HH5 - $54,870",
+  6: "HH6 - $62,940",
+  7: "HH7 - $71,010",
+  8: "HH8 - $79,080",
+  9: "HH9 - $87,150",
+  10: "HH10 - $95,220",
+  11: "HH11 - $103,290",
+  12: "HH12 - $111,360",
+  13: "HH13 - $119,430",
+  14: "HH14 - $127,500",
+  15: "HH15 - $135,570",
+  16: "HH16 - $add $8,070 each",
+};
+
+const inquirerCurrentMapping = {
+  1: "Unknown",
+  2: "Balance Based",
+  3: "Income Driven",
+  4: "Recent Grad(Not setup yet)",
+};
+const loanServicerMapping = {
+  1: "Nelnet",
+  2: "AidVantage",
+  3: "EdFinancial",
+  4: "Mohela",
+  5: "CRI (Central Research Incorporated)",
+  6: "Multiple Servicers",
+  7: "A.E.S",
+  8: "A.C.S",
+  9: "Navient (Inactive)",
+  10: "SLOAN",
+  11: "Cornerstone",
+  12: "Granite State (Inactive)",
+  13: "Aspire (Inactive)",
+  14: "UHEAA",
+  15: "Collections Agency",
+  16: "OSLA",
+  17: "Trellis (Higher Ed)",
+  18: "Fedloan",
+  19: "Great Lakes (Inactive)",
+};
+const loanMapping = {
+  1: "Unknown",
+  2: "Current",
+  3: "Deferment or Forbearance",
+  4: "Default",
+  5: "Past Due",
+  6: "Garnishment",
+  7: "App in Process",
+};
+
+const professionMapping = {
+  1: "Chiropractor",
+  2: "Unknown",
+  3: "Naturopath",
+  4: "Acupuncturist",
+  5: "Medical Practitioner",
+  6: "Dentist",
+  7: "Doctorate / PHD",
+  8: "Attorney",
+  9: "Finance",
+  10: "Veterinarian",
+  11: "Nurse",
+  12: "Psychologist",
+  13: "Therapist",
+  14: "Nutritionist",
+  15: "Teacher",
+  16: "Self Employed (Generic)",
+  17: "W-2 (Generic)",
+  18: "Sales",
+  19: "Optometrist",
+  20: "Pharmacist",
+  21: "Other",
+};
+const inquirerStatusMapping = {
+  1: "New",
+  2: "(DU) Hot Lead - Nurturing",
+  3: "$0 Payment Currently",
+  4: "Action Needed",
+  5: "Bad Lead",
+  6: "Became Client",
+  7: "Canceled by inquirer",
+  8: "DNC/DQ",
+  9: "Eval Call Set",
+  10: "Eval Reschedule - Pending",
+  11: "F&F Became Client",
+  12: "GF Became Client",
+  13: "HF PCS",
+  14: "MIA/Ghost",
+  15: "No Resp. 1st Att.",
+  16: "No Resp. 2nd Att.",
+  17: "No Resp. Final Att.",
+  18: "No Sale (tutor)",
+  19: "No Show (Planning Call)",
+  20: "Not Interested (eval)",
+  21: "Outstanding Invoice",
+  22: "Pending PC - Link Sent to book",
+  23: "Planning Call (not paid yet)",
+  24: "Planning Call Set",
+  25: "Promise to Schedule",
+  26: "Rehab Default",
+  27: "Req to stop Texting - Drip 2",
+  28: "Rescheduled Eval Call",
+  29: "Sent to Cohen - Eval",
+  30: "Setter Following Up - 1st Attempt",
+  31: "Setter Following Up - 2nd Attempt",
+  32: "Setter Following Up - Final",
+  33: "Setter Hot Lead - Nurturing",
+  34: "Student",
+  35: "To Be Deleted",
+  36: "TRAINING",
+  37: "Tutor AAR Follow up",
+  38: "Tutor Following Up",
+  39: "Unqualified Lead",
+};
 
 function buildHubSpotInquirerPayload(data = {}) {
+  // Map the numeric loan status to string if present
+  const Employment = data?.employment_type_s;
+  const duSlt = data?.du_slt_outreachaffiliate;
+  const Du = data?.du_financial_planner;
+  const Contractor = data?.contractor_referred_by;
+  const Eval = data?.eval__federal_loan_amoun;
+  const affiliate = data?.affiliate_referral;
+  const entered = data?.entered_info_for_nfm;
+  const status = data?.inquirer_loan_status;
+
   const properties = cleanProps({
+    // employment_type_s: emloymenttypes[Employment] || null, // todo not exist in hubspot
+    // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
+    spouse_has_loans_s: spounceHasMapping[data?.spouse_has_loans_s] || null,
+    inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
+    inquirer_profession: professionMapping[data?.inquirer_profession] || null,
+    inquirer_loan_servicer:
+      loanServicerMapping[data?.inquirer_loan_servicer] || null,
+    inquirer_current_repaymen:
+      inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
+    household_size__income_t0:
+      householdIncomeMapping[data?.household_size__income_t0] || null,
+    eval__taxes_jointlysepa:
+      evalTaxesmapping[data?.eval__taxes_jointlysepa] || null,
+    du_slt_outreachaffiliate: duSltOutereachMapping[duSlt] || null,
+    du_financial_planner: duFinancialPlannerMapping[Du] || null,
+    contractor_referred_by: contractorReferredmapping[Contractor] || null,
+    eval__federal_loan_amoun: evalFederalMapping[Eval] || null,
+    affiliate_referral: affiliateReferralMapping[affiliate] || null,
+    entered_info_for_nfm: enteredInfoMapping[entered] || null,
+    inquirer_loan_status: loanStatusMapping[status] || null,
+
     // Error fields----------------------------------------------------------------------
     // "fields_changed": "0,0",
     // "created_by": "14",
@@ -90,16 +304,26 @@ function buildHubSpotInquirerPayload(data = {}) {
     // "affiliate_lead_owner": "0",
     // "inquirer_profession_if_o": "",
     // "podcast": "0",
-    // "du_financial_planner": "0",
+
     // "affiliate_lead_owner": "0",
-    // Missing object:-
+    // inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
+    // inquirer_years_towards_fo: data.inquirer_years_towards_fo,
+    // already_enrolled_in_autop: data.already_enrolled_in_autop,
+    // inquirer_outstanding_prin: data.inquirer_outstanding_prin,
+    // counting_spouse_in_hh_siz: data.counting_spouse_in_hh_siz,
+    // add_other_dependents: data.add_other_dependents,
+    // add_child_dependents_in: data.add_child_dependents_in,
+    // spouse_annual_documented_: data.spouse_annual_documented_,
+    // total_streams_of_taxable_: data.total_streams_of_taxable_,
+    // sps__of_sub_loans: data.sps__of_sub_loans,
+    // sps_already_enrolled_in_: data.sps_already_enrolled_in_,
+    // notes_on_pricing_quoted_e: data.notes_on_pricing_quoted_e,
     //------------------------------------------------------------------------------
-    
+
     inquirer___last_year___agi: data.inquirer__last_year__ag,
     eval___spouse_pay_frequency: data.eval__pay_frequency,
     inquirer_profession_if_o: data.inquirer_profession_if_o,
-    
-    
+
     collection_id: data.collection_id,
     site_id: data.site_id,
     phone_2: data.phone_2,
@@ -123,29 +347,12 @@ function buildHubSpotInquirerPayload(data = {}) {
     loan_status_s: data.loan_status_s,
     fed_loan_payment_s: data.fed_loan_payment_s,
     type_of_repayment_s: data.type_of_repayment_s,
-    spouse_has_loans_s: data.spouse_has_loans_s,
     inquirer_middle_name: data.inquirer_middle_name,
     field_30_day_income_s: data.field_30_day_income_s,
     spouse_fed_loans_payment: data.spouse_fed_loans_payment,
     orders: data.orders,
     inquirer_total_balance: data.inquirer_total_balance,
-
-    // Error Fields----------------------------------------------------------------------------
-    // inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
-    // inquirer_years_towards_fo: data.inquirer_years_towards_fo,
-    // already_enrolled_in_autop: data.already_enrolled_in_autop,
-    // inquirer_outstanding_prin: data.inquirer_outstanding_prin,
-    // counting_spouse_in_hh_siz: data.counting_spouse_in_hh_siz,
-    // add_other_dependents: data.add_other_dependents,
-    // add_child_dependents_in: data.add_child_dependents_in,
-    // spouse_annual_documented_: data.spouse_annual_documented_,
-    // total_streams_of_taxable_: data.total_streams_of_taxable_,
-    // sps__of_sub_loans: data.sps__of_sub_loans,
-    // sps_already_enrolled_in_: data.sps_already_enrolled_in_,
-    // notes_on_pricing_quoted_e: data.notes_on_pricing_quoted_e,
-   // ----------------------------------------------------------------------------------------
-   
-    of_subsidized_loans: data.of_subsidized_loans, 
+    of_subsidized_loans: data.of_subsidized_loans,
     inquirer_consolidation__0: data.inquirer_consolidation__0,
     inquirer_current_planidr: data.inquirer_current_planidr,
     married: data.married,
@@ -186,15 +393,12 @@ function buildHubSpotInquirerPayload(data = {}) {
     eval_notes: data.eval_notes,
     spouse__last_year__agi: data.spouse__last_year__agi,
     eval__spouse_pay_frequen: data.eval__spouse_pay_frequen,
-    eval__taxes_jointlysepa: data.eval__taxes_jointlysepa,
     notes: data.notes,
     under_admin_review__t_k: data.under_admin_review__t_k,
-    affiliate_referral: data.affiliate_referral,
     affiliate_presenting_tuto: data.affiliate_presenting_tuto,
     spacer: data.spacer,
     date_of_tutor_fu: data.date_of_tutor_fu,
     date_eval_occured: data.date_eval_occured,
-    eval__federal_loan_amoun: data.eval__federal_loan_amoun,
     graduation_year: data.graduation_year,
     eval__current_income: data.eval__current_income,
     eval__spouse_current_inc: data.eval__spouse_current_inc,
@@ -224,7 +428,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     no_call_no_show_3: data.no_call_no_show_3,
     rescheduled_date: data.rescheduled_date,
     standby_marked_date: data.standby_marked_date,
-    entered_info_for_nfm: data.entered_info_for_nfm,
     est_tax_burden: data.est_tax_burden,
     created_date: data.created_date,
     lead_owner: data.lead_owner,
@@ -233,7 +436,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     last_name: data.last_name,
     primary_phone: data.primary_phone,
     email_1: data.email_1,
-    du_slt_outreachaffiliate: data.du_slt_outreachaffiliate,
     tutor_needs_attention: data.tutor_needs_attention,
     setter_needs_attention: data.setter_needs_attention,
     under_admin_review__s_k: data.under_admin_review__s_k,
@@ -246,7 +448,6 @@ function buildHubSpotInquirerPayload(data = {}) {
   return { properties };
 }
 
-
 //  code for Affiliate Payload
 
 function buildHubSpotAffiliatePayload(data = {}) {
@@ -256,8 +457,81 @@ function buildHubSpotAffiliatePayload(data = {}) {
   }
   const payload = {
     properties: {
-
       // presenting_rep: data.presenting_rep,
+      // old Mapping Fileds..
+
+      // collection_id: data.collection_id,
+      // site_id: data.site_id,
+      // fields_changed: data.fields_changed,
+      // date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
+      // created_by: data.created_by,
+      // employment_type_s: data.employment_type_s,
+      // field_30_day_income_s: data.field_30_day_income_s,
+      // tome_zone_intake: data.tome_zone_intake,
+      // lead_description__specia0: data.lead_description__specia0,
+      // date_of_last_contact: data.date_of_last_contact,
+      // bd_andor_ria_rep: data.bd_andor_ria_rep,
+      // date_of_birth__year: data.date_of_birth__year,
+      // receives_texts: data.receives_texts,
+      // name_stated_on_vm: data.name_stated_on_vm,
+      // date_of_fa_presentation: data.date_of_fa_presentation,
+      // title: data.title,
+      // marital_status_s: data.marital_status_s,
+      // vip_affiliate: data.vip_affiliate,
+      // of_registered_states: data._of_registered_states,
+      // of_years_an_agent_new: data._of_years_an_agent_new,
+      // of_years_an_agent_old: data.of_years_an_agent_old,
+      // email__personal_type: data.email__personal_type,
+      // linkedin: data.linkedin,
+      // has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
+      // date_of_first_client_refe: data.date_of_first_client_refe,
+      // affiliate_nurturing_call: data.affiliate_nurturing_call,
+      // revenue_share: data.revenue_share,
+      // fa_draw: data.fa_draw,
+      // field_1st: data.field_1st,
+      // field_2nd: data.field_2nd,
+      // field_3rd: data.field_3rd,
+      // primary_address_1: data.primary_address_1,
+      // modified_by: data.modified_by,
+      // modified_date: data.modified_date,
+      // phone_2: data.phone_2,
+      // email__business2_type: data.email__business2_type,
+      // time_zone0: data.time_zone0,
+      // spouse_has_loans_s: data.spouse_has_loans_s,
+      // primary_address_2: data.primary_address_2,
+      // primary_city: data.primary_city,
+      // no_sale_reason: data.no_sale_reason,
+      // type_of_repayment_s: data.type_of_repayment_s,
+      // fed_loan_payment_s: data.fed_loan_payment_s,
+      // loan_status_s: data.loan_status_s,
+      // actively_in_school_s: data.actively_in_school_s,
+      // fed_loan_amount_s: data.fed_loan_amount_s,
+      // click_on_convert_2: data.click_on_convert_2,
+      // click_on_convert_1: data.click_on_convert_1,
+      // primary_zip_code: data.primary_zip_code,
+      // first_name: data.first_name,
+      // last_name: data.last_name,
+      // primary_phone: data.primary_phone,
+      // email__business_type: data.email__business_type,
+      // firm_name: data.firm_name,
+      // primary_state: data.primary_state,
+
+      // Error fields----------------------------------------------------------------------
+      // "industry": "14738",
+      // "presenting_rep": "0",
+      // "comp_super_affiliate": "0",
+      // "conference": "0",
+      // "created_date": "2022-06-06 16:02:50",
+      // "time_zone": "0",
+      // "primary_phone_line_type": "14264",
+      // "phone_2_type": "14268",
+      // "profession": "14384",
+      // "lead_owner": "14",
+      // "affiliate_status": "14283",
+      // "lead_source": "14750",
+      //------------------------------------------------------------------------------------
+
+      // New Maaping Payload
 
       collection_id: data.collection_id,
       site_id: data.site_id,
@@ -277,9 +551,7 @@ function buildHubSpotAffiliatePayload(data = {}) {
       title: data.title,
       marital_status_s: data.marital_status_s,
       vip_affiliate: data.vip_affiliate,
-      of_registered_states: data. _of_registered_states,
-      of_years_an_agent_new: data._of_years_an_agent_new,
-      of_years_an_agent_old: data. of_years_an_agent_old,
+      _of_years_an_agent_new: data._of_years_an_agent_new,
       email__personal_type: data.email__personal_type,
       linkedin: data.linkedin,
       has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
@@ -295,7 +567,6 @@ function buildHubSpotAffiliatePayload(data = {}) {
       modified_date: data.modified_date,
       phone_2: data.phone_2,
       email__business2_type: data.email__business2_type,
-      time_zone0: data.time_zone0,
       spouse_has_loans_s: data.spouse_has_loans_s,
       primary_address_2: data.primary_address_2,
       primary_city: data.primary_city,
@@ -314,21 +585,21 @@ function buildHubSpotAffiliatePayload(data = {}) {
       email__business_type: data.email__business_type,
       firm_name: data.firm_name,
       primary_state: data.primary_state,
-
-      // Error fields----------------------------------------------------------------------
-      // "industry": "14738",
-      // "presenting_rep": "0",
-      // "comp_super_affiliate": "0",
-      // "conference": "0",
-      // "created_date": "2022-06-06 16:02:50",
-      // "time_zone": "0",
-      // "primary_phone_line_type": "14264",
-      // "phone_2_type": "14268",
-      // "profession": "14384",
-      // "lead_owner": "14",
-      // "affiliate_status": "14283",
-      // "lead_source": "14750",
-      //------------------------------------------------------------------------------------
+      // phone_2_type: data.phone_2_type,
+      // time_zone0: data.time_zone0,
+      // profession: data.profession,
+      // lead_owner: data.lead_owner,
+      // affiliate_status: data.affiliate_status,
+      // lead_source: data.lead_source,
+      // _of_years_an_agent_old: data._of_years_an_agent_old,
+      // _of_registered_states: data._of_registered_states,
+      // industry: data.industry,
+      // presenting_rep: data.presenting_rep,
+      // comp_super_affiliate: data.comp_super_affiliate,
+      // conference: data.conference,
+      // created_date: data.created_date,
+      // time_zone: data.time_zone,
+      // primary_phone_line_type: data.primary_phone_line_type,
     },
   };
 
@@ -456,112 +727,112 @@ function buildHubSpotClientPayload(data = {}) {
 
   console.log("Raw input data:", data);
 
-  const properties = cleanProps ({
+  const properties = cleanProps({
+    // Old Mapping Fields...
 
-    servicer___username: data.servicer__username,
-    servicer___password: data.servicer__password,
-    client_avg__interest_rate: data.client_avg_interest_rate,
-    payment_problem_to_resolve: data.payment_problem_to_resolve,
-    collection_notes: data.collection_notes,
-    date_calculation_ran: data.date_calculation_ran,
-    // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
-    
-    
-    collection_id: data.collection_id,
-    site_id: data.site_id,
-    fields_changed: data.fields_changed,
-    created_by: data.created_by,
-    modified_by: data.modified_by,
-    modified_date: data.modified_date,
-    lead_owner: data.lead_owner,
-    phone_2: data.phone_2,
-    email_2: data.email_2,
-    time_zone0: data.time_zone0,
-    address_1: data.address_1,
-    address_2: data.address_2,
-    city: data.city,
-    state: data.state,
-    zip: data.zip,
-    spouse__partner: data.spouse__partner,
-    referral: data.referral,
-    msa_sent_: data.msa_sent_,
-    msa_received0: data.msa_received0,
-    lpa_sent: data.lpa_sent,
-    lpa_received: data.lpa_received,
+    // servicer___username: data.servicer__username,
+    // servicer___password: data.servicer__password,
+    // client_avg__interest_rate: data.client_avg_interest_rate,
+    // payment_problem_to_resolve: data.payment_problem_to_resolve,
+    // collection_notes: data.collection_notes,
+    // date_calculation_ran: data.date_calculation_ran,
 
-    idr_app_submitted_date: data.idr_app_submitted_date,
-    days_since_app_sub: data.days_since_app_sub,
-    error_with_payments: data.error_with_payments,
-    date_of_birth: data.date_of_birth,
-    primary_phone0: data.primary_phone0,
-    primary_phone_type: data.primary_phone_type,
-    secondary_phone: data.secondary_phone,
-    secondary_phone_type: data.secondary_phone_type,
-    studentaidgov_user_not_0: data.studentaidgov_user_not_0,
-    studentaidgov_pass_not_0: data.studentaidgov_pass_not_0,
-    employerbusiness_name: data.employerbusiness_name,
-    employer_address: data.employer_address,
-    employers_city: data.employers_city,
-    employers_state: data.employers_state,
+    // collection_id: data.collection_id,
+    // site_id: data.site_id,
+    // fields_changed: data.fields_changed,
+    // created_by: data.created_by,
+    // modified_by: data.modified_by,
+    // modified_date: data.modified_date,
+    // lead_owner: data.lead_owner,
+    // phone_2: data.phone_2,
+    // email_2: data.email_2,
+    // address_1: data.address_1,
+    // address_2: data.address_2,
+    // city: data.city,
+    // state: data.state,
+    // zip: data.zip,
+    // spouse__partner: data.spouse__partner,
+    // referral: data.referral,
+    // msa_sent_: data.msa_sent_,
+    // msa_received0: data.msa_received0,
+    // lpa_sent: data.lpa_sent,
+    // lpa_received: data.lpa_received,
 
-    reference_1_name: data.reference_1_name,
-    reference_1_address: data.reference_1_address,
-    reference_1_city: data.reference_1_city,
-    reference_1_state: data.reference_1_state,
-    reference_1_zip_: data.reference_1_zip_,
-    reference_2_name: data.reference_2_name,
-    reference_2_address: data.reference_2_address,
-    reference_2_city: data.reference_2_city,
-    reference_2_state: data.reference_2_state,
-    reference_2_zip: data.reference_2_zip,
+    // idr_app_submitted_date: data.idr_app_submitted_date,
+    // days_since_app_sub: data.days_since_app_sub,
+    // error_with_payments: data.error_with_payments,
+    // date_of_birth: data.date_of_birth,
+    // primary_phone0: data.primary_phone0,
+    // primary_phone_type: data.primary_phone_type,
+    // secondary_phone: data.secondary_phone,
+    // secondary_phone_type: data.secondary_phone_type,
+    // studentaidgov_user_not_0: data.studentaidgov_user_not_0,
+    // studentaidgov_pass_not_0: data.studentaidgov_pass_not_0,
+    // employerbusiness_name: data.employerbusiness_name,
+    // employer_address: data.employer_address,
+    // employers_city: data.employers_city,
+    // employers_state: data.employers_state,
 
-    spouse__full_name_: data.spouse__full_name_,
-    spouse__date_of_birth: data.spouse__date_of_birth,
-    maidenformer_name: data.maidenformer_name,
-    spouse__ssn: data.spouse__ssn,
-    spouse__email: data.spouse__email,
-    spouse__phone: data.spouse__phone,
-    spouse__loan_amount: data.spouse__loan_amount,
+    // reference_1_name: data.reference_1_name,
+    // reference_1_address: data.reference_1_address,
+    // reference_1_city: data.reference_1_city,
+    // reference_1_state: data.reference_1_state,
+    // reference_1_zip_: data.reference_1_zip_,
+    // reference_2_name: data.reference_2_name,
+    // reference_2_address: data.reference_2_address,
+    // reference_2_city: data.reference_2_city,
+    // reference_2_state: data.reference_2_state,
+    // reference_2_zip: data.reference_2_zip,
 
-    employer_info_: data.employer_info_,
-    personal_reference: data.personal_reference,
-    spouse_info: data.spouse_info,
+    // spouse__full_name_: data.spouse__full_name_,
+    // spouse__date_of_birth: data.spouse__date_of_birth,
+    // maidenformer_name: data.maidenformer_name,
+    // spouse__ssn: data.spouse__ssn,
+    // spouse__email: data.spouse__email,
+    // spouse__phone: data.spouse__phone,
+    // spouse__loan_amount: data.spouse__loan_amount,
 
-    q26_spouse_income_changed0: data.q26_spouse_income_changed0,
-    desired_servicer_s: data.desired_servicer_s,
-    borrower_actual_agi_0: data.borrower_actual_agi_0,
-    state_s: data.state_s,
-    actual_combined_agi_s: data.actual_combined_agi_s,
-    spouse_actual_agi_s: data.spouse_actual_agi_s,
-    desired_repay_plan_s: data.desired_repay_plan_s,
-    q1_balance_based_type_s: data.q1_balance_based_type_s,
-    q1_and_q2_desired_repay_p0: data.q1_and_q2_desired_repay_p0,
-    q5_dependent_children_s: data.q5_dependent_children_s,
-    q6_other_dependents_s: data.q6_other_dependents_s,
-    q7_marital_status_s: data.q7_marital_status_s,
-    q10_employment_type_s: data.q10_employment_type_s,
-    q20_filed_taxes_last_2_yr0: data.q20_filed_taxes_last_2_yr0,
-    q23_separated_from_spouse0: data.q23_separated_from_spouse0,
-    q24_sp_income_access_s: data.q24_sp_income_access_s,
-    q8_filed_taxes_last_2_yrs: data.q8_filed_taxes_last_2_yrs,
-    filed_taxes_last_2_yrs0: data.filed_taxes_last_2_yrs0,
-    q25_spouse_filed_taxes_s: data.q25_spouse_filed_taxes_s,
-    q15_you_and_spouse_filed_0: data.q15_you_and_spouse_filed_0,
-    q21_income_change_since_l0: data.q21_income_change_since_l0,
-    q22_taxable_income_s: data.q22_taxable_income_s,
+    // employer_info_: data.employer_info_,
+    // personal_reference: data.personal_reference,
+    // spouse_info: data.spouse_info,
 
-    reference_1_phone: data.reference_1_phone,
-    reference_1_relationship: data.reference_1_relationship,
-    reference_2_phone: data.reference_2_phone,
-    reference_2_relationship: data.reference_2_relationship,
-    employers_zip: data.employers_zip,
-    roa_sent_to_servicer: data.roa_sent_to_servicer,
+    // q26_spouse_income_changed0: data.q26_spouse_income_changed0,
+    // desired_servicer_s: data.desired_servicer_s,
+    // borrower_actual_agi_0: data.borrower_actual_agi_0,
+    // state_s: data.state_s,
+    // actual_combined_agi_s: data.actual_combined_agi_s,
+    // spouse_actual_agi_s: data.spouse_actual_agi_s,
+    // desired_repay_plan_s: data.desired_repay_plan_s,
+    // q1_balance_based_type_s: data.q1_balance_based_type_s,
+    // q1_and_q2_desired_repay_p0: data.q1_and_q2_desired_repay_p0,
+    // q5_dependent_children_s: data.q5_dependent_children_s,
+    // q6_other_dependents_s: data.q6_other_dependents_s,
+    // q7_marital_status_s: data.q7_marital_status_s,
+    // q10_employment_type_s: data.q10_employment_type_s,
+    // q20_filed_taxes_last_2_yr0: data.q20_filed_taxes_last_2_yr0,
+    // q23_separated_from_spouse0: data.q23_separated_from_spouse0,
+    // q24_sp_income_access_s: data.q24_sp_income_access_s,
+    // q8_filed_taxes_last_2_yrs: data.q8_filed_taxes_last_2_yrs,
+    // filed_taxes_last_2_yrs0: data.filed_taxes_last_2_yrs0,
+    // q25_spouse_filed_taxes_s: data.q25_spouse_filed_taxes_s,
+    // q15_you_and_spouse_filed_0: data.q15_you_and_spouse_filed_0,
+    // q21_income_change_since_l0: data.q21_income_change_since_l0,
+    // q22_taxable_income_s: data.q22_taxable_income_s,
 
-    first_name: data.first_name,
-    last_name: data.last_name,
-    email_1: data.email_1,
+    // reference_1_phone: data.reference_1_phone,
+    // reference_1_relationship: data.reference_1_relationship,
+    // reference_2_phone: data.reference_2_phone,
+    // reference_2_relationship: data.reference_2_relationship,
+    // employers_zip: data.employers_zip,
+    // roa_sent_to_servicer: data.roa_sent_to_servicer,
+
+    // first_name: data.first_name,
+    // last_name: data.last_name,
+    // email_1: data.email_1,
 
     // Error fields for Clients ---------------------------------------------------------------------------
+    // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
+    // time_zone0: data.time_zone0,
     //client_current_planidr_h: data.client_current_planidr_h,
     // "tutor_name": "33",
     // "processor_name": "55",
@@ -671,19 +942,131 @@ function buildHubSpotClientPayload(data = {}) {
     // "ia_inquirer_status": "13289",
     // "meeting_notes": "@sara Troy Frazier. Didn't have loan data or myaid data on file (please try to have that for future APC's). They are in too much debt and recovering from surgery and no cashflow so not in a good spot to start saving. In a year please ask them if they have excess in their business again and if it would be a good time for michael to help them get setup with a whole life policy. ",
     //------------------------------------------------------------------------------------------------------
+
+    // New Mapping Client value
+
+     // Error Fields-------------------------------------------------------------------------------
+    // created_date: data?.created_date,
+    // phone_1_type: data?.phone_1_type,
+    // phone_2_type: data?.phone_2_type,
+    // spouse_has_loans: data?.spouse_has_loans,
+    // q1_income_driven_type_s: data?.q1_income_driven_type_s,
+    // q18_employment_type_0: data?.q18_employment_type_0,
+    // client_action_taken: data?.client_action_taken,
+    // recert_date: data?.recert_date,
+    // social_security_number: data?.social_security_number,
+    //----------------------------------------------------------------------------------------------------
+
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+    created_by: data?.created_by,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    lead_owner: data?.lead_owner,
+
+    phone_2: data?.phone_2,
+    email_2: data?.email_2,
+
+    time_zone0: data?.time_zone0,
+    address_1: data?.address_1,
+    address_2: data?.address_2,
+    city: data?.city,
+    state: data?.state,
+    zip: data?.zip,
+
+    spouse__partner: data?.spouse__partner,
+    referral: data?.referral,
+
+    msa_sent_: data?.msa_sent_,
+    msa_received0: data?.msa_received0,
+    lpa_sent: data?.lpa_sent,
+    lpa_received: data?.lpa_received,
+
+    idr_app_submitted_date: data?.idr_app_submitted_date,
+    days_since_app_sub: data?.days_since_app_sub,
+    error_with_payments: data?.error_with_payments,
+
+    date_of_birth: data?.date_of_birth,
+
+    primary_phone0: data?.primary_phone0,
+    primary_phone_type: data?.primary_phone_type,
+    secondary_phone: data?.secondary_phone,
+    secondary_phone_type: data?.secondary_phone_type,
+
+    studentaidgov_user_not_0: data?.studentaidgov_user_not_0,
+    studentaidgov_pass_not_0: data?.studentaidgov_pass_not_0,
+
+    employerbusiness_name: data?.employerbusiness_name,
+    employer_address: data?.employer_address,
+    employers_city: data?.employers_city,
+    employers_state: data?.employers_state,
+
+    reference_1_name: data?.reference_1_name,
+    reference_1_address: data?.reference_1_address,
+    reference_1_city: data?.reference_1_city,
+    reference_1_state: data?.reference_1_state,
+    reference_1_zip_: data?.reference_1_zip_,
+
+    reference_2_name: data?.reference_2_name,
+    reference_2_address: data?.reference_2_address,
+    reference_2_city: data?.reference_2_city,
+    reference_2_state: data?.reference_2_state,
+    reference_2_zip: data?.reference_2_zip,
+
+    spouse__full_name_: data?.spouse__full_name_,
+    spouse__date_of_birth: data?.spouse__date_of_birth,
+    maidenformer_name: data?.maidenformer_name,
+    spouse__ssn: data?.spouse__ssn,
+    spouse__email: data?.spouse__email,
+    spouse__phone: data?.spouse__phone,
+
+    spouse__loan_amount: data?.spouse__loan_amount,
+
+    employer_info_: data?.employer_info_,
+    personal_reference: data?.personal_reference,
+    spouse_info: data?.spouse_info,
+
+    q26_spouse_income_changed0: data?.q26_spouse_income_changed0,
+    desired_servicer_s: data?.desired_servicer_s,
+
+    borrower_actual_agi_0: data?.borrower_actual_agi_0,
+    state_s: data?.state_s,
+    actual_combined_agi_s: data?.actual_combined_agi_s,
+    spouse_actual_agi_s: data?.spouse_actual_agi_s,
+
+    desired_repay_plan_s: data?.desired_repay_plan_s,
+    q1_balance_based_type_s: data?.q1_balance_based_type_s,
+
+    q1_and_q2_desired_repay_p0: data?.q1_and_q2_desired_repay_p0,
+
+    q5_dependent_children_s: data?.q5_dependent_children_s,
+    q6_other_dependents_s: data?.q6_other_dependents_s,
+    q7_marital_status_s: data?.q7_marital_status_s,
+
+    q10_employment_type_s: data?.q10_employment_type_s,
+
+    q20_filed_taxes_last_2_yr0: data?.q20_filed_taxes_last_2_yr0,
+    q23_separated_from_spouse0: data?.q23_separated_from_spouse0,
+    q24_sp_income_access_s: data?.q24_sp_income_access_s,
+
+    q8_filed_taxes_last_2_yrs: data?.q8_filed_taxes_last_2_yrs,
+    filed_taxes_last_2_yrs0: data?.filed_taxes_last_2_yrs0,
+
+    q25_spouse_filed_taxes_s: data?.q25_spouse_filed_taxes_s,
+    q15_you_and_spouse_filed_0: data?.q15_you_and_spouse_filed_0,
+    q21_income_change_since_l0: data?.q21_income_change_since_l0,
+    q22_taxable_income_s: data?.q22_taxable_income_s,
   });
 
   // console.log("Cleaned properties:", properties);
 
-if (Object.keys(properties).length === 0) {
-  throw new Error("❌ Client payload is empty");
+  if (Object.keys(properties).length === 0) {
+    throw new Error("❌ Client payload is empty");
+  }
+
+  return { properties };
 }
-
-return { properties };
-}
-
-
-
 
 export {
   cleanProps,
@@ -692,6 +1075,4 @@ export {
   buildHubSpotActivityPayload,
   buildHubSpotInvoicePayload,
   buildHubSpotClientPayload,
-
-
 };
