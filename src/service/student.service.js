@@ -101,35 +101,6 @@ async function searchAffiliateByInHubspot(collectionId) {
 
 
 
-
-// Create Activity in Hubsopt 
-
-async function createActivityInHubSpot(data) {
-  const payload = buildHubSpotActivityPayload(data);
-
-  try {
-    const response = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/activities",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
-    console.log("✅ Activity created:", response.data.id);
-    return response.data;
-  } catch (error) {
-    console.error(
-      "❌ Error creating activity:",
-      error.response?.data || error.message
-    );
-    return {};
-  }
-}
-
 // Search Client function
 async function searchClientInHubSpot(collectionId) {
   if (!collectionId) return [];
@@ -448,12 +419,390 @@ async function createInquirerInHubSpot(payload) {
   }
 }
 
+// Search oder in hubspot
+
+async function searchOrderInHubSpot(collectionId) {
+  if (!collectionId) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "collection_id", // ✅ internal property name
+            operator: "EQ",
+            value: String(collectionId),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/0-123/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const results = response.data?.results || [];
+    console.log("✅ Order search by collection_id:", results.length);
+    return results;
+  } catch (error) {
+    console.error(
+      "❌ Error searching order by collection_id:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
+
+// Update order in Hubspot
+
+async function updateOderInHubSpot(inquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-123/${inquirerId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Order updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating order:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+// Create Order In hubspot
+
+async function createOrderInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/0-123";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Order created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating order:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
 
 
+// Search Text Message in hubspot
+
+async function searchTextMessageInHubSpot(collectionId) {
+  if (!collectionId) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "collection_id", // ✅ internal property name
+            operator: "EQ",
+            value: String(collectionId),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/{Number}/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const results = response.data?.results || [];
+    console.log("✅ Text Message search by collection_id:", results.length);
+    return results;
+  } catch (error) {
+    console.error(
+      "❌ Error searching text message by collection_id:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
+
+// Update Text Message In hubspot
+
+async function updateTextMessageInHubSpot(inquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/{Number}/${inquirerId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Text Message updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating text message:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+// Create Text Message In hubspot
+
+async function createTextMessageInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/{Number}";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Text Message created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating text message:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+
+// Email Search Function in hubspot
+
+async function searchEmailInHubSpot(collectionId) {
+  if (!collectionId) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "collection_id", // ✅ internal property name
+            operator: "EQ",
+            value: String(collectionId),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/{Number}/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const results = response.data?.results || [];
+    console.log("✅ Email search by collection_id:", results.length);
+    return results;
+  } catch (error) {
+    console.error(
+      "❌ Error searching email by collection_id:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
+
+// update Email In hubspot
+async function updateEmailInHubSpot(inquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/{Number}/${inquirerId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Email updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating email:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+
+// Create Email In hubspot
+
+async function createEmailInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/{Number}";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Email created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating email:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+// Search Activity In hubspot
+
+async function searchActivityInHubSpot(collectionId) {
+  if (!collectionId) return [];
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "collection_id", // ✅ internal property name
+            operator: "EQ",
+            value: String(collectionId),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/{Number}/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const results = response.data?.results || [];
+    console.log("✅ Activity search by collection_id:", results.length);
+    return results;
+  } catch (error) {
+    console.error(
+      "❌ Error searching activity by collection_id:",
+      error.response?.data || error.message
+    );
+    return [];
+  }
+}
+
+// update Activity In hubspot
+
+async function updateActivityInHubSpot(inquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/{Number}/${inquirerId}`;
+
+  try {
+    const response = await axios.patch(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Activity updated:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error updating activity:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
+
+// Create Activity In hubspot
+async function createActivityInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/{Number}";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("✅ Activity created:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "❌ Error creating activity:",
+      error.response?.data || error
+    );
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
 
 export {createAffiliateInHubSpot,
-  createActivityInHubSpot,updateAffiliateInHubSpot,
+  updateAffiliateInHubSpot,
   searchAffiliateByInHubspot,searchClientInHubSpot,
   createClientInHubSpot,updateClientInHubSpot,searchInvoiceInHubSpot,createInvoiceInHubSpot,
   updateInvoiceInHubSpot,
-  updateInquirerInHubSpot,searchInquirerInHubSpot,createInquirerInHubSpot};
+  updateInquirerInHubSpot,searchInquirerInHubSpot,createInquirerInHubSpot,
+searchOrderInHubSpot,updateOderInHubSpot,createOrderInHubSpot,
+searchTextMessageInHubSpot,createTextMessageInHubSpot,updateTextMessageInHubSpot,
+searchEmailInHubSpot,updateEmailInHubSpot,createEmailInHubSpot,
+searchActivityInHubSpot,updateActivityInHubSpot,createActivityInHubSpot};

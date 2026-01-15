@@ -235,18 +235,9 @@ const inquirerStatusMapping = {
 };
 
 function buildHubSpotInquirerPayload(data = {}) {
-  // Map the numeric loan status to string if present
-  const Employment = data?.employment_type_s;
-  const duSlt = data?.du_slt_outreachaffiliate;
-  const Du = data?.du_financial_planner;
-  const Contractor = data?.contractor_referred_by;
-  const Eval = data?.eval__federal_loan_amoun;
-  const affiliate = data?.affiliate_referral;
-  const entered = data?.entered_info_for_nfm;
-  const status = data?.inquirer_loan_status;
-
+  
   const properties = cleanProps({
-    // employment_type_s: emloymenttypes[Employment] || null, // todo not exist in hubspot
+    // employment_type_s: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
     spouse_has_loans_s: spounceHasMapping[data?.spouse_has_loans_s] || null,
     inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
@@ -259,13 +250,13 @@ function buildHubSpotInquirerPayload(data = {}) {
       householdIncomeMapping[data?.household_size__income_t0] || null,
     eval__taxes_jointlysepa:
       evalTaxesmapping[data?.eval__taxes_jointlysepa] || null,
-    du_slt_outreachaffiliate: duSltOutereachMapping[duSlt] || null,
-    du_financial_planner: duFinancialPlannerMapping[Du] || null,
-    contractor_referred_by: contractorReferredmapping[Contractor] || null,
-    eval__federal_loan_amoun: evalFederalMapping[Eval] || null,
-    affiliate_referral: affiliateReferralMapping[affiliate] || null,
-    entered_info_for_nfm: enteredInfoMapping[entered] || null,
-    inquirer_loan_status: loanStatusMapping[status] || null,
+    du_slt_outreachaffiliate: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null,
+    du_financial_planner: duFinancialPlannerMapping[data?.du_financial_planner] || null,
+    contractor_referred_by: contractorReferredmapping[data?.contractor_referred_by] || null,
+    eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null,
+    affiliate_referral: affiliateReferralMapping[data?.affiliate_referral] || null,
+    entered_info_for_nfm: enteredInfoMapping[data?.entered_info_for_nfm] || null,
+    inquirer_loan_status: loanStatusMapping[data?.inquirer_loan_status] || null,
 
     // Error fields----------------------------------------------------------------------
     // "fields_changed": "0,0",
@@ -781,45 +772,6 @@ function buildHubSpotAffiliatePayload(data = {}) {
   return payload;
 }
 
-// Create Activity Payload
-
-function buildHubSpotActivityPayload(data = {}) {
-  const properties = cleanProps({
-    activity_name: data.subject || "Capsule Activity",
-
-    activity_type: data.activity, // 1004
-    activity_status: data.status, // 10004
-    activity_priority: data.priority, // 10006
-
-    activity_description: data.description || "",
-    activity_location: data.location || "",
-
-    activity_timestamp: data.start_time
-      ? new Date(data.start_time).getTime()
-      : Date.now(),
-
-    activity_end_time: data.end_time ? new Date(data.end_time).getTime() : null,
-
-    is_all_day:
-      data.all_day_event === "true" || data.all_day_event === true
-        ? "true"
-        : "false",
-
-    hubspot_owner_id: data.assigned || null,
-
-    activity_created_date: data.created_date
-      ? new Date(data.created_date).getTime()
-      : null,
-
-    created_via: "api",
-  });
-
-  if (!Object.keys(properties).length) {
-    throw new Error("❌ Activity payload is empty");
-  }
-
-  return { properties };
-}
 
 // Create Invoices Payload
 
@@ -1297,6 +1249,283 @@ function buildHubSpotClientPayload(data = {}) {
   return { properties };
 }
 
+// Order Payload
+
+function buildHubspotOrderPayload(data = {}) {
+  
+   const payload = {
+  collection_id: data?.collection_id,
+  site_id: data?.site_id,
+  fields_changed: data?.fields_changed,
+  created_by: data?.created_by,
+  modified_by: data?.modified_by,
+  modified_date: data?.modified_date,
+
+  marital_status: data?.marital_status,
+  most_recent_tax_filing_st: data?.most_recent_tax_filing_st,
+  filed_taxes_in_the_last_t: data?.filed_taxes_in_the_last_t,
+
+  household_size: data?.household_size,
+  children: data?.children,
+  other: data?.other,
+
+  amount: data?.amount,
+  income_frequency: data?.income_frequency,
+  income_doc_type: data?.income_doc_type,
+
+  linked_record: data?.linked_record,
+  notes: data?.notes,
+
+  spouse_income: data?.spouse_income,
+  spouse_income_type: data?.spouse_income_type,
+  spouse_income_frequency: data?.spouse_income_frequency,
+
+  pslf: data?.pslf,
+  consolidation: data?.consolidation,
+
+  spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
+  nslds_screenshots: data?.nslds_screenshots,
+
+  outstanding_principle: data?.outstanding_principle,
+  avg_interest_rate_: data?.avg_interest_rate_,
+  percent_subsidized_: data?.percent_subsidized_,
+  years_towards_forgiveness: data?.years_towards_forgiveness,
+
+  consolidationloan_notes: data?.consolidationloan_notes,
+  est_tax_implication_: data?.est_tax_implication_,
+  life_of_loan_payments: data?.life_of_loan_payments,
+  est_total_cost_of_slt_st: data?.est_total_cost_of_slt_st,
+
+  balance_based_mo_payment: data?.balance_based_mo_payment,
+  balance_based_total_cost: data?.balance_based_total_cost,
+  overall_savings_vs_balan: data?.overall_savings_vs_balan,
+
+  new_payment_amount: data?.new_payment_amount,
+  additional_notes_: data?.additional_notes_,
+
+  if_invest_monthly_saving: data?.if_invest_monthly_saving,
+  total_earnings_by_time_of: data?.total_earnings_by_time_of,
+
+  date_info_captured: data?.date_info_captured,
+  total_balance: data?.total_balance,
+
+  current_servicer: data?.current_servicer,
+  desired_servicer: data?.desired_servicer,
+
+  interest_per_year: data?.interest_per_year,
+  after_neg_am_interest_pe: data?.after_neg_am_interest_pe,
+  interest_life_of_loan_be0: data?.interest_life_of_loan_be0,
+
+  calculate_for_autopay: data?.calculate_for_autopay,
+  subsidized_forgiveness_su: data?.subsidized_forgiveness_su,
+
+  projected_balance_at_time: data?.projected_balance_at_time,
+  projected_additional_inte: data?.projected_additional_inte,
+
+  forbearance_needed: data?.forbearance_needed,
+  apc_notes: data?.apc_notes,
+
+  desired_repayment_plan: data?.desired_repayment_plan,
+  year_of_taxes_being_used: data?.year_of_taxes_being_used,
+
+  servicer: data?.servicer,
+  balance_based_years: data?.balance_based_years,
+  balance_based_scenarios: data?.balance_based_scenarios,
+
+  value_of_cashflow: data?.value_of_cashflow,
+  slt_calc_results: data?.slt_calc_results,
+
+  household_notes: data?.household_notes,
+  income_notes: data?.income_notes,
+
+  related_email_address: data?.related_email_address,
+
+  refusal_details0: data?.refusal_details0,
+  stop_dont_use: data?.stop_dont_use,
+
+  copy_order: data?.copy_order,
+  type0: data?.type0,
+
+  months_of_pslf: data?.months_of_pslf,
+  due_remove_auto_pay: data?.due_remove_auto_pay,
+
+  plans: data?.plans,
+  consolidate: data?.consolidate,
+  leave_out: data?.leave_out,
+
+  eligible_for_ibr_new_all: data?.eligible_for_ibr_new_all,
+  work_needed: data?.work_needed,
+
+  current_repayment_plan: data?.current_repayment_plan,
+  estimated_payment: data?.estimated_payment,
+  actual_payment: data?.actual_payment,
+
+  client: data?.client,
+  tax_saving_status_apc: data?.tax_saving_status_apc,
+
+  created_date: data?.created_date
+};
+
+  return cleanProps(payload);
+}
+
+// Text Message Payload 
+
+function buildTextMessagePayload(data = {}) {
+
+  const payload = {
+  
+  collection_id: data?.collection_id,
+  site_id: data?.site_id,
+  fields_changed: data?.fields_changed,
+
+  created_by: data?.created_by,
+  modified_by: data?.modified_by,
+  modified_date: data?.modified_date,
+  created_date: data?.created_date,
+
+  read_status: data?.read_status,
+  status: data?.status,
+
+  message: data?.message,
+
+  text_number: data?.text_number,
+  external_number: data?.external_number,
+
+  external_id: data?.external_id,
+
+  client: data?.client,
+
+  group_text: data?.group_text,
+  group_text_parent: data?.group_text_parent
+
+  
+  };
+
+  return cleanProps(payload);
+}
+
+// Email Payload 
+
+function buildEmailPayload(data = {}) {
+
+  const payload = {
+    
+  collection_id: data?.collection_id,
+  site_id: data?.site_id,
+  fields_changed: data?.fields_changed,
+
+  linked_record: data?.linked_record,
+  linked_module: data?.linked_module,
+
+  folder_id: data?.folder_id,
+  retry_count: data?.retry_count,
+
+  notify_options: data?.notify_options,
+  external_options: data?.external_options,
+
+  message_uid: data?.message_uid,
+  message_id: data?.message_id,
+  result: data?.result,
+
+  open_date: data?.open_date,
+  events: data?.events,
+
+  email_attachments: data?.email_attachments,
+  ivinex_attachments: data?.ivinex_attachments,
+  file_upload_status: data?.file_upload_status,
+
+  template_processed: data?.template_processed,
+  email_template: data?.email_template,
+
+  replied_from: data?.replied_from,
+  forwarded_from: data?.forwarded_from,
+
+  reply: data?.reply,
+  reply_all: data?.reply_all,
+  forward: data?.forward,
+
+  delay_send_date: data?.delay_send_date,
+
+  created_date: data?.created_date,
+  modified_by: data?.modified_by,
+  modified_date: data?.modified_date,
+  created_by: data?.created_by,
+
+  email_from: data?.email_from,
+  email_from_name: data?.email_from_name,
+
+  email_to: data?.email_to,
+  cc: data?.cc,
+  bcc: data?.bcc,
+
+  subject: data?.subject,
+  body: data?.body,
+  body_plain: data?.body_plain,
+
+  email_date: data?.email_date,
+  email_status: data?.email_status,
+
+  email_account: data?.email_account,
+  user: data?.user
+
+
+    };
+
+  return cleanProps(payload);
+}
+
+
+// Create Activity Payload
+
+function buildHubSpotActivityPayload(data = {}) {
+  const payload = cleanProps({
+  collection_id: data?.collection_id,
+  site_id: data?.site_id,
+  fields_changed: data?.fields_changed,
+
+  location: data?.location,
+  date_email_opened: data?.date_email_opened,
+
+  email_id: data?.email_id,
+  subject: data?.subject,
+
+  field_from: data?.field_from,
+  email_to: data?.email_to,
+  cc: data?.cc,
+  bcc: data?.bcc,
+
+  recurrence: data?.recurrence,
+  all_day_event: data?.all_day_event,
+
+  start_time: data?.start_time,
+  end_time: data?.end_time,
+
+  priority: data?.priority,
+  status: data?.status,
+
+  activity: data?.activity,
+  description: data?.description,
+
+  assigned: data?.assigned,
+
+  created_date: data?.created_date,
+  created_by: data?.created_by,
+
+  modified_date: data?.modified_date,
+  modified_by: data?.modified_by,
+
+  date: data?.date
+
+
+  });
+
+  if (!Object.keys(payload).length) {
+    throw new Error("❌ Activity payload is empty");
+  }
+
+  return { payload};
+}
 export {
   cleanProps,
   buildHubSpotInquirerPayload,
@@ -1304,4 +1533,8 @@ export {
   buildHubSpotActivityPayload,
   buildHubSpotInvoicePayload,
   buildHubSpotClientPayload,
+  buildHubspotOrderPayload,
+  buildTextMessagePayload,
+  buildEmailPayload,
+  
 };

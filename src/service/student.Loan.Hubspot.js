@@ -408,7 +408,7 @@ async function fetchOrdersRecords(perPage = 100) {
       console.log(`Fetched page ${page}, order records: ${records.length}`);
 
       allRecords.push(...records);
-        // return allRecords; //todo remove after testing
+        return allRecords; //todo remove after testing
 
       // stop when last page reached
       if (records.length < perPage) {
@@ -460,7 +460,7 @@ async function fetchOrdersRecords(perPage = 100) {
 
 // Add pagenation logic
 
-async function fetchTextMessagesRecrds(perPage = 100) {
+async function fetchTextMessagesRecords(perPage = 100) {
   let page = 1;
   let allRecords = [];
 
@@ -480,7 +480,7 @@ async function fetchTextMessagesRecrds(perPage = 100) {
       console.log(`Fetched page ${page}, text message records: ${records.length}`);
 
       allRecords.push(...records);
-        // return allRecords; //todo remove after testing
+        return allRecords; //todo remove after testing
 
       // ⛔ stop when last page is reached (same logic)
       if (records.length < perPage) {
@@ -578,4 +578,4 @@ async function fetchEmailsRecords(perPage = 100) {
 
 export {fetchInquirerRecords, fetchAffiliateRecords,
     fetchActivityReords,fetchInvoicesRecords,
-    fetchClientsRecords,fetchOrdersRecords,fetchTextMessagesRecrds,fetchEmailsRecords, };
+    fetchClientsRecords,fetchOrdersRecords,fetchTextMessagesRecords,fetchEmailsRecords, };
