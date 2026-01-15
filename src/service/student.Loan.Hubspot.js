@@ -551,7 +551,7 @@ async function fetchEmailsRecords(perPage = 100) {
       console.log(`Fetched page ${page}, email records: ${records.length}`);
 
       allRecords.push(...records);
-        // return allRecords; //todo remove after testing
+        return allRecords; //todo remove after testing
 
       // ⛔ stop when last page is reached
       if (records.length < perPage) {

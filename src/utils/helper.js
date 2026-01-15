@@ -237,8 +237,8 @@ const inquirerStatusMapping = {
 function buildHubSpotInquirerPayload(data = {}) {
   
   const properties = cleanProps({
-    // employment_type_s: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
+    employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
     spouse_has_loans_s: spounceHasMapping[data?.spouse_has_loans_s] || null,
     inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
     inquirer_profession: professionMapping[data?.inquirer_profession] || null,
