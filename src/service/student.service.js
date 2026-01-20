@@ -397,6 +397,7 @@ async function updateInquirerInHubSpot(inquirerId, payload) {
 
 // create Inquirer in Hubspot
 async function createInquirerInHubSpot(payload) {
+  
   const url = "https://api.hubapi.com/crm/v3/objects/0-1";
 
   try {
@@ -415,7 +416,7 @@ async function createInquirerInHubSpot(payload) {
       error.response?.data || error
     );
     // throw error; // keep commented to match your pattern
-    return {};
+    return null;
   }
 }
 
