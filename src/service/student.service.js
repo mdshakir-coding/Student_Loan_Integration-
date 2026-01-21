@@ -466,8 +466,8 @@ async function searchOrderInHubSpot(collectionId) {
 
 // Update order in Hubspot
 
-async function updateOderInHubSpot(inquirerId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/0-5/${inquirerId}`;
+async function updateOderInHubSpot(orderId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-5/${orderId}`;
 
   try {
     const response = await axios.patch(url, payload, {

@@ -777,116 +777,62 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
 function buildHubSpotInvoicePayload(data = {}) {
   const properties = cleanProps({
+    
+  // clients_tutor__only_sel1: data?.clients_tutor__only_sel1,
 
-  special_notes: data?.special_notes,
-  hourly_rate: data?.hourly_rate,
-  project_description: data?.project_description,
-  expense_description: data?.expense_description,
-  related_client: data?.related_client,
+  collection_id: data?.collection_id,
+  site_id: data?.site_id,
+  fields_changed: data?.fields_changed,
+  dont_use_setter_if_25_: data?.dont_use_setter_if_25_,
   hours_spent: data?.hours_spent,
+  created_by: data?.created_by,
+  project_description: data?.project_description,
+  amount_of_expense_receip: data?.amount_of_expense_receip,
+  expense_description: data?.expense_description,
+  review_bonuses__processi: data?.review_bonuses__processi,
+  marketing_bonuses: data?.marketing_bonuses,
+  advanced_planning_activit: data?.advanced_planning_activit,
+  affiliate_bonus: data?.affiliate_bonus,
+  related_client: data?.related_client,
+  no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_,
+  hourly_rate: data?.hourly_rate,
+  setter_name: data?.setter_name,
+  sale_financing___recurri: data?.sale_financing___recurri,
   special_details: data?.special_details,
   amount_charged_today: data?.amount_charged_today,
+  commission_: data?.commission_,
+  sales_commission: data?.sales_commission,
+  clients_tutor__only_sel: data?.clients_tutor__only_sel,
   related_affiliate: data?.related_affiliate,
-  special_arrangements_deta: data?.special_arrangements_deta,
-  related_inquirer: data?.related_inquirer,
+  additional_work_completed: data?.additional_work_completed,
+  payment_type: data?.payment_type,
   date_reconciled: data?.date_reconciled,
+  related_inquirer: data?.related_inquirer,
+  related_client_processin: data?.related_client_processin,
+  special_notes: data?.special_notes,
+  related_client_recertifc: data?.related_client_recertifc,
+  aar_sale_amount: data?.aar_sale_amount,
+  payment_arrangementtrade: data?.payment_arrangementtrade,
+  modified_date: data?.modified_date,
+  modified_by: data?.modified_by,
+  tutor_sale_amount: data?.tutor_sale_amount,
+  payment_arrangement: data?.payment_arrangement,
+  dont_use__setter_if_50_: data?.dont_use__setter_if_50_,
+  special_arrangements_deta: data?.special_arrangements_deta,
+  created_date: data?.created_date,
   date_of_activity: data?.date_of_activity,
   contractor_name: data?.contractor_name,
-  total_invoice_amount: data?.total_invoice_amount,
+  sales_category_report_cc: data?.sales_category_report_cc,
+  invoice_category: data?.invoice_category,
   total_sale_amount: data?.total_sale_amount,
+  total_invoice_amount: data?.total_invoice_amount,
   first_name: data?.first_name,
-  last_name: data?.last_name
+  last_name: data?.last_name,
+  aar_activity_commission: data?.aar_activity_commission,
+  processing_activity: data?.processing_activity,
+  clients_tutor__only_sel0: data?.clients_tutor__only_sel0
 
-
-    // Error fields for Invoices ----------------------------------------------------------------
-    // "collection_id": "4",
-    // "site_id": "1",
-    // "fields_changed": "0,13792,0",/
-    // "no_sale_bonus_to_setter_": "0",
-    // "created_by": "14",
-    // "amount_of_expense_receip": "0.00",
-    // "review_bonuses__processi": "13199",
-    // "marketing_bonuses": "13204",
-    // "advanced_planning_activit": "13210",
-    // "affiliate_bonus": "13213",
-    // "dont_use_setter_if_25_": "0",
-    // "setter_name": "0",
-    // "sale_financing___recurri": "0",
-    // "commission_": "1",
-    // "sales_commission": "1",
-    // "clients_tutor__only_sel": "0",
-    // "additional_work_completed": "0",
-    // "created_date": "2020-07-10 15:36:43",
-    // "modified_by": "41",
-    // "modified_date": "2020-07-14 15:27:42",
-    // "related_client_processin": "0",
-    // "related_client_recertifc": "0",
-    // "aar_sale_amount": "13170",
-    // "payment_type": "13175",
-    // "payment_arrangementtrade": "",
-    // "dont_use__setter_if_50_": "0",
-    // "tutor_sale_amount": "13186",
-    // "payment_arrangement": "13192",
-    // "sales_category_report_cc": "0",
-    // "invoice_category": "13217",
-    // "aar_activity_commission": "13169",
-    // "processing_activity": "13194",
-    // "clients_tutor__only_sel0": "14"
-
-    //------------------------------------------------------------------------------------------
-    // New Invoice Mapping Fields...
-
-  // collection_id: data?.collection_id,
-  // site_id: data?.site_id,
-  // fields_changed: data?.fields_changed,
-  // no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_,
-  // special_notes: data?.special_notes,
-  // created_by: data?.created_by,
-  // hourly_rate: data?.hourly_rate,
-  // project_description: data?.project_description,
-  // amount_of_expense_receip: data?.amount_of_expense_receip,
-  // expense_description: data?.expense_description,
-  // review_bonuses__processi: data?.review_bonuses__processi,
-  // marketing_bonuses: data?.marketing_bonuses,
-  // advanced_planning_activit: data?.advanced_planning_activit,
-  // affiliate_bonus: data?.affiliate_bonus,
-  // related_client: data?.related_client,
-  // hours_spent: data?.hours_spent,
-  // dont_use_setter_if_25_: data?.dont_use_setter_if_25_,
-  // setter_name: data?.setter_name,
-  // sale_financing___recurri: data?.sale_financing___recurri,
-  // special_details: data?.special_details,
-  // amount_charged_today: data?.amount_charged_today,
-  // commission_: data?.commission_,
-  // sales_commission: data?.sales_commission,
-  // clients_tutor__only_sel: data?.clients_tutor__only_sel,
-  // related_affiliate: data?.related_affiliate,
-  // additional_work_completed: data?.additional_work_completed,
-  // special_arrangements_deta: data?.special_arrangements_deta,
-  // created_date: data?.created_date,
-  // modified_by: data?.modified_by,
-  // modified_date: data?.modified_date,
-  // related_client_processin: data?.related_client_processin,
-  // related_inquirer: data?.related_inquirer,
-  // date_reconciled: data?.date_reconciled,
-  // related_client_recertifc: data?.related_client_recertifc,
-  // aar_sale_amount: data?.aar_sale_amount,
-  // payment_type: data?.payment_type,
-  // payment_arrangementtrade: data?.payment_arrangementtrade,
-  // dont_use__setter_if_50_: data?.dont_use__setter_if_50_,
-  // tutor_sale_amount: data?.tutor_sale_amount,
-  // payment_arrangement: data?.payment_arrangement,
-  // date_of_activity: data?.date_of_activity,
-  // contractor_name: data?.contractor_name,
-  // sales_category_report_cc: data?.sales_category_report_cc,
-  // invoice_category: data?.invoice_category,
-  // total_invoice_amount: data?.total_invoice_amount,
-  // total_sale_amount: data?.total_sale_amount,
-  // first_name: data?.first_name,
-  // last_name: data?.last_name,
-  // aar_activity_commission: data?.aar_activity_commission,
-  // processing_activity: data?.processing_activity,
-  // clients_tutor__only_sel0: data?.clients_tutor__only_sel0
+  
 
 
 
@@ -1251,119 +1197,143 @@ function buildHubSpotClientPayload(data = {}) {
 
 // Order Payload
 
+
 function buildHubspotOrderPayload(data = {}) {
   
    const payload = {
+    
+
+   // ERRor fields------------------------------------------------------------------------------
+
+  // income_doc_type: data?.income_doc_type,
+  // marital_status: data?.marital_status,
+  // pslf: data?.pslf,
+  // consolidation: data?.consolidation,
+  // desired_servicer: data?.desired_servicer,
+  // desired_repayment_plan: data?.desired_repayment_plan,
+  // employment_type: data?.employment_type,
+  // _income_frequency_1: data?._income_frequency_1,
+  // work_needed: data?.work_needed,
+  // current_repayment_plan: data?.current_repayment_plan,
+  // picklist value mapping:-
+    // calculate_for_autopay: data?.calculate_for_autopay,
+  // forbearance_needed: data?.forbearance_needed,
+
+//---------------------------------------------------------------------------------------------
+
+// Order Mapping Fields:- 
+
+
   collection_id: data?.collection_id,
   site_id: data?.site_id,
   fields_changed: data?.fields_changed,
   created_by: data?.created_by,
   modified_by: data?.modified_by,
   modified_date: data?.modified_date,
-
-  marital_status: data?.marital_status,
   most_recent_tax_filing_st: data?.most_recent_tax_filing_st,
   filed_taxes_in_the_last_t: data?.filed_taxes_in_the_last_t,
-
   household_size: data?.household_size,
   children: data?.children,
   other: data?.other,
-
   amount: data?.amount,
   income_frequency: data?.income_frequency,
-  income_doc_type: data?.income_doc_type,
-
   linked_record: data?.linked_record,
   notes: data?.notes,
-
   spouse_income: data?.spouse_income,
   spouse_income_type: data?.spouse_income_type,
   spouse_income_frequency: data?.spouse_income_frequency,
-
-  pslf: data?.pslf,
-  consolidation: data?.consolidation,
-
+  
   spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
   nslds_screenshots: data?.nslds_screenshots,
-
   outstanding_principle: data?.outstanding_principle,
   avg_interest_rate_: data?.avg_interest_rate_,
   percent_subsidized_: data?.percent_subsidized_,
   years_towards_forgiveness: data?.years_towards_forgiveness,
-
   consolidationloan_notes: data?.consolidationloan_notes,
   est_tax_implication_: data?.est_tax_implication_,
   life_of_loan_payments: data?.life_of_loan_payments,
   est_total_cost_of_slt_st: data?.est_total_cost_of_slt_st,
-
   balance_based_mo_payment: data?.balance_based_mo_payment,
   balance_based_total_cost: data?.balance_based_total_cost,
   overall_savings_vs_balan: data?.overall_savings_vs_balan,
-
   new_payment_amount: data?.new_payment_amount,
   additional_notes_: data?.additional_notes_,
-
   if_invest_monthly_saving: data?.if_invest_monthly_saving,
   total_earnings_by_time_of: data?.total_earnings_by_time_of,
-
   date_info_captured: data?.date_info_captured,
   total_balance: data?.total_balance,
-
   current_servicer: data?.current_servicer,
-  desired_servicer: data?.desired_servicer,
-
   interest_per_year: data?.interest_per_year,
   after_neg_am_interest_pe: data?.after_neg_am_interest_pe,
   interest_life_of_loan_be0: data?.interest_life_of_loan_be0,
 
-  calculate_for_autopay: data?.calculate_for_autopay,
   subsidized_forgiveness_su: data?.subsidized_forgiveness_su,
-
   projected_balance_at_time: data?.projected_balance_at_time,
   projected_additional_inte: data?.projected_additional_inte,
-
-  forbearance_needed: data?.forbearance_needed,
   apc_notes: data?.apc_notes,
-
-  desired_repayment_plan: data?.desired_repayment_plan,
   year_of_taxes_being_used: data?.year_of_taxes_being_used,
-
+  tutor_approx_value_of_str: data?.tutor_approx_value_of_str,
   servicer: data?.servicer,
   balance_based_years: data?.balance_based_years,
   balance_based_scenarios: data?.balance_based_scenarios,
-
   value_of_cashflow: data?.value_of_cashflow,
   slt_calc_results: data?.slt_calc_results,
-
   household_notes: data?.household_notes,
   income_notes: data?.income_notes,
-
+  hh_size__income_threshol: data?.hh_size__income_threshol,
   related_email_address: data?.related_email_address,
-
+  income_notes0: data?.income_notes0,
+  household_notes0: data?.household_notes0,
   refusal_details0: data?.refusal_details0,
   stop_dont_use: data?.stop_dont_use,
-
   copy_order: data?.copy_order,
   type0: data?.type0,
-
   months_of_pslf: data?.months_of_pslf,
   due_remove_auto_pay: data?.due_remove_auto_pay,
-
+  servicerwebsite: data?.servicerwebsite,
   plans: data?.plans,
+  consol_1_loan_codes__am: data?.consol_1_loan_codes__am,
+  consol_2_loan_codes__am: data?.consol_2_loan_codes__am,
+  consolidation_1_desired_0: data?.consolidation_1_desired_0,
+  consolidation_2_desired_0: data?.consolidation_2_desired_0,
+  consolidation_3_desired_: data?.consolidation_3_desired_,
+  final_step_enroll_into_i: data?.final_step_enroll_into_i,
+  current_servicer__repaym: data?.current_servicer__repaym,
+  consol_3_loan_codes__am: data?.consol_3_loan_codes__am,
+  dates: data?.dates,
+  amount_1: data?.amount_1,
+  amount_2: data?.amount_2,
+  dates0: data?.dates0,
+  agi: data?.agi,
+  
+  income_frequency_2: data?.income_frequency_2,
+  spouses_name: data?.spouses_name,
+  special_grouping__notes: data?.special_grouping__notes,
+  spouse_income_notes: data?.spouse_income_notes,
+  field_2025_ibrpaye__15: data?.field_2025_ibrpaye__15,
+  field_2025_icr__20: data?.field_2025_icr__20,
+  consolidating_heal_loans0: data?.consolidating_heal_loans0,
+  in_school_deferment: data?.in_school_deferment,
+  forbearance_needed0: data?.forbearance_needed0,
+  total: data?.total,
+  total0: data?.total0,
   consolidate: data?.consolidate,
   leave_out: data?.leave_out,
-
+  plans0: data?.plans0,
   eligible_for_ibr_new_all: data?.eligible_for_ibr_new_all,
-  work_needed: data?.work_needed,
-
-  current_repayment_plan: data?.current_repayment_plan,
+  year0: data?.year0,
+  
   estimated_payment: data?.estimated_payment,
-  actual_payment: data?.actual_payment,
-
   client: data?.client,
+  actual_payment: data?.actual_payment,
   tax_saving_status_apc: data?.tax_saving_status_apc,
+  created_date: data?.created_date,
 
-  created_date: data?.created_date
+  // IMPORTANT: must be a STAGE ID, not pipeline ID or label
+  // hs_pipeline_stage: data?.hs_pipeline_stage,
+     hs_pipeline_stage: "2091193057",
+    subject: "SLT calculation record",
+    content: "Created via API"
 };
 
   return cleanProps(payload);
