@@ -114,13 +114,13 @@ async function syncAffiliate() {
           const created = await createAffiliateInHubSpot(Payloads);
           console.log("✅ Affiliate created:", created.id);
         }
-        break; // todo remove after testing
+        // break; // todo remove after testing
 
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
         console.error("Error processing record index", i, error);
-        break; // todo remove after testing
+        // break; // todo remove after testing
         // Save progress here to resume later if needed
         // saveProgress(i);
       }

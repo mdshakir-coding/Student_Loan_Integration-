@@ -24,7 +24,7 @@ app.listen(PORT, () => {
     // syncActivity();
     // syncInvoices();    //done
     // syncClients(); //done 
-    syncOrders();
+    syncOrders(); //done
     // syncTextMessages();
     // syncEmails();
 

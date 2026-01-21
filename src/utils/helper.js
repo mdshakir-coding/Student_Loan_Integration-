@@ -1,3 +1,5 @@
+import { time } from "console";
+
 function cleanProps(obj) {
   const cleaned = {};
 
@@ -434,7 +436,8 @@ function buildHubSpotInquirerPayload(data = {}) {
     //----------------------------------------------------------------------------
 
     // New Inquirer Mapping fields:-
-
+    
+    // time_zone: data.hs_timezone,
     si_creation_date: data?.si_creation_date,
     zip: data?.zip,
     collection_id: data?.collection_id,
@@ -611,12 +614,7 @@ function buildHubSpotInquirerPayload(data = {}) {
 //  code for Affiliate Payload
 
 function buildHubSpotAffiliatePayload(data = {}) {
-  if (!data || !data.first_name) {
-    console.warn("No data provided for Affiliate payload");
-    return {};
-  }
-  const payload = {
-    properties: {
+  const properties = {
       // presenting_rep: data.presenting_rep,
       // old Mapping Fileds..
 
@@ -762,14 +760,18 @@ function buildHubSpotAffiliatePayload(data = {}) {
       // time_zone: data.time_zone,
       // primary_phone_line_type: data.primary_phone_line_type,
       //----------------------------------------------------------------------------------
-    },
+   };
+
+  const cleanedProperties = cleanProps(properties);
+
+  // 🔥 Critical safety check
+  if (!Object.keys(cleanedProperties).length) {
+    throw new Error("Affiliate payload has no valid properties");
+  }
+
+  return {
+    properties: cleanedProperties
   };
-
-  // if (!Object.keys(properties).length) {
-  //   throw new Error("Affiliate payload is empty");
-  // }
-
-  return payload;
 }
 
 
@@ -857,105 +859,105 @@ function buildHubSpotClientPayload(data = {}) {
   const properties = cleanProps({
     // Old Mapping Fields...
 
-    // servicer___username: data.servicer__username,
-    // servicer___password: data.servicer__password,
-    // client_avg__interest_rate: data.client_avg_interest_rate,
-    // payment_problem_to_resolve: data.payment_problem_to_resolve,
-    // collection_notes: data.collection_notes,
-    // date_calculation_ran: data.date_calculation_ran,
+    servicer___username: data.servicer__username,
+    servicer___password: data.servicer__password,
+    client_avg__interest_rate: data.client_avg_interest_rate,
+    payment_problem_to_resolve: data.payment_problem_to_resolve,
+    collection_notes: data.collection_notes,
+    date_calculation_ran: data.date_calculation_ran,
 
-    // collection_id: data.collection_id,
-    // site_id: data.site_id,
-    // fields_changed: data.fields_changed,
-    // created_by: data.created_by,
-    // modified_by: data.modified_by,
-    // modified_date: data.modified_date,
-    // lead_owner: data.lead_owner,
-    // phone_2: data.phone_2,
-    // email_2: data.email_2,
-    // address_1: data.address_1,
-    // address_2: data.address_2,
-    // city: data.city,
-    // state: data.state,
-    // zip: data.zip,
-    // spouse__partner: data.spouse__partner,
-    // referral: data.referral,
-    // msa_sent_: data.msa_sent_,
-    // msa_received0: data.msa_received0,
-    // lpa_sent: data.lpa_sent,
-    // lpa_received: data.lpa_received,
+    collection_id: data.collection_id,
+    site_id: data.site_id,
+    fields_changed: data.fields_changed,
+    created_by: data.created_by,
+    modified_by: data.modified_by,
+    modified_date: data.modified_date,
+    lead_owner: data.lead_owner,
+    phone_2: data.phone_2,
+    email_2: data.email_2,
+    address_1: data.address_1,
+    address_2: data.address_2,
+    city: data.city,
+    state: data.state,
+    zip: data.zip,
+    spouse__partner: data.spouse__partner,
+    referral: data.referral,
+    msa_sent_: data.msa_sent_,
+    msa_received0: data.msa_received0,
+    lpa_sent: data.lpa_sent,
+    lpa_received: data.lpa_received,
 
-    // idr_app_submitted_date: data.idr_app_submitted_date,
-    // days_since_app_sub: data.days_since_app_sub,
-    // error_with_payments: data.error_with_payments,
-    // date_of_birth: data.date_of_birth,
-    // primary_phone0: data.primary_phone0,
-    // primary_phone_type: data.primary_phone_type,
-    // secondary_phone: data.secondary_phone,
-    // secondary_phone_type: data.secondary_phone_type,
-    // studentaidgov_user_not_0: data.studentaidgov_user_not_0,
-    // studentaidgov_pass_not_0: data.studentaidgov_pass_not_0,
-    // employerbusiness_name: data.employerbusiness_name,
-    // employer_address: data.employer_address,
-    // employers_city: data.employers_city,
-    // employers_state: data.employers_state,
+    idr_app_submitted_date: data.idr_app_submitted_date,
+    days_since_app_sub: data.days_since_app_sub,
+    error_with_payments: data.error_with_payments,
+    date_of_birth: data.date_of_birth,
+    primary_phone0: data.primary_phone0,
+    primary_phone_type: data.primary_phone_type,
+    secondary_phone: data.secondary_phone,
+    secondary_phone_type: data.secondary_phone_type,
+    studentaidgov_user_not_0: data.studentaidgov_user_not_0,
+    studentaidgov_pass_not_0: data.studentaidgov_pass_not_0,
+    employerbusiness_name: data.employerbusiness_name,
+    employer_address: data.employer_address,
+    employers_city: data.employers_city,
+    employers_state: data.employers_state,
 
-    // reference_1_name: data.reference_1_name,
-    // reference_1_address: data.reference_1_address,
-    // reference_1_city: data.reference_1_city,
-    // reference_1_state: data.reference_1_state,
-    // reference_1_zip_: data.reference_1_zip_,
-    // reference_2_name: data.reference_2_name,
-    // reference_2_address: data.reference_2_address,
-    // reference_2_city: data.reference_2_city,
-    // reference_2_state: data.reference_2_state,
-    // reference_2_zip: data.reference_2_zip,
+    reference_1_name: data.reference_1_name,
+    reference_1_address: data.reference_1_address,
+    reference_1_city: data.reference_1_city,
+    reference_1_state: data.reference_1_state,
+    reference_1_zip_: data.reference_1_zip_,
+    reference_2_name: data.reference_2_name,
+    reference_2_address: data.reference_2_address,
+    reference_2_city: data.reference_2_city,
+    reference_2_state: data.reference_2_state,
+    reference_2_zip: data.reference_2_zip,
 
-    // spouse__full_name_: data.spouse__full_name_,
-    // spouse__date_of_birth: data.spouse__date_of_birth,
-    // maidenformer_name: data.maidenformer_name,
-    // spouse__ssn: data.spouse__ssn,
-    // spouse__email: data.spouse__email,
-    // spouse__phone: data.spouse__phone,
-    // spouse__loan_amount: data.spouse__loan_amount,
+    spouse__full_name_: data.spouse__full_name_,
+    spouse__date_of_birth: data.spouse__date_of_birth,
+    maidenformer_name: data.maidenformer_name,
+    spouse__ssn: data.spouse__ssn,
+    spouse__email: data.spouse__email,
+    spouse__phone: data.spouse__phone,
+    spouse__loan_amount: data.spouse__loan_amount,
 
-    // employer_info_: data.employer_info_,
-    // personal_reference: data.personal_reference,
-    // spouse_info: data.spouse_info,
+    employer_info_: data.employer_info_,
+    personal_reference: data.personal_reference,
+    spouse_info: data.spouse_info,
 
-    // q26_spouse_income_changed0: data.q26_spouse_income_changed0,
-    // desired_servicer_s: data.desired_servicer_s,
-    // borrower_actual_agi_0: data.borrower_actual_agi_0,
-    // state_s: data.state_s,
-    // actual_combined_agi_s: data.actual_combined_agi_s,
-    // spouse_actual_agi_s: data.spouse_actual_agi_s,
-    // desired_repay_plan_s: data.desired_repay_plan_s,
-    // q1_balance_based_type_s: data.q1_balance_based_type_s,
-    // q1_and_q2_desired_repay_p0: data.q1_and_q2_desired_repay_p0,
-    // q5_dependent_children_s: data.q5_dependent_children_s,
-    // q6_other_dependents_s: data.q6_other_dependents_s,
-    // q7_marital_status_s: data.q7_marital_status_s,
-    // q10_employment_type_s: data.q10_employment_type_s,
-    // q20_filed_taxes_last_2_yr0: data.q20_filed_taxes_last_2_yr0,
-    // q23_separated_from_spouse0: data.q23_separated_from_spouse0,
-    // q24_sp_income_access_s: data.q24_sp_income_access_s,
-    // q8_filed_taxes_last_2_yrs: data.q8_filed_taxes_last_2_yrs,
-    // filed_taxes_last_2_yrs0: data.filed_taxes_last_2_yrs0,
-    // q25_spouse_filed_taxes_s: data.q25_spouse_filed_taxes_s,
-    // q15_you_and_spouse_filed_0: data.q15_you_and_spouse_filed_0,
-    // q21_income_change_since_l0: data.q21_income_change_since_l0,
-    // q22_taxable_income_s: data.q22_taxable_income_s,
+    q26_spouse_income_changed0: data.q26_spouse_income_changed0,
+    desired_servicer_s: data.desired_servicer_s,
+    borrower_actual_agi_0: data.borrower_actual_agi_0,
+    state_s: data.state_s,
+    actual_combined_agi_s: data.actual_combined_agi_s,
+    spouse_actual_agi_s: data.spouse_actual_agi_s,
+    desired_repay_plan_s: data.desired_repay_plan_s,
+    q1_balance_based_type_s: data.q1_balance_based_type_s,
+    q1_and_q2_desired_repay_p0: data.q1_and_q2_desired_repay_p0,
+    q5_dependent_children_s: data.q5_dependent_children_s,
+    q6_other_dependents_s: data.q6_other_dependents_s,
+    q7_marital_status_s: data.q7_marital_status_s,
+    q10_employment_type_s: data.q10_employment_type_s,
+    q20_filed_taxes_last_2_yr0: data.q20_filed_taxes_last_2_yr0,
+    q23_separated_from_spouse0: data.q23_separated_from_spouse0,
+    q24_sp_income_access_s: data.q24_sp_income_access_s,
+    q8_filed_taxes_last_2_yrs: data.q8_filed_taxes_last_2_yrs,
+    filed_taxes_last_2_yrs0: data.filed_taxes_last_2_yrs0,
+    q25_spouse_filed_taxes_s: data.q25_spouse_filed_taxes_s,
+    q15_you_and_spouse_filed_0: data.q15_you_and_spouse_filed_0,
+    q21_income_change_since_l0: data.q21_income_change_since_l0,
+    q22_taxable_income_s: data.q22_taxable_income_s,
 
-    // reference_1_phone: data.reference_1_phone,
-    // reference_1_relationship: data.reference_1_relationship,
-    // reference_2_phone: data.reference_2_phone,
-    // reference_2_relationship: data.reference_2_relationship,
-    // employers_zip: data.employers_zip,
-    // roa_sent_to_servicer: data.roa_sent_to_servicer,
+    reference_1_phone: data.reference_1_phone,
+    reference_1_relationship: data.reference_1_relationship,
+    reference_2_phone: data.reference_2_phone,
+    reference_2_relationship: data.reference_2_relationship,
+    employers_zip: data.employers_zip,
+    roa_sent_to_servicer: data.roa_sent_to_servicer,
 
-    // first_name: data.first_name,
-    // last_name: data.last_name,
-    // email_1: data.email_1,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    email_1: data.email_1,
 
     // Error fields for Clients ---------------------------------------------------------------------------
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
@@ -1072,106 +1074,106 @@ function buildHubSpotClientPayload(data = {}) {
 
     // New Mapping Client value:-
 
-    collection_id: data?.collection_id,
-    site_id: data?.site_id,
-    fields_changed: data?.fields_changed,
-    created_by: data?.created_by,
-    modified_by: data?.modified_by,
-    modified_date: data?.modified_date,
-    lead_owner: data?.lead_owner,
+    // collection_id: data?.collection_id,
+    // site_id: data?.site_id,
+    // fields_changed: data?.fields_changed,
+    // created_by: data?.created_by,
+    // modified_by: data?.modified_by,
+    // modified_date: data?.modified_date,
+    // lead_owner: data?.lead_owner,
 
-    phone_2: data?.phone_2,
-    email_2: data?.email_2,
+    // phone_2: data?.phone_2,
+    // email_2: data?.email_2,
 
-    time_zone0: data?.time_zone0,
-    address_1: data?.address_1,
-    address_2: data?.address_2,
-    city: data?.city,
-    state: data?.state,
-    zip: data?.zip,
+    // time_zone0: data?.time_zone0,
+    // address_1: data?.address_1,
+    // address_2: data?.address_2,
+    // city: data?.city,
+    // state: data?.state,
+    // zip: data?.zip,
 
-    spouse__partner: data?.spouse__partner,
-    referral: data?.referral,
+    // spouse__partner: data?.spouse__partner,
+    // referral: data?.referral,
 
-    msa_sent_: data?.msa_sent_,
-    msa_received0: data?.msa_received0,
-    lpa_sent: data?.lpa_sent,
-    lpa_received: data?.lpa_received,
+    // msa_sent_: data?.msa_sent_,
+    // msa_received0: data?.msa_received0,
+    // lpa_sent: data?.lpa_sent,
+    // lpa_received: data?.lpa_received,
 
-    idr_app_submitted_date: data?.idr_app_submitted_date,
-    days_since_app_sub: data?.days_since_app_sub,
-    error_with_payments: data?.error_with_payments,
+    // idr_app_submitted_date: data?.idr_app_submitted_date,
+    // days_since_app_sub: data?.days_since_app_sub,
+    // error_with_payments: data?.error_with_payments,
 
-    date_of_birth: data?.date_of_birth,
+    // date_of_birth: data?.date_of_birth,
 
-    primary_phone0: data?.primary_phone0,
-    primary_phone_type: data?.primary_phone_type,
-    secondary_phone: data?.secondary_phone,
-    secondary_phone_type: data?.secondary_phone_type,
+    // primary_phone0: data?.primary_phone0,
+    // primary_phone_type: data?.primary_phone_type,
+    // secondary_phone: data?.secondary_phone,
+    // secondary_phone_type: data?.secondary_phone_type,
 
-    studentaidgov_user_not_0: data?.studentaidgov_user_not_0,
-    studentaidgov_pass_not_0: data?.studentaidgov_pass_not_0,
+    // studentaidgov_user_not_0: data?.studentaidgov_user_not_0,
+    // studentaidgov_pass_not_0: data?.studentaidgov_pass_not_0,
 
-    employerbusiness_name: data?.employerbusiness_name,
-    employer_address: data?.employer_address,
-    employers_city: data?.employers_city,
-    employers_state: data?.employers_state,
+    // employerbusiness_name: data?.employerbusiness_name,
+    // employer_address: data?.employer_address,
+    // employers_city: data?.employers_city,
+    // employers_state: data?.employers_state,
 
-    reference_1_name: data?.reference_1_name,
-    reference_1_address: data?.reference_1_address,
-    reference_1_city: data?.reference_1_city,
-    reference_1_state: data?.reference_1_state,
-    reference_1_zip_: data?.reference_1_zip_,
+    // reference_1_name: data?.reference_1_name,
+    // reference_1_address: data?.reference_1_address,
+    // reference_1_city: data?.reference_1_city,
+    // reference_1_state: data?.reference_1_state,
+    // reference_1_zip_: data?.reference_1_zip_,
 
-    reference_2_name: data?.reference_2_name,
-    reference_2_address: data?.reference_2_address,
-    reference_2_city: data?.reference_2_city,
-    reference_2_state: data?.reference_2_state,
-    reference_2_zip: data?.reference_2_zip,
+    // reference_2_name: data?.reference_2_name,
+    // reference_2_address: data?.reference_2_address,
+    // reference_2_city: data?.reference_2_city,
+    // reference_2_state: data?.reference_2_state,
+    // reference_2_zip: data?.reference_2_zip,
 
-    spouse__full_name_: data?.spouse__full_name_,
-    spouse__date_of_birth: data?.spouse__date_of_birth,
-    maidenformer_name: data?.maidenformer_name,
-    spouse__ssn: data?.spouse__ssn,
-    spouse__email: data?.spouse__email,
-    spouse__phone: data?.spouse__phone,
+    // spouse__full_name_: data?.spouse__full_name_,
+    // spouse__date_of_birth: data?.spouse__date_of_birth,
+    // maidenformer_name: data?.maidenformer_name,
+    // spouse__ssn: data?.spouse__ssn,
+    // spouse__email: data?.spouse__email,
+    // spouse__phone: data?.spouse__phone,
 
-    spouse__loan_amount: data?.spouse__loan_amount,
+    // spouse__loan_amount: data?.spouse__loan_amount,
 
-    employer_info_: data?.employer_info_,
-    personal_reference: data?.personal_reference,
-    spouse_info: data?.spouse_info,
+    // employer_info_: data?.employer_info_,
+    // personal_reference: data?.personal_reference,
+    // spouse_info: data?.spouse_info,
 
-    q26_spouse_income_changed0: data?.q26_spouse_income_changed0,
-    desired_servicer_s: data?.desired_servicer_s,
+    // q26_spouse_income_changed0: data?.q26_spouse_income_changed0,
+    // desired_servicer_s: data?.desired_servicer_s,
 
-    borrower_actual_agi_0: data?.borrower_actual_agi_0,
-    state_s: data?.state_s,
-    actual_combined_agi_s: data?.actual_combined_agi_s,
-    spouse_actual_agi_s: data?.spouse_actual_agi_s,
+    // borrower_actual_agi_0: data?.borrower_actual_agi_0,
+    // state_s: data?.state_s,
+    // actual_combined_agi_s: data?.actual_combined_agi_s,
+    // spouse_actual_agi_s: data?.spouse_actual_agi_s,
 
-    desired_repay_plan_s: data?.desired_repay_plan_s,
-    q1_balance_based_type_s: data?.q1_balance_based_type_s,
+    // desired_repay_plan_s: data?.desired_repay_plan_s,
+    // q1_balance_based_type_s: data?.q1_balance_based_type_s,
 
-    q1_and_q2_desired_repay_p0: data?.q1_and_q2_desired_repay_p0,
+    // q1_and_q2_desired_repay_p0: data?.q1_and_q2_desired_repay_p0,
 
-    q5_dependent_children_s: data?.q5_dependent_children_s,
-    q6_other_dependents_s: data?.q6_other_dependents_s,
-    q7_marital_status_s: data?.q7_marital_status_s,
+    // q5_dependent_children_s: data?.q5_dependent_children_s,
+    // q6_other_dependents_s: data?.q6_other_dependents_s,
+    // q7_marital_status_s: data?.q7_marital_status_s,
 
-    q10_employment_type_s: data?.q10_employment_type_s,
+    // q10_employment_type_s: data?.q10_employment_type_s,
 
-    q20_filed_taxes_last_2_yr0: data?.q20_filed_taxes_last_2_yr0,
-    q23_separated_from_spouse0: data?.q23_separated_from_spouse0,
-    q24_sp_income_access_s: data?.q24_sp_income_access_s,
+    // q20_filed_taxes_last_2_yr0: data?.q20_filed_taxes_last_2_yr0,
+    // q23_separated_from_spouse0: data?.q23_separated_from_spouse0,
+    // q24_sp_income_access_s: data?.q24_sp_income_access_s,
 
-    q8_filed_taxes_last_2_yrs: data?.q8_filed_taxes_last_2_yrs,
-    filed_taxes_last_2_yrs0: data?.filed_taxes_last_2_yrs0,
+    // q8_filed_taxes_last_2_yrs: data?.q8_filed_taxes_last_2_yrs,
+    // filed_taxes_last_2_yrs0: data?.filed_taxes_last_2_yrs0,
 
-    q25_spouse_filed_taxes_s: data?.q25_spouse_filed_taxes_s,
-    q15_you_and_spouse_filed_0: data?.q15_you_and_spouse_filed_0,
-    q21_income_change_since_l0: data?.q21_income_change_since_l0,
-    q22_taxable_income_s: data?.q22_taxable_income_s,
+    // q25_spouse_filed_taxes_s: data?.q25_spouse_filed_taxes_s,
+    // q15_you_and_spouse_filed_0: data?.q15_you_and_spouse_filed_0,
+    // q21_income_change_since_l0: data?.q21_income_change_since_l0,
+    // q22_taxable_income_s: data?.q22_taxable_income_s,
 
      // Error Fields-------------------------------------------------------------------------------
     // created_date: data?.created_date,
