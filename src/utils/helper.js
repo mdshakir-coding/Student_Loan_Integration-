@@ -241,7 +241,7 @@ function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
     employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
-    spouse_has_loans_s: spounceHasMapping[data?.spouse_has_loans_s] || null,
+    spouse_has_loans_s_ivinex: spounceHasMapping[data?.spouse_has_loans_s] || null, //
     inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
     inquirer_profession: professionMapping[data?.inquirer_profession] || null,
     inquirer_loan_servicer:
@@ -250,15 +250,15 @@ function buildHubSpotInquirerPayload(data = {}) {
       inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
     household_size__income_t0:
       householdIncomeMapping[data?.household_size__income_t0] || null,
-    eval__taxes_jointlysepa:
-      evalTaxesmapping[data?.eval__taxes_jointlysepa] || null,
-    du_slt_outreachaffiliate: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null,
-    du_financial_planner: duFinancialPlannerMapping[data?.du_financial_planner] || null,
-    contractor_referred_by: contractorReferredmapping[data?.contractor_referred_by] || null,
-    eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null,
-    affiliate_referral: affiliateReferralMapping[data?.affiliate_referral] || null,
-    entered_info_for_nfm: enteredInfoMapping[data?.entered_info_for_nfm] || null,
-    inquirer_loan_status: loanStatusMapping[data?.inquirer_loan_status] || null,
+    eval_taxes_jointlysepa_ivinex:
+      evalTaxesmapping[data?.eval__taxes_jointlysepa] || null, //
+    du_slt_outreachaffiliate_ivinex: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null, //
+    du_financial_planner_ivinex: duFinancialPlannerMapping[data?.du_financial_planner] || null, //
+    contractor_referred_by_ivinex: contractorReferredmapping[data?.contractor_referred_by] || null, //
+    eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null, //
+    affiliate_referral_ivinex: affiliateReferralMapping[data?.affiliate_referral] || null, //
+    entered_info_for_nfm_ivinex: enteredInfoMapping[data?.entered_info_for_nfm] || null, //
+    inquirer_loan_status_ivinex: loanStatusMapping[data?.inquirer_loan_status] || null, //
 
     // Error fields----------------------------------------------------------------------
     // "fields_changed": "0,0",
@@ -703,19 +703,20 @@ function buildHubSpotAffiliatePayload(data = {}) {
       date_of_last_contact: data.date_of_last_contact,
       bd_andor_ria_rep: data.bd_andor_ria_rep,
       date_of_birth__year: data.date_of_birth__year,
-      receives_texts: data.receives_texts,
       name_stated_on_vm: data.name_stated_on_vm,
       date_of_fa_presentation: data.date_of_fa_presentation,
       title: data.title,
       marital_status_s: data.marital_status_s,
-      vip_affiliate: data.vip_affiliate,
+      receives_texts_ivinex: data.receives_texts, //
+      vip_affiliate_ivinex: data.vip_affiliate, //
+      has_referrals_in_mind_asa_ivinex: data.has_referrals_in_mind_asa, //
+      affiliate_nurturing_call_ivinex: data.affiliate_nurturing_call, //
+      revenue_share_ivinex: data.revenue_share, //
+      comp_super_affiliate_ivinex: data.comp_super_affiliate, //
       _of_years_an_agent_new: data._of_years_an_agent_new,
       email__personal_type: data.email__personal_type,
       linkedin: data.linkedin,
-      has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
       date_of_first_client_refe: data.date_of_first_client_refe,
-      affiliate_nurturing_call: data.affiliate_nurturing_call,
-      revenue_share: data.revenue_share,
       fa_draw: data.fa_draw,
       field_1st: data.field_1st,
       field_2nd: data.field_2nd,
@@ -754,7 +755,6 @@ function buildHubSpotAffiliatePayload(data = {}) {
       // _of_registered_states: data._of_registered_states,
       // industry: data.industry,
       // presenting_rep: data.presenting_rep,
-      // comp_super_affiliate: data.comp_super_affiliate,
       // conference: data.conference,
       // created_date: data.created_date,
       // time_zone: data.time_zone,
@@ -958,6 +958,9 @@ function buildHubSpotClientPayload(data = {}) {
     first_name: data.first_name,
     last_name: data.last_name,
     email_1: data.email_1,
+    phone_1_type_ivinex: data?.phone_1_type, //
+    phone_2_type_ivinex: data?.phone_2_type, //
+    spouse_has_loans_ivinex: data?.spouse_has_loans, //
 
     // Error fields for Clients ---------------------------------------------------------------------------
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
