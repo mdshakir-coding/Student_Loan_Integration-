@@ -240,25 +240,25 @@ function buildHubSpotInquirerPayload(data = {}) {
   
   const properties = cleanProps({
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
-    employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
-    spouse_has_loans_s_ivinex: spounceHasMapping[data?.spouse_has_loans_s] || null, //
-    inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
-    inquirer_profession: professionMapping[data?.inquirer_profession] || null,
-    inquirer_loan_servicer:
-      loanServicerMapping[data?.inquirer_loan_servicer] || null,
-    inquirer_current_repaymen:
-      inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
-    household_size__income_t0:
-      householdIncomeMapping[data?.household_size__income_t0] || null,
-    eval_taxes_jointlysepa_ivinex:
-      evalTaxesmapping[data?.eval__taxes_jointlysepa] || null, //
-    du_slt_outreachaffiliate_ivinex: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null, //
-    du_financial_planner_ivinex: duFinancialPlannerMapping[data?.du_financial_planner] || null, //
-    contractor_referred_by_ivinex: contractorReferredmapping[data?.contractor_referred_by] || null, //
-    eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null, //
-    affiliate_referral_ivinex: affiliateReferralMapping[data?.affiliate_referral] || null, //
-    entered_info_for_nfm_ivinex: enteredInfoMapping[data?.entered_info_for_nfm] || null, //
-    inquirer_loan_status_ivinex: loanStatusMapping[data?.inquirer_loan_status] || null, //
+    // employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
+    // inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
+    // inquirer_profession: professionMapping[data?.inquirer_profession] || null,
+    // inquirer_loan_servicer:
+    // loanServicerMapping[data?.inquirer_loan_servicer] || null,
+    // inquirer_current_repaymen:
+    // inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
+    // household_size__income_t0:
+    // householdIncomeMapping[data?.household_size__income_t0] || null,
+    // eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null, 
+    // spouse_has_loans_s_ivinex: spounceHasMapping[data?.spouse_has_loans_s] || null, //
+    // eval_taxes_jointlysepa_ivinex:
+    // evalTaxesmapping[data?.eval__taxes_jointlysepa] || null, //
+    // du_slt_outreachaffiliate_ivinex: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null, //
+    // du_financial_planner_ivinex: duFinancialPlannerMapping[data?.du_financial_planner] || null, //
+    // contractor_referred_by_ivinex: contractorReferredmapping[data?.contractor_referred_by] || null, //
+    // affiliate_referral_ivinex: affiliateReferralMapping[data?.affiliate_referral] || null, //
+    // entered_info_for_nfm_ivinex: enteredInfoMapping[data?.entered_info_for_nfm] || null, //
+    // inquirer_loan_status_ivinex: loanStatusMapping[data?.inquirer_loan_status] || null, //
 
     // Error fields----------------------------------------------------------------------
     // "fields_changed": "0,0",
@@ -438,6 +438,23 @@ function buildHubSpotInquirerPayload(data = {}) {
     // New Inquirer Mapping fields:-
     
     // time_zone: data.hs_timezone,
+    spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
+    eval_taxes_jointlysepa_ivinex: data?.eval__taxes_jointlysepa || null, //
+    du_slt_outreachaffiliate_ivinex: data?.du_slt_outreachaffiliate || null, //
+    // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
+    contractor_referred_by_ivinex: data?.contractor_referred_by || null, //
+    affiliate_referral_ivinex: data?.affiliate_referral || null, //
+    entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
+    inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
+    // employment_type: data?.employment_type_s || null, 
+    // inquirer_status: data?.inquirer_status || null,
+    // inquirer_profession: data?.inquirer_profession || null,
+    // inquirer_loan_servicer:data?.inquirer_loan_servicer || null,
+    // inquirer_current_repaymen: data?.inquirer_current_repaymen || null,
+    // household_size__income_t0:data?.household_size__income_t0 || null,
+    eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null, 
+   
+
     si_creation_date: data?.si_creation_date,
     zip: data?.zip,
     collection_id: data?.collection_id,
@@ -961,6 +978,9 @@ function buildHubSpotClientPayload(data = {}) {
     phone_1_type_ivinex: data?.phone_1_type, //
     phone_2_type_ivinex: data?.phone_2_type, //
     spouse_has_loans_ivinex: data?.spouse_has_loans, //
+    // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
+    // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
+
 
     // Error fields for Clients ---------------------------------------------------------------------------
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
