@@ -237,7 +237,6 @@ const inquirerStatusMapping = {
 };
 
 function buildHubSpotInquirerPayload(data = {}) {
-  
   const properties = cleanProps({
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
     // employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
@@ -249,7 +248,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     // inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
     // household_size__income_t0:
     // householdIncomeMapping[data?.household_size__income_t0] || null,
-    // eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null, 
+    // eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null,
     // spouse_has_loans_s_ivinex: spounceHasMapping[data?.spouse_has_loans_s] || null, //
     // eval_taxes_jointlysepa_ivinex:
     // evalTaxesmapping[data?.eval__taxes_jointlysepa] || null, //
@@ -436,7 +435,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     //----------------------------------------------------------------------------
 
     // New Inquirer Mapping fields:-
-    
+
     // time_zone: data.hs_timezone,
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
     eval_taxes_jointlysepa_ivinex: data?.eval__taxes_jointlysepa || null, //
@@ -446,14 +445,19 @@ function buildHubSpotInquirerPayload(data = {}) {
     affiliate_referral_ivinex: data?.affiliate_referral || null, //
     entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
-    // employment_type: data?.employment_type_s || null, 
+    // employment_type: data?.employment_type_s || null,
     // inquirer_status: data?.inquirer_status || null,
     // inquirer_profession: data?.inquirer_profession || null,
     // inquirer_loan_servicer:data?.inquirer_loan_servicer || null,
-    // inquirer_current_repaymen: data?.inquirer_current_repaymen || null,
     // household_size__income_t0:data?.household_size__income_t0 || null,
-    eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null, 
-   
+    inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
+    eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
+    inquirer___last_year___agi: data?.inquirer__last_year__ag || null,
+    inquirer_current_monthly_payment: data?.inquirer_current_monthly_ || null,
+    inquirer_profession_ivinex:data?.inquirer_profession || null,
+    // marital_status:data?.marital_status || null, // dropdown
+    // eval___spouse_has_loans: data?.eval__spouse_has_loans || null, // dropdown
+    field_of_study:data?.fields_changed || null,
 
     si_creation_date: data?.si_creation_date,
     zip: data?.zip,
@@ -575,7 +579,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     setter_needs_attention: data?.setter_needs_attention,
     under_admin_review__s_k: data?.under_admin_review__s_k,
 
-      // New Error fields------------------------------------------------------------
+    // New Error fields------------------------------------------------------------
 
     // spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
     // eval__pay_frequency: data?.eval__pay_frequency,
@@ -618,7 +622,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     // affiliate_lead_owner: data?.affiliate_lead_owner,
     // marital_status: data?.marital_status,
     //----------------------------------------------------------------------------
-    
   });
 
   if (!Object.keys(properties).length) {
@@ -632,152 +635,152 @@ function buildHubSpotInquirerPayload(data = {}) {
 
 function buildHubSpotAffiliatePayload(data = {}) {
   const properties = {
-      // presenting_rep: data.presenting_rep,
-      // old Mapping Fileds..
+    // presenting_rep: data.presenting_rep,
+    // old Mapping Fileds..
 
-      // collection_id: data.collection_id,
-      // site_id: data.site_id,
-      // fields_changed: data.fields_changed,
-      // date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
-      // created_by: data.created_by,
-      // employment_type_s: data.employment_type_s,
-      // field_30_day_income_s: data.field_30_day_income_s,
-      // tome_zone_intake: data.tome_zone_intake,
-      // lead_description__specia0: data.lead_description__specia0,
-      // date_of_last_contact: data.date_of_last_contact,
-      // bd_andor_ria_rep: data.bd_andor_ria_rep,
-      // date_of_birth__year: data.date_of_birth__year,
-      // receives_texts: data.receives_texts,
-      // name_stated_on_vm: data.name_stated_on_vm,
-      // date_of_fa_presentation: data.date_of_fa_presentation,
-      // title: data.title,
-      // marital_status_s: data.marital_status_s,
-      // vip_affiliate: data.vip_affiliate,
-      // of_registered_states: data._of_registered_states,
-      // of_years_an_agent_new: data._of_years_an_agent_new,
-      // of_years_an_agent_old: data.of_years_an_agent_old,
-      // email__personal_type: data.email__personal_type,
-      // linkedin: data.linkedin,
-      // has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
-      // date_of_first_client_refe: data.date_of_first_client_refe,
-      // affiliate_nurturing_call: data.affiliate_nurturing_call,
-      // revenue_share: data.revenue_share,
-      // fa_draw: data.fa_draw,
-      // field_1st: data.field_1st,
-      // field_2nd: data.field_2nd,
-      // field_3rd: data.field_3rd,
-      // primary_address_1: data.primary_address_1,
-      // modified_by: data.modified_by,
-      // modified_date: data.modified_date,
-      // phone_2: data.phone_2,
-      // email__business2_type: data.email__business2_type,
-      // time_zone0: data.time_zone0,
-      // spouse_has_loans_s: data.spouse_has_loans_s,
-      // primary_address_2: data.primary_address_2,
-      // primary_city: data.primary_city,
-      // no_sale_reason: data.no_sale_reason,
-      // type_of_repayment_s: data.type_of_repayment_s,
-      // fed_loan_payment_s: data.fed_loan_payment_s,
-      // loan_status_s: data.loan_status_s,
-      // actively_in_school_s: data.actively_in_school_s,
-      // fed_loan_amount_s: data.fed_loan_amount_s,
-      // click_on_convert_2: data.click_on_convert_2,
-      // click_on_convert_1: data.click_on_convert_1,
-      // primary_zip_code: data.primary_zip_code,
-      // first_name: data.first_name,
-      // last_name: data.last_name,
-      // primary_phone: data.primary_phone,
-      // email__business_type: data.email__business_type,
-      // firm_name: data.firm_name,
-      // primary_state: data.primary_state,
+    // collection_id: data.collection_id,
+    // site_id: data.site_id,
+    // fields_changed: data.fields_changed,
+    // date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
+    // created_by: data.created_by,
+    // employment_type_s: data.employment_type_s,
+    // field_30_day_income_s: data.field_30_day_income_s,
+    // tome_zone_intake: data.tome_zone_intake,
+    // lead_description__specia0: data.lead_description__specia0,
+    // date_of_last_contact: data.date_of_last_contact,
+    // bd_andor_ria_rep: data.bd_andor_ria_rep,
+    // date_of_birth__year: data.date_of_birth__year,
+    // receives_texts: data.receives_texts,
+    // name_stated_on_vm: data.name_stated_on_vm,
+    // date_of_fa_presentation: data.date_of_fa_presentation,
+    // title: data.title,
+    // marital_status_s: data.marital_status_s,
+    // vip_affiliate: data.vip_affiliate,
+    // of_registered_states: data._of_registered_states,
+    // of_years_an_agent_new: data._of_years_an_agent_new,
+    // of_years_an_agent_old: data.of_years_an_agent_old,
+    // email__personal_type: data.email__personal_type,
+    // linkedin: data.linkedin,
+    // has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
+    // date_of_first_client_refe: data.date_of_first_client_refe,
+    // affiliate_nurturing_call: data.affiliate_nurturing_call,
+    // revenue_share: data.revenue_share,
+    // fa_draw: data.fa_draw,
+    // field_1st: data.field_1st,
+    // field_2nd: data.field_2nd,
+    // field_3rd: data.field_3rd,
+    // primary_address_1: data.primary_address_1,
+    // modified_by: data.modified_by,
+    // modified_date: data.modified_date,
+    // phone_2: data.phone_2,
+    // email__business2_type: data.email__business2_type,
+    // time_zone0: data.time_zone0,
+    // spouse_has_loans_s: data.spouse_has_loans_s,
+    // primary_address_2: data.primary_address_2,
+    // primary_city: data.primary_city,
+    // no_sale_reason: data.no_sale_reason,
+    // type_of_repayment_s: data.type_of_repayment_s,
+    // fed_loan_payment_s: data.fed_loan_payment_s,
+    // loan_status_s: data.loan_status_s,
+    // actively_in_school_s: data.actively_in_school_s,
+    // fed_loan_amount_s: data.fed_loan_amount_s,
+    // click_on_convert_2: data.click_on_convert_2,
+    // click_on_convert_1: data.click_on_convert_1,
+    // primary_zip_code: data.primary_zip_code,
+    // first_name: data.first_name,
+    // last_name: data.last_name,
+    // primary_phone: data.primary_phone,
+    // email__business_type: data.email__business_type,
+    // firm_name: data.firm_name,
+    // primary_state: data.primary_state,
 
-      // Error fields----------------------------------------------------------------------
-      // "industry": "14738",
-      // "presenting_rep": "0",
-      // "comp_super_affiliate": "0",
-      // "conference": "0",
-      // "created_date": "2022-06-06 16:02:50",
-      // "time_zone": "0",
-      // "primary_phone_line_type": "14264",
-      // "phone_2_type": "14268",
-      // "profession": "14384",
-      // "lead_owner": "14",
-      // "affiliate_status": "14283",
-      // "lead_source": "14750",
-      //------------------------------------------------------------------------------------
+    // Error fields----------------------------------------------------------------------
+    // "industry": "14738",
+    // "presenting_rep": "0",
+    // "comp_super_affiliate": "0",
+    // "conference": "0",
+    // "created_date": "2022-06-06 16:02:50",
+    // "time_zone": "0",
+    // "primary_phone_line_type": "14264",
+    // "phone_2_type": "14268",
+    // "profession": "14384",
+    // "lead_owner": "14",
+    // "affiliate_status": "14283",
+    // "lead_source": "14750",
+    //------------------------------------------------------------------------------------
 
-      // New Affilate Maaping Payload
+    // New Affilate Maaping Payload
 
-      collection_id: data.collection_id,
-      site_id: data.site_id,
-      fields_changed: data.fields_changed,
-      date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
-      created_by: data.created_by,
-      employment_type_s: data.employment_type_s, 
-      field_30_day_income_s: data.field_30_day_income_s,
-      tome_zone_intake: data.tome_zone_intake,
-      lead_description__specia0: data.lead_description__specia0,
-      date_of_last_contact: data.date_of_last_contact,
-      bd_andor_ria_rep: data.bd_andor_ria_rep,
-      date_of_birth__year: data.date_of_birth__year,
-      name_stated_on_vm: data.name_stated_on_vm,
-      date_of_fa_presentation: data.date_of_fa_presentation,
-      title: data.title,
-      marital_status_s: data.marital_status_s,
-      receives_texts_ivinex: data.receives_texts, //
-      vip_affiliate_ivinex: data.vip_affiliate, //
-      has_referrals_in_mind_asa_ivinex: data.has_referrals_in_mind_asa, //
-      affiliate_nurturing_call_ivinex: data.affiliate_nurturing_call, //
-      revenue_share_ivinex: data.revenue_share, //
-      comp_super_affiliate_ivinex: data.comp_super_affiliate, //
-      _of_years_an_agent_new: data._of_years_an_agent_new,
-      email__personal_type: data.email__personal_type,
-      linkedin: data.linkedin,
-      date_of_first_client_refe: data.date_of_first_client_refe,
-      fa_draw: data.fa_draw,
-      field_1st: data.field_1st,
-      field_2nd: data.field_2nd,
-      field_3rd: data.field_3rd,
-      primary_address_1: data.primary_address_1,
-      modified_by: data.modified_by,
-      modified_date: data.modified_date, 
-      phone_2: data.phone_2,
-      email__business2_type: data.email__business2_type,
-      spouse_has_loans_s: data.spouse_has_loans_s,
-      primary_address_2: data.primary_address_2,
-      primary_city: data.primary_city,
-      no_sale_reason: data.no_sale_reason,
-      type_of_repayment_s: data.type_of_repayment_s,
-      fed_loan_payment_s: data.fed_loan_payment_s,
-      loan_status_s: data.loan_status_s,
-      actively_in_school_s: data.actively_in_school_s,
-      fed_loan_amount_s: data.fed_loan_amount_s,
-      click_on_convert_2: data.click_on_convert_2,
-      click_on_convert_1: data.click_on_convert_1,
-      primary_zip_code: data.primary_zip_code,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      primary_phone: data.primary_phone,
-      email__business_type: data.email__business_type,
-      firm_name: data.firm_name,
-      primary_state: data.primary_state,
-      // New error Fields ------------------------------------------------------------------
-      // phone_2_type: data.phone_2_type,
-      // time_zone0: data.time_zone0,
-      // profession: data.profession,
-      // lead_owner: data.lead_owner,
-      // affiliate_status: data.affiliate_status,
-      // lead_source: data.lead_source,
-      // _of_years_an_agent_old: data._of_years_an_agent_old,
-      // _of_registered_states: data._of_registered_states,
-      // industry: data.industry,
-      // presenting_rep: data.presenting_rep,
-      // conference: data.conference,
-      // created_date: data.created_date,
-      // time_zone: data.time_zone,
-      // primary_phone_line_type: data.primary_phone_line_type,
-      //----------------------------------------------------------------------------------
-   };
+    collection_id: data.collection_id,
+    site_id: data.site_id,
+    fields_changed: data.fields_changed,
+    date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
+    created_by: data.created_by,
+    employment_type_s: data.employment_type_s,
+    field_30_day_income_s: data.field_30_day_income_s,
+    tome_zone_intake: data.tome_zone_intake,
+    lead_description__specia0: data.lead_description__specia0,
+    date_of_last_contact: data.date_of_last_contact,
+    bd_andor_ria_rep: data.bd_andor_ria_rep,
+    date_of_birth__year: data.date_of_birth__year,
+    name_stated_on_vm: data.name_stated_on_vm,
+    date_of_fa_presentation: data.date_of_fa_presentation,
+    title: data.title,
+    marital_status_s: data.marital_status_s,
+    receives_texts_ivinex: data.receives_texts, //
+    vip_affiliate_ivinex: data.vip_affiliate, //
+    has_referrals_in_mind_asa_ivinex: data.has_referrals_in_mind_asa, //
+    affiliate_nurturing_call_ivinex: data.affiliate_nurturing_call, //
+    revenue_share_ivinex: data.revenue_share, //
+    comp_super_affiliate_ivinex: data.comp_super_affiliate, //
+    _of_years_an_agent_new: data._of_years_an_agent_new,
+    email__personal_type: data.email__personal_type,
+    linkedin: data.linkedin,
+    date_of_first_client_refe: data.date_of_first_client_refe,
+    fa_draw: data.fa_draw,
+    field_1st: data.field_1st,
+    field_2nd: data.field_2nd,
+    field_3rd: data.field_3rd,
+    primary_address_1: data.primary_address_1,
+    modified_by: data.modified_by,
+    modified_date: data.modified_date,
+    phone_2: data.phone_2,
+    email__business2_type: data.email__business2_type,
+    spouse_has_loans_s: data.spouse_has_loans_s,
+    primary_address_2: data.primary_address_2,
+    primary_city: data.primary_city,
+    no_sale_reason: data.no_sale_reason,
+    type_of_repayment_s: data.type_of_repayment_s,
+    fed_loan_payment_s: data.fed_loan_payment_s,
+    loan_status_s: data.loan_status_s,
+    actively_in_school_s: data.actively_in_school_s,
+    fed_loan_amount_s: data.fed_loan_amount_s,
+    click_on_convert_2: data.click_on_convert_2,
+    click_on_convert_1: data.click_on_convert_1,
+    primary_zip_code: data.primary_zip_code,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    primary_phone: data.primary_phone,
+    email__business_type: data.email__business_type,
+    firm_name: data.firm_name,
+    primary_state: data.primary_state,
+    // New error Fields ------------------------------------------------------------------
+    // phone_2_type: data.phone_2_type,
+    // time_zone0: data.time_zone0,
+    // profession: data.profession,
+    // lead_owner: data.lead_owner,
+    // affiliate_status: data.affiliate_status,
+    // lead_source: data.lead_source,
+    // _of_years_an_agent_old: data._of_years_an_agent_old,
+    // _of_registered_states: data._of_registered_states,
+    // industry: data.industry,
+    // presenting_rep: data.presenting_rep,
+    // conference: data.conference,
+    // created_date: data.created_date,
+    // time_zone: data.time_zone,
+    // primary_phone_line_type: data.primary_phone_line_type,
+    //----------------------------------------------------------------------------------
+  };
 
   const cleanedProperties = cleanProps(properties);
 
@@ -787,74 +790,67 @@ function buildHubSpotAffiliatePayload(data = {}) {
   }
 
   return {
-    properties: cleanedProperties
+    properties: cleanedProperties,
   };
 }
-
 
 // Create Invoices Payload
 
 function buildHubSpotInvoicePayload(data = {}) {
   const properties = cleanProps({
-    
-  // clients_tutor__only_sel1: data?.clients_tutor__only_sel1,
+    // clients_tutor__only_sel1: data?.clients_tutor__only_sel1,
 
-  collection_id: data?.collection_id,
-  site_id: data?.site_id,
-  fields_changed: data?.fields_changed,
-  dont_use_setter_if_25_: data?.dont_use_setter_if_25_,
-  hours_spent: data?.hours_spent,
-  created_by: data?.created_by,
-  project_description: data?.project_description,
-  amount_of_expense_receip: data?.amount_of_expense_receip,
-  expense_description: data?.expense_description,
-  review_bonuses__processi: data?.review_bonuses__processi,
-  marketing_bonuses: data?.marketing_bonuses,
-  advanced_planning_activit: data?.advanced_planning_activit,
-  affiliate_bonus: data?.affiliate_bonus,
-  related_client: data?.related_client,
-  no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_,
-  hourly_rate: data?.hourly_rate,
-  setter_name: data?.setter_name,
-  sale_financing___recurri: data?.sale_financing___recurri,
-  special_details: data?.special_details,
-  amount_charged_today: data?.amount_charged_today,
-  commission_: data?.commission_,
-  sales_commission: data?.sales_commission,
-  clients_tutor__only_sel: data?.clients_tutor__only_sel,
-  related_affiliate: data?.related_affiliate,
-  additional_work_completed: data?.additional_work_completed,
-  payment_type: data?.payment_type,
-  date_reconciled: data?.date_reconciled,
-  related_inquirer: data?.related_inquirer,
-  related_client_processin: data?.related_client_processin,
-  special_notes: data?.special_notes,
-  related_client_recertifc: data?.related_client_recertifc,
-  aar_sale_amount: data?.aar_sale_amount,
-  payment_arrangementtrade: data?.payment_arrangementtrade,
-  modified_date: data?.modified_date,
-  modified_by: data?.modified_by,
-  tutor_sale_amount: data?.tutor_sale_amount,
-  payment_arrangement: data?.payment_arrangement,
-  dont_use__setter_if_50_: data?.dont_use__setter_if_50_,
-  special_arrangements_deta: data?.special_arrangements_deta,
-  created_date: data?.created_date,
-  date_of_activity: data?.date_of_activity,
-  contractor_name: data?.contractor_name,
-  sales_category_report_cc: data?.sales_category_report_cc,
-  invoice_category: data?.invoice_category,
-  total_sale_amount: data?.total_sale_amount,
-  total_invoice_amount: data?.total_invoice_amount,
-  first_name: data?.first_name,
-  last_name: data?.last_name,
-  aar_activity_commission: data?.aar_activity_commission,
-  processing_activity: data?.processing_activity,
-  clients_tutor__only_sel0: data?.clients_tutor__only_sel0
-
-  
-
-
-
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+    dont_use_setter_if_25_: data?.dont_use_setter_if_25_,
+    hours_spent: data?.hours_spent,
+    created_by: data?.created_by,
+    project_description: data?.project_description,
+    amount_of_expense_receip: data?.amount_of_expense_receip,
+    expense_description: data?.expense_description,
+    review_bonuses__processi: data?.review_bonuses__processi,
+    marketing_bonuses: data?.marketing_bonuses,
+    advanced_planning_activit: data?.advanced_planning_activit,
+    affiliate_bonus: data?.affiliate_bonus,
+    related_client: data?.related_client,
+    no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_,
+    hourly_rate: data?.hourly_rate,
+    setter_name: data?.setter_name,
+    sale_financing___recurri: data?.sale_financing___recurri,
+    special_details: data?.special_details,
+    amount_charged_today: data?.amount_charged_today,
+    commission_: data?.commission_,
+    sales_commission: data?.sales_commission,
+    clients_tutor__only_sel: data?.clients_tutor__only_sel,
+    related_affiliate: data?.related_affiliate,
+    additional_work_completed: data?.additional_work_completed,
+    payment_type: data?.payment_type,
+    date_reconciled: data?.date_reconciled,
+    related_inquirer: data?.related_inquirer,
+    related_client_processin: data?.related_client_processin,
+    special_notes: data?.special_notes,
+    related_client_recertifc: data?.related_client_recertifc,
+    aar_sale_amount: data?.aar_sale_amount,
+    payment_arrangementtrade: data?.payment_arrangementtrade,
+    modified_date: data?.modified_date,
+    modified_by: data?.modified_by,
+    tutor_sale_amount: data?.tutor_sale_amount,
+    payment_arrangement: data?.payment_arrangement,
+    dont_use__setter_if_50_: data?.dont_use__setter_if_50_,
+    special_arrangements_deta: data?.special_arrangements_deta,
+    created_date: data?.created_date,
+    date_of_activity: data?.date_of_activity,
+    contractor_name: data?.contractor_name,
+    sales_category_report_cc: data?.sales_category_report_cc,
+    invoice_category: data?.invoice_category,
+    total_sale_amount: data?.total_sale_amount,
+    total_invoice_amount: data?.total_invoice_amount,
+    first_name: data?.first_name,
+    last_name: data?.last_name,
+    aar_activity_commission: data?.aar_activity_commission,
+    processing_activity: data?.processing_activity,
+    clients_tutor__only_sel0: data?.clients_tutor__only_sel0,
   });
 
   if (!Object.keys(properties).length) {
@@ -980,7 +976,6 @@ function buildHubSpotClientPayload(data = {}) {
     spouse_has_loans_ivinex: data?.spouse_has_loans, //
     // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
-
 
     // Error fields for Clients ---------------------------------------------------------------------------
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
@@ -1198,7 +1193,7 @@ function buildHubSpotClientPayload(data = {}) {
     // q21_income_change_since_l0: data?.q21_income_change_since_l0,
     // q22_taxable_income_s: data?.q22_taxable_income_s,
 
-     // Error Fields-------------------------------------------------------------------------------
+    // Error Fields-------------------------------------------------------------------------------
     // created_date: data?.created_date,
     // phone_1_type: data?.phone_1_type,
     // phone_2_type: data?.phone_2_type,
@@ -1222,304 +1217,288 @@ function buildHubSpotClientPayload(data = {}) {
 
 // Order Payload
 
-
 function buildHubspotOrderPayload(data = {}) {
-  
-   const payload = {
-    
-
-   // ERRor fields------------------------------------------------------------------------------
-
-  // income_doc_type: data?.income_doc_type,
-  // marital_status: data?.marital_status,
-  // pslf: data?.pslf,
-  // consolidation: data?.consolidation,
-  // desired_servicer: data?.desired_servicer,
-  // desired_repayment_plan: data?.desired_repayment_plan,
-  // employment_type: data?.employment_type,
-  // _income_frequency_1: data?._income_frequency_1,
-  // work_needed: data?.work_needed,
-  // current_repayment_plan: data?.current_repayment_plan,
-  // picklist value mapping:-
-    // calculate_for_autopay: data?.calculate_for_autopay,
-  // forbearance_needed: data?.forbearance_needed,
-
-//---------------------------------------------------------------------------------------------
-
-// Order Mapping Fields:- 
-
-
-  collection_id: data?.collection_id,
-  site_id: data?.site_id,
-  fields_changed: data?.fields_changed,
-  created_by: data?.created_by,
-  modified_by: data?.modified_by,
-  modified_date: data?.modified_date,
-  most_recent_tax_filing_st: data?.most_recent_tax_filing_st,
-  filed_taxes_in_the_last_t: data?.filed_taxes_in_the_last_t,
-  household_size: data?.household_size,
-  children: data?.children,
-  other: data?.other,
-  amount: data?.amount,
-  income_frequency: data?.income_frequency,
-  linked_record: data?.linked_record,
-  notes: data?.notes,
-  spouse_income: data?.spouse_income,
-  spouse_income_type: data?.spouse_income_type,
-  spouse_income_frequency: data?.spouse_income_frequency,
-  
-  spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
-  nslds_screenshots: data?.nslds_screenshots,
-  outstanding_principle: data?.outstanding_principle,
-  avg_interest_rate_: data?.avg_interest_rate_,
-  percent_subsidized_: data?.percent_subsidized_,
-  years_towards_forgiveness: data?.years_towards_forgiveness,
-  consolidationloan_notes: data?.consolidationloan_notes,
-  est_tax_implication_: data?.est_tax_implication_,
-  life_of_loan_payments: data?.life_of_loan_payments,
-  est_total_cost_of_slt_st: data?.est_total_cost_of_slt_st,
-  balance_based_mo_payment: data?.balance_based_mo_payment,
-  balance_based_total_cost: data?.balance_based_total_cost,
-  overall_savings_vs_balan: data?.overall_savings_vs_balan,
-  new_payment_amount: data?.new_payment_amount,
-  additional_notes_: data?.additional_notes_,
-  if_invest_monthly_saving: data?.if_invest_monthly_saving,
-  total_earnings_by_time_of: data?.total_earnings_by_time_of,
-  date_info_captured: data?.date_info_captured,
-  total_balance: data?.total_balance,
-  current_servicer: data?.current_servicer,
-  interest_per_year: data?.interest_per_year,
-  after_neg_am_interest_pe: data?.after_neg_am_interest_pe,
-  interest_life_of_loan_be0: data?.interest_life_of_loan_be0,
-
-  subsidized_forgiveness_su: data?.subsidized_forgiveness_su,
-  projected_balance_at_time: data?.projected_balance_at_time,
-  projected_additional_inte: data?.projected_additional_inte,
-  apc_notes: data?.apc_notes,
-  year_of_taxes_being_used: data?.year_of_taxes_being_used,
-  tutor_approx_value_of_str: data?.tutor_approx_value_of_str,
-  servicer: data?.servicer,
-  balance_based_years: data?.balance_based_years,
-  balance_based_scenarios: data?.balance_based_scenarios,
-  value_of_cashflow: data?.value_of_cashflow,
-  slt_calc_results: data?.slt_calc_results,
-  household_notes: data?.household_notes,
-  income_notes: data?.income_notes,
-  hh_size__income_threshol: data?.hh_size__income_threshol,
-  related_email_address: data?.related_email_address,
-  income_notes0: data?.income_notes0,
-  household_notes0: data?.household_notes0,
-  refusal_details0: data?.refusal_details0,
-  stop_dont_use: data?.stop_dont_use,
-  copy_order: data?.copy_order,
-  type0: data?.type0,
-  months_of_pslf: data?.months_of_pslf,
-  due_remove_auto_pay: data?.due_remove_auto_pay,
-  servicerwebsite: data?.servicerwebsite,
-  plans: data?.plans,
-  consol_1_loan_codes__am: data?.consol_1_loan_codes__am,
-  consol_2_loan_codes__am: data?.consol_2_loan_codes__am,
-  consolidation_1_desired_0: data?.consolidation_1_desired_0,
-  consolidation_2_desired_0: data?.consolidation_2_desired_0,
-  consolidation_3_desired_: data?.consolidation_3_desired_,
-  final_step_enroll_into_i: data?.final_step_enroll_into_i,
-  current_servicer__repaym: data?.current_servicer__repaym,
-  consol_3_loan_codes__am: data?.consol_3_loan_codes__am,
-  dates: data?.dates,
-  amount_1: data?.amount_1,
-  amount_2: data?.amount_2,
-  dates0: data?.dates0,
-  agi: data?.agi,
-  
-  income_frequency_2: data?.income_frequency_2,
-  spouses_name: data?.spouses_name,
-  special_grouping__notes: data?.special_grouping__notes,
-  spouse_income_notes: data?.spouse_income_notes,
-  field_2025_ibrpaye__15: data?.field_2025_ibrpaye__15,
-  field_2025_icr__20: data?.field_2025_icr__20,
-  consolidating_heal_loans0: data?.consolidating_heal_loans0,
-  in_school_deferment: data?.in_school_deferment,
-  forbearance_needed0: data?.forbearance_needed0,
-  total: data?.total,
-  total0: data?.total0,
-  consolidate: data?.consolidate,
-  leave_out: data?.leave_out,
-  plans0: data?.plans0,
-  eligible_for_ibr_new_all: data?.eligible_for_ibr_new_all,
-  year0: data?.year0,
-  
-  estimated_payment: data?.estimated_payment,
-  client: data?.client,
-  actual_payment: data?.actual_payment,
-  tax_saving_status_apc: data?.tax_saving_status_apc,
-  created_date: data?.created_date,
-
-  // IMPORTANT: must be a STAGE ID, not pipeline ID or label
-  // hs_pipeline_stage: data?.hs_pipeline_stage,
-     hs_pipeline_stage: "2091193057",
-    subject: "SLT calculation record",
-    content: "Created via API"
-};
-
-  return cleanProps(payload);
-}
-
-// Text Message Payload 
-
-function buildTextMessagePayload(data = {}) {
-
   const payload = {
-  
-  collection_id: data?.collection_id,
-  site_id: data?.site_id,
-  fields_changed: data?.fields_changed,
+    // ERRor fields------------------------------------------------------------------------------
 
-  created_by: data?.created_by,
-  modified_by: data?.modified_by,
-  modified_date: data?.modified_date,
-  created_date: data?.created_date,
+    // income_doc_type: data?.income_doc_type,
+    // marital_status: data?.marital_status,
+    // pslf: data?.pslf,
+    // consolidation: data?.consolidation,
+    // desired_servicer: data?.desired_servicer,
+    // desired_repayment_plan: data?.desired_repayment_plan,
+    // employment_type: data?.employment_type,
+    // _income_frequency_1: data?._income_frequency_1,
+    // work_needed: data?.work_needed,
+    // current_repayment_plan: data?.current_repayment_plan,
+    // picklist value mapping:-
+    // calculate_for_autopay: data?.calculate_for_autopay,
+    // forbearance_needed: data?.forbearance_needed,
 
-  read_status: data?.read_status,
-  status: data?.status,
+    //---------------------------------------------------------------------------------------------
 
-  message: data?.message,
+    // Order Mapping Fields:-
 
-  text_number: data?.text_number,
-  external_number: data?.external_number,
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+    created_by: data?.created_by,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    most_recent_tax_filing_st: data?.most_recent_tax_filing_st,
+    filed_taxes_in_the_last_t: data?.filed_taxes_in_the_last_t,
+    household_size: data?.household_size,
+    children: data?.children,
+    other: data?.other,
+    amount: data?.amount,
+    income_frequency: data?.income_frequency,
+    linked_record: data?.linked_record,
+    notes: data?.notes,
+    spouse_income: data?.spouse_income,
+    spouse_income_type: data?.spouse_income_type,
+    spouse_income_frequency: data?.spouse_income_frequency,
 
-  external_id: data?.external_id,
+    spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
+    nslds_screenshots: data?.nslds_screenshots,
+    outstanding_principle: data?.outstanding_principle,
+    avg_interest_rate_: data?.avg_interest_rate_,
+    percent_subsidized_: data?.percent_subsidized_,
+    years_towards_forgiveness: data?.years_towards_forgiveness,
+    consolidationloan_notes: data?.consolidationloan_notes,
+    est_tax_implication_: data?.est_tax_implication_,
+    life_of_loan_payments: data?.life_of_loan_payments,
+    est_total_cost_of_slt_st: data?.est_total_cost_of_slt_st,
+    balance_based_mo_payment: data?.balance_based_mo_payment,
+    balance_based_total_cost: data?.balance_based_total_cost,
+    overall_savings_vs_balan: data?.overall_savings_vs_balan,
+    new_payment_amount: data?.new_payment_amount,
+    additional_notes_: data?.additional_notes_,
+    if_invest_monthly_saving: data?.if_invest_monthly_saving,
+    total_earnings_by_time_of: data?.total_earnings_by_time_of,
+    date_info_captured: data?.date_info_captured,
+    total_balance: data?.total_balance,
+    current_servicer: data?.current_servicer,
+    interest_per_year: data?.interest_per_year,
+    after_neg_am_interest_pe: data?.after_neg_am_interest_pe,
+    interest_life_of_loan_be0: data?.interest_life_of_loan_be0,
 
-  client: data?.client,
+    subsidized_forgiveness_su: data?.subsidized_forgiveness_su,
+    projected_balance_at_time: data?.projected_balance_at_time,
+    projected_additional_inte: data?.projected_additional_inte,
+    apc_notes: data?.apc_notes,
+    year_of_taxes_being_used: data?.year_of_taxes_being_used,
+    tutor_approx_value_of_str: data?.tutor_approx_value_of_str,
+    servicer: data?.servicer,
+    balance_based_years: data?.balance_based_years,
+    balance_based_scenarios: data?.balance_based_scenarios,
+    value_of_cashflow: data?.value_of_cashflow,
+    slt_calc_results: data?.slt_calc_results,
+    household_notes: data?.household_notes,
+    income_notes: data?.income_notes,
+    hh_size__income_threshol: data?.hh_size__income_threshol,
+    related_email_address: data?.related_email_address,
+    income_notes0: data?.income_notes0,
+    household_notes0: data?.household_notes0,
+    refusal_details0: data?.refusal_details0,
+    stop_dont_use: data?.stop_dont_use,
+    copy_order: data?.copy_order,
+    type0: data?.type0,
+    months_of_pslf: data?.months_of_pslf,
+    due_remove_auto_pay: data?.due_remove_auto_pay,
+    servicerwebsite: data?.servicerwebsite,
+    plans: data?.plans,
+    consol_1_loan_codes__am: data?.consol_1_loan_codes__am,
+    consol_2_loan_codes__am: data?.consol_2_loan_codes__am,
+    consolidation_1_desired_0: data?.consolidation_1_desired_0,
+    consolidation_2_desired_0: data?.consolidation_2_desired_0,
+    consolidation_3_desired_: data?.consolidation_3_desired_,
+    final_step_enroll_into_i: data?.final_step_enroll_into_i,
+    current_servicer__repaym: data?.current_servicer__repaym,
+    consol_3_loan_codes__am: data?.consol_3_loan_codes__am,
+    dates: data?.dates,
+    amount_1: data?.amount_1,
+    amount_2: data?.amount_2,
+    dates0: data?.dates0,
+    agi: data?.agi,
 
-  group_text: data?.group_text,
-  group_text_parent: data?.group_text_parent
+    income_frequency_2: data?.income_frequency_2,
+    spouses_name: data?.spouses_name,
+    special_grouping__notes: data?.special_grouping__notes,
+    spouse_income_notes: data?.spouse_income_notes,
+    field_2025_ibrpaye__15: data?.field_2025_ibrpaye__15,
+    field_2025_icr__20: data?.field_2025_icr__20,
+    consolidating_heal_loans0: data?.consolidating_heal_loans0,
+    in_school_deferment: data?.in_school_deferment,
+    forbearance_needed0: data?.forbearance_needed0,
+    total: data?.total,
+    total0: data?.total0,
+    consolidate: data?.consolidate,
+    leave_out: data?.leave_out,
+    plans0: data?.plans0,
+    eligible_for_ibr_new_all: data?.eligible_for_ibr_new_all,
+    year0: data?.year0,
 
-  
+    estimated_payment: data?.estimated_payment,
+    client: data?.client,
+    actual_payment: data?.actual_payment,
+    tax_saving_status_apc: data?.tax_saving_status_apc,
+    created_date: data?.created_date,
+
+    // IMPORTANT: must be a STAGE ID, not pipeline ID or label
+    // hs_pipeline_stage: data?.hs_pipeline_stage,
+    hs_pipeline_stage: "2091193057",
+    subject: "SLT calculation record",
+    content: "Created via API",
   };
 
   return cleanProps(payload);
 }
 
-// Email Payload 
+// Text Message Payload
 
-function buildEmailPayload(data = {}) {
-
+function buildTextMessagePayload(data = {}) {
   const payload = {
-    
-  collection_id: data?.collection_id,
-  site_id: data?.site_id,
-  fields_changed: data?.fields_changed,
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
 
-  linked_record: data?.linked_record,
-  linked_module: data?.linked_module,
+    created_by: data?.created_by,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    created_date: data?.created_date,
 
-  folder_id: data?.folder_id,
-  retry_count: data?.retry_count,
+    read_status: data?.read_status,
+    status: data?.status,
 
-  notify_options: data?.notify_options,
-  external_options: data?.external_options,
+    message: data?.message,
 
-  message_uid: data?.message_uid,
-  message_id: data?.message_id,
-  result: data?.result,
+    text_number: data?.text_number,
+    external_number: data?.external_number,
 
-  open_date: data?.open_date,
-  events: data?.events,
+    external_id: data?.external_id,
 
-  email_attachments: data?.email_attachments,
-  ivinex_attachments: data?.ivinex_attachments,
-  file_upload_status: data?.file_upload_status,
+    client: data?.client,
 
-  template_processed: data?.template_processed,
-  email_template: data?.email_template,
-
-  replied_from: data?.replied_from,
-  forwarded_from: data?.forwarded_from,
-
-  reply: data?.reply,
-  reply_all: data?.reply_all,
-  forward: data?.forward,
-
-  delay_send_date: data?.delay_send_date,
-
-  created_date: data?.created_date,
-  modified_by: data?.modified_by,
-  modified_date: data?.modified_date,
-  created_by: data?.created_by,
-
-  email_from: data?.email_from,
-  email_from_name: data?.email_from_name,
-
-  email_to: data?.email_to,
-  cc: data?.cc,
-  bcc: data?.bcc,
-
-  subject: data?.subject,
-  body: data?.body,
-  body_plain: data?.body_plain,
-
-  email_date: data?.email_date,
-  email_status: data?.email_status,
-
-  email_account: data?.email_account,
-  user: data?.user
-
-
-    };
+    group_text: data?.group_text,
+    group_text_parent: data?.group_text_parent,
+  };
 
   return cleanProps(payload);
 }
 
+// Email Payload
+
+function buildEmailPayload(data = {}) {
+  const payload = {
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+
+    linked_record: data?.linked_record,
+    linked_module: data?.linked_module,
+
+    folder_id: data?.folder_id,
+    retry_count: data?.retry_count,
+
+    notify_options: data?.notify_options,
+    external_options: data?.external_options,
+
+    message_uid: data?.message_uid,
+    message_id: data?.message_id,
+    result: data?.result,
+
+    open_date: data?.open_date,
+    events: data?.events,
+
+    email_attachments: data?.email_attachments,
+    ivinex_attachments: data?.ivinex_attachments,
+    file_upload_status: data?.file_upload_status,
+
+    template_processed: data?.template_processed,
+    email_template: data?.email_template,
+
+    replied_from: data?.replied_from,
+    forwarded_from: data?.forwarded_from,
+
+    reply: data?.reply,
+    reply_all: data?.reply_all,
+    forward: data?.forward,
+
+    delay_send_date: data?.delay_send_date,
+
+    created_date: data?.created_date,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    created_by: data?.created_by,
+
+    email_from: data?.email_from,
+    email_from_name: data?.email_from_name,
+
+    email_to: data?.email_to,
+    cc: data?.cc,
+    bcc: data?.bcc,
+
+    subject: data?.subject,
+    body: data?.body,
+    body_plain: data?.body_plain,
+
+    email_date: data?.email_date,
+    email_status: data?.email_status,
+
+    email_account: data?.email_account,
+    user: data?.user,
+  };
+
+  return cleanProps(payload);
+}
 
 // Create Activity Payload
 
 function buildHubSpotActivityPayload(data = {}) {
   const payload = cleanProps({
-  collection_id: data?.collection_id,
-  site_id: data?.site_id,
-  fields_changed: data?.fields_changed,
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
 
-  location: data?.location,
-  date_email_opened: data?.date_email_opened,
+    location: data?.location,
+    date_email_opened: data?.date_email_opened,
 
-  email_id: data?.email_id,
-  subject: data?.subject,
+    email_id: data?.email_id,
+    subject: data?.subject,
 
-  field_from: data?.field_from,
-  email_to: data?.email_to,
-  cc: data?.cc,
-  bcc: data?.bcc,
+    field_from: data?.field_from,
+    email_to: data?.email_to,
+    cc: data?.cc,
+    bcc: data?.bcc,
 
-  recurrence: data?.recurrence,
-  all_day_event: data?.all_day_event,
+    recurrence: data?.recurrence,
+    all_day_event: data?.all_day_event,
 
-  start_time: data?.start_time,
-  end_time: data?.end_time,
+    start_time: data?.start_time,
+    end_time: data?.end_time,
 
-  priority: data?.priority,
-  status: data?.status,
+    priority: data?.priority,
+    status: data?.status,
 
-  activity: data?.activity,
-  description: data?.description,
+    activity: data?.activity,
+    description: data?.description,
 
-  assigned: data?.assigned,
+    assigned: data?.assigned,
 
-  created_date: data?.created_date,
-  created_by: data?.created_by,
+    created_date: data?.created_date,
+    created_by: data?.created_by,
 
-  modified_date: data?.modified_date,
-  modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    modified_by: data?.modified_by,
 
-  date: data?.date
-
-
+    date: data?.date,
   });
 
   if (!Object.keys(payload).length) {
     throw new Error("❌ Activity payload is empty");
   }
 
-  return { payload};
+  return { payload };
 }
 export {
   cleanProps,
@@ -1531,5 +1510,4 @@ export {
   buildHubspotOrderPayload,
   buildTextMessagePayload,
   buildEmailPayload,
-  
 };
