@@ -869,7 +869,8 @@ function buildHubSpotClientPayload(data = {}) {
   const properties = cleanProps({
     // Old Mapping Fields...
 
-    client_consolidation___loan_type_description:data?.client_consolidation__lo,
+    client_consolidation___loan_type_description:
+      data?.client_consolidation__lo,
     client_avg__interest_rate: data?.client_avg_interest_rate,
     hs_object_id: data?.hs_object_id,
     servicer___username: data.servicer__username,
@@ -1210,25 +1211,21 @@ function buildHubSpotClientPayload(data = {}) {
 // Order Payload
 
 function buildHubspotOrderPayload(data = {}) {
-  
   const payload = cleanProps({
-    // ERRor fields------------------------------------------------------------------------------
-
-    // income_doc_type: data?.income_doc_type,
-    // marital_status: data?.marital_status,
-    // pslf: data?.pslf,
-    // consolidation: data?.consolidation,
-    // desired_servicer: data?.desired_servicer,
-    // desired_repayment_plan: data?.desired_repayment_plan,
-    // employment_type: data?.employment_type,
-    // _income_frequency_1: data?._income_frequency_1,
+  
+    income_doc_type_ivinex: data?.income_doc_type,
+    marital_status_ivinex: data?.marital_status,
+    pslf_ivinex: data?.pslf,
+    consolidation_2_desired_0: data?.consolidation,
+    desired_servicer_ivinex: data?.desired_servicer,
+    desired_repayment_plan_ivinex: data?.desired_repayment_plan,
+    employment_type_ivinex: data?.employment_type,
+    income_frequency_1: data?._income_frequency_1,
     // work_needed: data?.work_needed,
-    // current_repayment_plan: data?.current_repayment_plan,
+    current_repayment_plan_ivinex: data?.current_repayment_plan,
     // picklist value mapping:-
     // calculate_for_autopay: data?.calculate_for_autopay,
-    // forbearance_needed: data?.forbearance_needed,
-
-    //---------------------------------------------------------------------------------------------
+    forbearance_needed0_ivinex: data?.forbearance_needed,
 
     // Order Mapping Fields:-
 
@@ -1344,7 +1341,6 @@ function buildHubspotOrderPayload(data = {}) {
     content: "Created via API",
   });
   return { properties: payload };
-
 }
 // Text Message Payload
 
