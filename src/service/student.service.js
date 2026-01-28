@@ -104,6 +104,7 @@ async function searchAffiliateByInHubspot(collectionId) {
 // Search Client function
 async function searchClientInHubSpot(collectionId) {
   if (!collectionId) return [];
+  
   const payload = {
     filterGroups: [
       {
@@ -482,10 +483,10 @@ async function updateOderInHubSpot(orderId, payload) {
   } catch (error) {
     console.error(
       "❌ Error updating order:",
-      error.response?.data || error
+      error.response?.data || error.message
     );
     // throw error; // keep commented to match your pattern
-    return {};
+    return null;
   }
 }
 

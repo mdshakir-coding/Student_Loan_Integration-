@@ -454,10 +454,10 @@ function buildHubSpotInquirerPayload(data = {}) {
     eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
     inquirer___last_year___agi: data?.inquirer__last_year__ag || null,
     inquirer_current_monthly_payment: data?.inquirer_current_monthly_ || null,
-    inquirer_profession_ivinex:data?.inquirer_profession || null,
+    inquirer_profession_ivinex: data?.inquirer_profession || null,
     // marital_status:data?.marital_status || null, // dropdown
     // eval___spouse_has_loans: data?.eval__spouse_has_loans || null, // dropdown
-    field_of_study:data?.fields_changed || null,
+    field_of_study: data?.fields_changed || null,
 
     si_creation_date: data?.si_creation_date,
     zip: data?.zip,
@@ -866,12 +866,12 @@ function buildHubSpotClientPayload(data = {}) {
   function toTimestamp(dateStr) {
     return dateStr ? new Date(dateStr).getTime() : null;
   }
-
-  console.log("Raw input data:", data);
-
   const properties = cleanProps({
     // Old Mapping Fields...
 
+    client_consolidation___loan_type_description:data?.client_consolidation__lo,
+    client_avg__interest_rate: data?.client_avg_interest_rate,
+    hs_object_id: data?.hs_object_id,
     servicer___username: data.servicer__username,
     servicer___password: data.servicer__password,
     client_avg__interest_rate: data.client_avg_interest_rate,
@@ -967,6 +967,11 @@ function buildHubSpotClientPayload(data = {}) {
     reference_2_relationship: data.reference_2_relationship,
     employers_zip: data.employers_zip,
     roa_sent_to_servicer: data.roa_sent_to_servicer,
+    time_zone0: data.time_zone0,
+    client_current_plan_idr_history: data.client_current_planidr_h,
+    primary_phone0: data?.primary_phone,
+    address_1: data.address,
+    desired_servicer_s: data?.servicer_account_,
 
     first_name: data.first_name,
     last_name: data.last_name,
@@ -979,21 +984,15 @@ function buildHubSpotClientPayload(data = {}) {
 
     // Error fields for Clients ---------------------------------------------------------------------------
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
-    // time_zone0: data.time_zone0,
-    //client_current_planidr_h: data.client_current_planidr_h,
-    // "tutor_name": "33",
-    // "processor_name": "55",
-    // "primary_phone": "8013689828",
+    // tutor_name:data?.tutor_name,
+    // processor_name: data?.processor_name,
     // "days_to_recert": "374",
     // "status1": "13385",
     // "days_since_client_cont": "488"
-    // "created_date": "2016-08-10 08:26:33",
-    // "phone_1_type": "11174",
-    // "phone_2_type": "11177",
-    // "client_action_taken": "2024-08-29 14:22:00",
-    // "recert_date": "2024-12-21 22:00:00",
-    // "social_security_number": "600-12-7333",
-    // "spouse_has_loans": "No",
+    // created_date:data?.created_date,
+    // client_action_taken:data?.client_action_taken,
+    // recert_date:data?.recert_date,
+    // social_security_number:data?.social_security_number,
     // "available_advisors": "0",
     // "lpamsa__sent_from": "0",
     // "no_apc__fa_referral": "false",
@@ -1003,7 +1002,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "double_consol_progress": "0",
     // "pp_tags_active": "false",
     // "client_contact_info": "1",
-    // "address": "1",
     // "aar_automation_date": "1",
     // "if_idr_plan_date_is_diffe": "1",
     // "import_id": "28",
@@ -1011,7 +1009,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "advisor_action_needed": "false",
     // "testimonial_complete": "false",
     // "ni_in_testimonial": "false",
-    // "servicer_account_": "",
     // "referred_to_slp": "false",
     // "double_consol_ppl_in_prog": "false",
     // "ia_securities_status": "0",
@@ -1032,7 +1029,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "ny_client": "false",
     // "ca_client": "false",
     // "ia_type_of_client": "14921",
-    // "servicer": "1",
     // "backdoor_roth": "false",
     // "nelnet_security_code_emai": "T.FrazierSLT2024@gmail.com",
     // "nelnet_security_code_emai0": "StudentLoans28!",
@@ -1055,8 +1051,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "current_ffel_loans": "false",
     // "do_not_complete_work_unti": "0.00",
     // "slt_rep_referred_by_no_l": "55",
-    // "client_consolidation__lo": "DCL 2017 \n5",
-    // "client_avg_interest_rate": "8.2",
     // "calculation_performed_by": "14",
     // "special_calculation_notes": "This is one that might get a significant credit. They've had these loans since 1999",
     // "ia_insurance_status": "13282",
@@ -1071,7 +1065,7 @@ function buildHubSpotClientPayload(data = {}) {
     // "q16_income_changed_s": "1",
     // "q17_spouse_income_changed0": "1",
     // "client_created_date": "2016-08-10 13:03:00",
-    // "aar_fee": "11493",
+    //  aar_fee:data?.aar_fee,
     // "q12_provide_info": "1",
     // "q4_in_forbearance": "1",
     // "client_name_fulf": "1",
@@ -1082,8 +1076,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "customer_info": "1",
     // "current_servicer0": "11965",
     // "status0": "1",
-    // "servicer__username": "tkfraz7",
-    // "servicer__password": "George62543*",
     // "profession0": "12735",
     // "client_is_pslf0": "13001",
     // "ia_inquirer_status": "13289",
@@ -1218,7 +1210,8 @@ function buildHubSpotClientPayload(data = {}) {
 // Order Payload
 
 function buildHubspotOrderPayload(data = {}) {
-  const payload = {
+  
+  const payload = cleanProps({
     // ERRor fields------------------------------------------------------------------------------
 
     // income_doc_type: data?.income_doc_type,
@@ -1346,14 +1339,13 @@ function buildHubspotOrderPayload(data = {}) {
 
     // IMPORTANT: must be a STAGE ID, not pipeline ID or label
     // hs_pipeline_stage: data?.hs_pipeline_stage,
-    hs_pipeline_stage: "2091193057",
+    hs_pipeline_stage: "2091193059",
     subject: "SLT calculation record",
     content: "Created via API",
-  };
+  });
+  return { properties: payload };
 
-  return cleanProps(payload);
 }
-
 // Text Message Payload
 
 function buildTextMessagePayload(data = {}) {
