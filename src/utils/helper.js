@@ -445,6 +445,8 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
     inquirer_loan_servicer_ivinex:data?.inquirer_loan_servicer || null,
     eval_federal_loan_amount_ivinex: data?.eval__federal_loan_amount || null,
+    inquirer_status_ivinex: data?.inquirer_status || null,
+
     
 
     inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
@@ -594,6 +596,16 @@ function buildHubSpotInquirerPayload(data = {}) {
     of_subsidized_loans: data?._of_subsidized_loans,
     inquirer_outstanding_principal: data?.inquirer_outstanding_prin,
     time_zone__custom: data?.time_zone,
+    adj_gross_amount_stream_0: data?.adj_gross_amount_stream_0,
+    adj_gross_amount_stream_1: data?.adj_gross_amount_stream_1,
+    annual_documented_income: data?.annual_documented_income,
+    anything_else_we_should_know: data?.anything_else_we_should_know,
+    company: data?.company,
+    country: data?.country,
+    date_of_tutor_fu: data?.date_of_tutor_fu,
+    inquirer_loan_ivinex: data?.inquirer_loan || null,
+
+
 
     // New Error fields------------------------------------------------------------
     // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
@@ -994,6 +1006,15 @@ function buildHubSpotClientPayload(data = {}) {
 
     first_name: data.first_name,
     last_name: data.last_name,
+    n2nd_contact___first_name:data?.first_name,
+    n2nd_contact___last_name:data?.last_name,
+    n2nd_contact___email:data?.email_1,
+    n2nd_contact___phone:data?.primary_phone,
+    client_name: data?.client_name,
+
+
+
+
     email_1: data.email_1,
     phone_1_type_ivinex: data?.phone_1_type, //
     phone_2_type_ivinex: data?.phone_2_type, //
