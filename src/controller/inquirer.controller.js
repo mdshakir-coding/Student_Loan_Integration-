@@ -97,8 +97,8 @@ async function syncInquirer() {
         // Build HubSpot payload
         const payload = buildHubSpotInquirerPayload(record);
 
-        console.log("Record:", record);
-        console.log("Payload:", payload);
+        // console.log("Record:", record);
+        // console.log("Payload:", payload);
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
         let searchResults = null;

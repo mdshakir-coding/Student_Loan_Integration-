@@ -443,6 +443,9 @@ function buildHubSpotInquirerPayload(data = {}) {
     affiliate_referral_ivinex: data?.affiliate_referral || null, //
     entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
+    inquirer_loan_servicer_ivinex:data?.inquirer_loan_servicer || null,
+    eval_federal_loan_amount_ivinex: data?.eval__federal_loan_amount || null,
+    
 
     inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
     eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
@@ -505,7 +508,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     sps_years_towards_forgiv: data?.sps_years_towards_forgiv,
     sps_loan_types: data?.sps_loan_types,
     sps_loan_servicers: data?.sps_loan_servicers,
-    inquirer_household_size_n: data?.inquirer_household_size_n,
+    inquirer_household_size_notes: data?.inquirer_household_size_n,
     date_of_planning_call: data?.date_of_planning_call,
     date_marketing_reconciled: data?.date_marketing_reconciled,
     conferencesdani_pr_sourc: data?.conferencesdani_pr_sourc,
