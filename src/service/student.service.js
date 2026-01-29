@@ -193,7 +193,7 @@ async function updateClientInHubSpot(clientId, payload) {
       "❌ Error updating client:",
       error.response?.data || error.message
     );
-    throw error; // IMPORTANT
+    return {};
   }
 }
 

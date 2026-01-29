@@ -436,27 +436,19 @@ function buildHubSpotInquirerPayload(data = {}) {
 
     // New Inquirer Mapping fields:-
 
-    // time_zone: data.hs_timezone,
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
     eval_taxes_jointlysepa_ivinex: data?.eval__taxes_jointlysepa || null, //
     du_slt_outreachaffiliate_ivinex: data?.du_slt_outreachaffiliate || null, //
-    // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
     contractor_referred_by_ivinex: data?.contractor_referred_by || null, //
     affiliate_referral_ivinex: data?.affiliate_referral || null, //
     entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
-    // employment_type: data?.employment_type_s || null,
-    // inquirer_status: data?.inquirer_status || null,
-    // inquirer_profession: data?.inquirer_profession || null,
-    // inquirer_loan_servicer:data?.inquirer_loan_servicer || null,
-    // household_size__income_t0:data?.household_size__income_t0 || null,
+
     inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
     eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
     inquirer___last_year___agi: data?.inquirer__last_year__ag || null,
     inquirer_current_monthly_payment: data?.inquirer_current_monthly_ || null,
     inquirer_profession_ivinex: data?.inquirer_profession || null,
-    // marital_status:data?.marital_status || null, // dropdown
-    // eval___spouse_has_loans: data?.eval__spouse_has_loans || null, // dropdown
     field_of_study: data?.fields_changed || null,
 
     si_creation_date: data?.si_creation_date,
@@ -578,49 +570,54 @@ function buildHubSpotInquirerPayload(data = {}) {
     tutor_needs_attention: data?.tutor_needs_attention,
     setter_needs_attention: data?.setter_needs_attention,
     under_admin_review__s_k: data?.under_admin_review__s_k,
+    spouse_fed_loan_amount: data?.spouse_fed_loan_amount0,
+    eval___spouse_pay_frequency: data?.eval__pay_frequency,
+    time_zone__custom: data?.time_zone0,
+    counting_spouse_in_hh_size_: data?.counting_spouse_in_hh_siz,
+    add___other__dependents: data?.add_other_dependents,
+    add__child_dependents__incl__adult_children_: data?.add_child_dependents_in,
+    spouse_annual_documented: data?.spouse_annual_documented_,
+    total_streams_of_taxable: data?.total_streams_of_taxable_,
+    sps__already_enrolled_in_autopay_: data?.sps_already_enrolled_in_,
+    inquirer___last_year___agi: data?.inquirer__last_year__ag,
+    inquirer_current_monthly_payment: data?.inquirer_current_monthly_,
+    tutor_name_: data?.tutor_name,
+    notes_on_pricing_quoted_etc_: data?.notes_on_pricing_quoted_e,
+    spouse__last_year__agi: data?.spouse__last_year__agi,
+    sps___of_sub_loans: data?.sps__of_sub_loans,
+    inquirer_avg__interest_rate: data?.inquirer_avg_interest_ra,
+    inquirer_years_towards_forgiveness: data?.inquirer_years_towards_fo,
+    already_enrolled_in_autopay_: data?.already_enrolled_in_autop,
+    of_subsidized_loans: data?._of_subsidized_loans,
+    inquirer_outstanding_principal: data?.inquirer_outstanding_prin,
+    time_zone__custom: data?.time_zone,
 
     // New Error fields------------------------------------------------------------
+    // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
+    // employment_type: data?.employment_type_s || null,
+    // inquirer_status: data?.inquirer_status || null,
+    // inquirer_profession: data?.inquirer_profession || null,
+    // inquirer_loan_servicer:data?.inquirer_loan_servicer || null,
+    // household_size__income_t0:data?.household_size__income_t0 || null,
+    // marital_status:data?.marital_status || null, // dropdown
+    // eval___spouse_has_loans: data?.eval__spouse_has_loans || null, // dropdown
 
-    // spouse_fed_loan_amount0: data?.spouse_fed_loan_amount0,
-    // eval__pay_frequency: data?.eval__pay_frequency,
-    // inquirer_avg_interest_ra: data?.inquirer_avg_interest_ra,
-    // inquirer_years_towards_fo: data?.inquirer_years_towards_fo,
-    // already_enrolled_in_autop: data?.already_enrolled_in_autop,
-    // _of_subsidized_loans: data?._of_subsidized_loans,
-    // inquirer_outstanding_prin: data?.inquirer_outstanding_prin,
-    // fields_changed: data?.fields_changed,
-    // created_by: data?.created_by,
+    // hs_created_by_user_id: data?.created_by,
     // modified_date: data?.modified_date,
-    // time_zone: data?.time_zone,
     // phone_1_type: data?.phone_1_type,
     // phone_2_type: data?.phone_2_type,
     // lead_source_dont_use: data?.lead_source_dont_use,
-    // time_zone0: data?.time_zone0,
-    // counting_spouse_in_hh_siz: data?.counting_spouse_in_hh_siz,
-    // add_other_dependents: data?.add_other_dependents,
-    // add_child_dependents_in: data?.add_child_dependents_in,
-    // spouse_annual_documented_: data?.spouse_annual_documented_,
-    // total_streams_of_taxable_: data?.total_streams_of_taxable_,
+    // date_became_client: data?.date_became_client,
+    // inquirer_employment_type: data?.inquirer_employment_type,
     // pay_frequency_stream_2: data?.pay_frequency_stream_2,
     // pay_frequency_stream_3: data?.pay_frequency_stream_3,
     // lead_type: data?.lead_type,
-    // sps__of_sub_loans: data?.sps__of_sub_loans,
-    // sps_already_enrolled_in_: data?.sps_already_enrolled_in_,
-    // date_became_client: data?.date_became_client,
-    // eval__spouse_has_loans: data?.eval__spouse_has_loans,
-    // inquirer_employment_type: data?.inquirer_employment_type,
-    // inquirer__last_year__ag: data?.inquirer__last_year__ag,
-    // inquirer_current_monthly_: data?.inquirer_current_monthly_,
-    // marital_status_s: data?.marital_status_s,
-    // employment_type_s: data?.employment_type_s,
+    // marital_status: data?.marital_status_s,
+    // employment_type: data?.employment_type_s,
     // standby_list: data?.standby_list,
     // slt_referring_rep: data?.slt_referring_rep,
-    // tutor_name: data?.tutor_name,
-    // notes_on_pricing_quoted_e: data?.notes_on_pricing_quoted_e,
     // podcast: data?.podcast,
-    // spouse__last_year__agi: data?.spouse__last_year__agi,
     // affiliate_lead_owner: data?.affiliate_lead_owner,
-    // marital_status: data?.marital_status,
     //----------------------------------------------------------------------------
   });
 
@@ -764,24 +761,25 @@ function buildHubSpotAffiliatePayload(data = {}) {
     email__business_type: data.email__business_type,
     firm_name: data.firm_name,
     primary_state: data.primary_state,
+    time_zone0: data.time_zone0,
+    affiliate_status_ivinex: data.affiliate_status,
+    lead_source_ivinex: data.lead_source,
+    of_registered_states: data?._of_registered_states,
+    industry_ivinex: data.industry,
+    conference_ivinex: data.conference,
+
     // New error Fields ------------------------------------------------------------------
+
     // phone_2_type: data.phone_2_type,
-    // time_zone0: data.time_zone0,
     // profession: data.profession,
     // lead_owner: data.lead_owner,
-    // affiliate_status: data.affiliate_status,
-    // lead_source: data.lead_source,
-    // _of_years_an_agent_old: data._of_years_an_agent_old,
-    // _of_registered_states: data._of_registered_states,
-    // industry: data.industry,
     // presenting_rep: data.presenting_rep,
-    // conference: data.conference,
+    // _of_years_an_agent_old: data._of_years_an_agent_old,
     // created_date: data.created_date,
     // time_zone: data.time_zone,
     // primary_phone_line_type: data.primary_phone_line_type,
     //----------------------------------------------------------------------------------
   };
-
   const cleanedProperties = cleanProps(properties);
 
   // 🔥 Critical safety check
@@ -798,8 +796,7 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
 function buildHubSpotInvoicePayload(data = {}) {
   const properties = cleanProps({
-    // clients_tutor__only_sel1: data?.clients_tutor__only_sel1,
-
+    clients_tutor__only_sel: data?.clients_tutor__only_sel1,
     collection_id: data?.collection_id,
     site_id: data?.site_id,
     fields_changed: data?.fields_changed,
@@ -973,6 +970,24 @@ function buildHubSpotClientPayload(data = {}) {
     primary_phone0: data?.primary_phone,
     address_1: data.address,
     desired_servicer_s: data?.servicer_account_,
+    days_to_recert: data?.days_to_recert,
+    possible_testimonial: data?.possible_testimonial,
+    mn_client: data?.mn_client,
+    ny_client: data?.ny_client,
+    ca_client: data?.ca_client,
+    import_id: data?.import_id,
+    mass_update: data?.mass_update_,
+    referred_to_slp: data?.referred_to_slp,
+    double_consol_ppl_in_progress: data?.double_consol_ppl_in_prog,
+    servicer_account: data?.servicer_account_,
+    first_year_of_payment: data?.first_year_of_payment,
+    pp_tags_active: data?.pp_tags_active,
+    current_year_total_balance: data?.current_year_total_balanc,
+    calculator_report_link: data?.calculator_report_link,
+    payment_problem_to_resolve: data?.payment_problem_to_resolv,
+    current_ffel_loans: data?.current_ffel_loans,
+    special_calculation_notes: data?.special_calculation_notes,
+    email_address: data?.email_address,
 
     first_name: data.first_name,
     last_name: data.last_name,
@@ -987,10 +1002,9 @@ function buildHubSpotClientPayload(data = {}) {
     // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
     // tutor_name:data?.tutor_name,
     // processor_name: data?.processor_name,
-    // "days_to_recert": "374",
     // "status1": "13385",
     // "days_since_client_cont": "488"
-    // created_date:data?.created_date,
+    // client_date:data?.created_date,
     // client_action_taken:data?.client_action_taken,
     // recert_date:data?.recert_date,
     // social_security_number:data?.social_security_number,
@@ -999,61 +1013,43 @@ function buildHubSpotClientPayload(data = {}) {
     // "no_apc__fa_referral": "false",
     // "current_idr_plan": "0",
     // "type_of_idr_app_submitted": "0",
-    // "slt_referring_rep_nfm": "0",
-    // "double_consol_progress": "0",
-    // "pp_tags_active": "false",
     // "client_contact_info": "1",
-    // "aar_automation_date": "1",
+    // aar_automation_date: data?.aar_automation_date,
     // "if_idr_plan_date_is_diffe": "1",
-    // "import_id": "28",
-    // "mass_update_": "true",
     // "advisor_action_needed": "false",
     // "testimonial_complete": "false",
     // "ni_in_testimonial": "false",
-    // "referred_to_slp": "false",
-    // "double_consol_ppl_in_prog": "false",
     // "ia_securities_status": "0",
     // "new_client_or_aar0": "0",
     // "does_client_have_a_financ": "0",
-    // "account_": "0",
-    // "account_type": "15045",
-    // "first_year_of_payment": "false",
     // "apc_booking_status_no_lo": "15076",
     // "avs_only__no_lpa__charg": "0",
     // "charge_percentage__msa_f": "0",
-    // "idr_recert_app_sub_deadli": "2024-11-21",
-    // "days_to_dealine": "405",
+    // idr_recert_app_sub_deadline:data?.
+    // days_to_deadline:data?.idr_recert_app_sub_deadli,
     // "fulfillment_company": "15025",
-    // "possible_testimonial": "false",
     // "solic_agent": "15035",
-    // "mn_client": "false",
-    // "ny_client": "false",
-    // "ca_client": "false",
     // "ia_type_of_client": "14921",
     // "backdoor_roth": "false",
     // "nelnet_security_code_emai": "T.FrazierSLT2024@gmail.com",
     // "nelnet_security_code_emai0": "StudentLoans28!",
+    // "client_ssn_last_4": "4321",
+    // "client_ssn_full": "123-45-4321",
     // "studentloanrecordid": "1",
     // "tsr_client_no_longer_use": "false",
     // "apc_status0": "1",
     // "client_int_in_slt_nonpr0": "false",
     // "date_marked_inactive": "2024-08-29",
-    // "current_year_total_balanc": "158,776.12",
-    // "current_year_principal_ba": "144324",
     // "referring_affiliate": "0",
     // "escrow_protocol": "false",
     // "est_forgiveness_date0": "2042-01-25",
     // "years_until_forgiveness": "-192",
     // "apc_status": "1",
-    // "calculator_report_link": "https://datastudio.google.com/s/s9qrY0Ew8m0",
     // "referrals": "1",
     // "inactive_specifics": "14184",
-    // "payment_problem_to_resolv": "false",
-    // "current_ffel_loans": "false",
     // "do_not_complete_work_unti": "0.00",
     // "slt_rep_referred_by_no_l": "55",
     // "calculation_performed_by": "14",
-    // "special_calculation_notes": "This is one that might get a significant credit. They've had these loans since 1999",
     // "ia_insurance_status": "13282",
     // "state_license_needed": "UT",
     // "term_only0": "false",
@@ -1071,7 +1067,6 @@ function buildHubSpotClientPayload(data = {}) {
     // "q4_in_forbearance": "1",
     // "client_name_fulf": "1",
     // "client_name_fulc": "1",
-    // "email_address": "kmfraz@comcast.net",
     // "recerts": "1",
     // "middle_initialname": "Delane",
     // "customer_info": "1",
@@ -1188,9 +1183,6 @@ function buildHubSpotClientPayload(data = {}) {
 
     // Error Fields-------------------------------------------------------------------------------
     // created_date: data?.created_date,
-    // phone_1_type: data?.phone_1_type,
-    // phone_2_type: data?.phone_2_type,
-    // spouse_has_loans: data?.spouse_has_loans,
     // q1_income_driven_type_s: data?.q1_income_driven_type_s,
     // q18_employment_type_0: data?.q18_employment_type_0,
     // client_action_taken: data?.client_action_taken,
@@ -1202,7 +1194,7 @@ function buildHubSpotClientPayload(data = {}) {
   // console.log("Cleaned properties:", properties);
 
   if (Object.keys(properties).length === 0) {
-    throw new Error("❌ Client payload is empty");
+    throw new Error("Client payload is empty");
   }
 
   return { properties };
@@ -1212,7 +1204,6 @@ function buildHubSpotClientPayload(data = {}) {
 
 function buildHubspotOrderPayload(data = {}) {
   const payload = cleanProps({
-  
     income_doc_type_ivinex: data?.income_doc_type,
     marital_status_ivinex: data?.marital_status,
     pslf_ivinex: data?.pslf,
@@ -1221,11 +1212,11 @@ function buildHubspotOrderPayload(data = {}) {
     desired_repayment_plan_ivinex: data?.desired_repayment_plan,
     employment_type_ivinex: data?.employment_type,
     income_frequency_1: data?._income_frequency_1,
-    // work_needed: data?.work_needed,
     current_repayment_plan_ivinex: data?.current_repayment_plan,
+    forbearance_needed0_ivinex: data?.forbearance_needed,
+    // work_needed: data?.work_needed,
     // picklist value mapping:-
     // calculate_for_autopay: data?.calculate_for_autopay,
-    forbearance_needed0_ivinex: data?.forbearance_needed,
 
     // Order Mapping Fields:-
 
