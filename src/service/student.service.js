@@ -708,7 +708,7 @@ async function createEmailInHubSpot(payload) {
 // Search Activity In hubspot
 
 async function searchActivityInHubSpot(collectionId) {
-  if (!collectionId) return [];
+  if (!collectionId) return null;
 
   const payload = {
     filterGroups: [
@@ -727,7 +727,7 @@ async function searchActivityInHubSpot(collectionId) {
 
   try {
     const response = await axios.post(
-      "https://api.hubapi.com/crm/v3/objects/{Number}/search",
+      "https://api.hubapi.com/crm/v3/objects/notes/search",
       payload,
       {
         headers: {
@@ -737,22 +737,22 @@ async function searchActivityInHubSpot(collectionId) {
       }
     );
 
-    const results = response.data?.results || [];
-    console.log("✅ Activity search by collection_id:", results.length);
+    const results = response.data?.results?.[0] || null;
+    // console.log("✅ Activity search by collection_id:", results.length);
     return results;
   } catch (error) {
     console.error(
       "❌ Error searching activity by collection_id:",
       error.response?.data || error.message
     );
-    return [];
+    return null;
   }
 }
 
 // update Activity In hubspot
 
-async function updateActivityInHubSpot(inquirerId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/{Number}/${inquirerId}`;
+async function updateActivityInHubSpot(activityId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/notes/${activityId}`;
 
   try {
     const response = await axios.patch(url, payload, {
@@ -776,13 +776,14 @@ async function updateActivityInHubSpot(inquirerId, payload) {
 
 // Create Activity In hubspot
 async function createActivityInHubSpot(payload) {
-  const url = "https://api.hubapi.com/crm/v3/objects/{Number}";
+  const url = "https://api.hubapi.com/crm/v3/objects/notes";
 
   try {
     const response = await axios.post(url, payload, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
+        
       },
     });
 
@@ -797,6 +798,10 @@ async function createActivityInHubSpot(payload) {
     return {};
   }
 }
+
+
+
+
 
 export {createAffiliateInHubSpot,
   updateAffiliateInHubSpot,

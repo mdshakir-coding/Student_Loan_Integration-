@@ -86,8 +86,8 @@ async function syncInquirer() {
         // Build HubSpot payload
         const payload = buildHubSpotInquirerPayload(record);
 
-        // console.log("Record:", record);
-        // console.log("Payload:", payload);
+        console.log("Record:", record);
+        console.log("Payload:", payload);
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
         let searchResults = null;
@@ -111,6 +111,10 @@ async function syncInquirer() {
         }
 
         // Find client based on linked_client field in STL -> Find client in HubSpot -> Associate Client and inquirer
+
+        // find client based on linked_client field => find client in hubspot based on collection id
+
+        // Assocaited Client and Inquirer in hubspot
 
         // Save progress after success
         // saveProgress(i + 1);
