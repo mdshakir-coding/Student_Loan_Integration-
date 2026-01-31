@@ -1,9 +1,20 @@
-import logger from "../../logger.js";
-import { fetchInquirerRecords } from "../service/student.loan.Hubspot.js";
+// import logger from "../../logger.js";
+
+import { logger } from "../utils/winston.logger.js";
+// import { fetchInquirerRecords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotInquirerPayload } from "../utils/helper.js";
 import { searchInquirerInHubSpot } from "../service/student.service.js";
 import { updateInquirerInHubSpot } from "../service/student.service.js";
 import { createInquirerInHubSpot } from "../service/student.service.js";
+import {
+  fetchAffiliateById,
+  fetchInvoiceById,
+  fetchInquirerById,
+  fetchClientById,
+  associateObjects,
+  fetchInquirerRecords,
+  searchCustomObjectInHubSpot,
+} from "../service/student.Loan.Hubspot.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -90,8 +101,10 @@ async function syncInquirer() {
         console.log("Payload:", payload);
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
+        let inquirer_record_id = null;
         let searchResults = null;
         searchResults = await searchInquirerInHubSpot(record.collection_id);
+        inquirer_record_id = searchResults[0].id;
 
         if (searchResults && searchResults.length > 0) {
           // Inquirer exists → update
@@ -107,26 +120,87 @@ async function syncInquirer() {
           // Inquirer does not exist → create
           let created = null;
           created = await createInquirerInHubSpot(payload);
+          inquirer_record_id = created.id;
+
           console.log("✅ Inquirer created:", created.id);
         }
 
-        // Find client based on linked_client field in STL -> Find client in HubSpot -> Associate Client and inquirer
+        // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
 
-        // find client based on linked_client field => find client in hubspot based on collection id
+        const client = await searchCustomObjectInHubSpot(
+          "2-171843307",
+          record.client_referral
+        );
+        const affiliate = await searchCustomObjectInHubSpot(
+          record.affiliate_referral
+        );
+        const inquirer = await searchCustomObjectInHubSpot(
+          record.inquirer_referral0
+        );
+
+        if (client[0]?.id && inquirer_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "2-171843307",
+            fromObjectId: client[0]?.id,
+            toObjectType: "0-1",
+            toObjectId: inquirer_record_id,
+            associationTypeId: 33,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+          logger.info(
+            `✅ Inquirer ${inquirer_record_id} associated with Client ${
+              client[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
+        if (affiliate[0]?.id && inquirer_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "2-171942530",
+            fromObjectId: affiliate[0]?.id,
+            toObjectType: "0-1",
+            toObjectId: inquirer_record_id,
+            associationTypeId: 71,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+          logger.info(
+            `✅ Inquirer ${inquirer_record_id} associated with affiliate ${
+              affiliate[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
+        if (inquirer[0]?.id && inquirer_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "0-1",
+            fromObjectId: inquirer[0]?.id,
+            toObjectType: "0-1",
+            toObjectId: inquirer_record_id,
+            associationTypeId: 449,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+
+          logger.info(
+            `✅ Inquirer ${inquirer_record_id} associated with inquirer ${
+              inquirer[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
 
         // Assocaited Client and Inquirer in hubspot
 
         // Save progress after success
         // saveProgress(i + 1);
 
-        break; // ❗ remove after testing
+        return; // ❗ remove after testing
       } catch (error) {
         console.error("Error processing record index", error);
 
         // Save progress to resume later
         // saveProgress(i);
 
-        break; // ❗ remove after testing
+        return; // ❗ remove after testing
       }
     }
 

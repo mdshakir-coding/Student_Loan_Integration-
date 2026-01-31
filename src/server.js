@@ -12,18 +12,12 @@ import { syncOrders } from "./controller/orders.controller.js";
 import { syncTextMessages } from "./controller/textmessages.controller.js";
 import { syncEmails } from "./controller/emails.controller.js";
 
+import { fetchClientById } from "./service/student.Loan.Hubspot.js";
+
 console.log("Loaded API Token:", process.env.HUBSPOT_API_KEY);
 const PORT = process.env.PORT || 3400;
 
-app.listen(PORT, () => {
-  syncInquirer(); //done
-  // syncAffiliate(); //done
-  // syncActivity();
-  // syncInvoices();    //done
-  // syncClients(); //done
-  // syncOrders(); //done
-  // syncTextMessages();
-  // syncEmails();
-
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+  // syncInquirer();
 });

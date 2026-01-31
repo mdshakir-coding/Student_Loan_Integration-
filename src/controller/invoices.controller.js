@@ -1,8 +1,8 @@
 import { fetchInvoicesRecords } from "../service/student.loan.Hubspot.js";
-import {buildHubSpotInvoicePayload} from "../utils/helper.js";
-import{searchInvoiceInHubSpot} from "../service/student.service.js";
-import{createInvoiceInHubSpot} from "../service/student.service.js";
-import{updateInvoiceInHubSpot} from "../service/student.service.js";
+import { buildHubSpotInvoicePayload } from "../utils/helper.js";
+import { searchInvoiceInHubSpot } from "../service/student.service.js";
+import { createInvoiceInHubSpot } from "../service/student.service.js";
+import { updateInvoiceInHubSpot } from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -64,9 +64,7 @@ function loadProgress() {
 //   }
 // }
 
-
-// New code Client Invoices 
-
+// New code Client Invoices
 
 async function syncInvoices() {
   try {
@@ -78,6 +76,7 @@ async function syncInvoices() {
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
+        let invoice_record_id = null;
 
         // Build HubSpot payload
         const payload = buildHubSpotInvoicePayload(record);
@@ -102,17 +101,82 @@ async function syncInvoices() {
             payload
           );
 
+          invoice_record_id = updated.id;
+
           console.log("✅ Invoice updated:", updated.id);
         } else {
           // Invoice does not exist → Create
           const created = await createInvoiceInHubSpot(payload);
+          invoice_record_id = created.id;
+
           console.log("✅ Invoice created:", created.id);
+        }
+
+        //  client affiliate inquirer
+        const client = await searchCustomObjectInHubSpot(
+          "2-171843307",
+          record.related_client
+        );
+        const affiliate = await searchCustomObjectInHubSpot(
+          record.related_affiliate
+        );
+        const inquirer = await searchCustomObjectInHubSpot(
+          record.related_inquirer
+        );
+
+        if (client[0]?.id && invoice_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "2-171843307",
+            fromObjectId: client[0]?.id,
+            toObjectType: "0-3",
+            toObjectId: invoice_record_id,
+            associationTypeId: 78,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+          logger.info(
+            `✅ Inquirer ${invoice_record_id} associated with Client ${
+              client[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
+        if (affiliate[0]?.id && invoice_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "2-171942530",
+            fromObjectId: affiliate[0]?.id,
+            toObjectType: "0-3",
+            toObjectId: invoice_record_id,
+            associationTypeId: 78,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+          logger.info(
+            `✅ Inquirer ${invoice_record_id} associated with affiliate ${
+              affiliate[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
+        if (inquirer[0]?.id && invoice_record_id) {
+          // ➡️ associate here
+          const associate = await associateObjects({
+            fromObjectType: "0-3",
+            fromObjectId: inquirer[0]?.id,
+            toObjectType: "0-3",
+            toObjectId: invoice_record_id,
+            associationTypeId: 451,
+            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          });
+
+          logger.info(
+            `✅ Inquirer ${invoice_record_id} associated with inquirer ${
+              inquirer[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
         }
 
         break; // 🔥 remove after testing
 
         // saveProgress(i + 1);
-
       } catch (error) {
         console.error("Error processing invoice index", i, error);
         break; // 🔥 remove after testing
@@ -126,6 +190,5 @@ async function syncInvoices() {
     return;
   }
 }
-
 
 export { syncInvoices };
