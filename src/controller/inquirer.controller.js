@@ -1,9 +1,9 @@
+import logger from "../../logger.js";
 import { fetchInquirerRecords } from "../service/student.loan.Hubspot.js";
-import {buildHubSpotInquirerPayload} from "../utils/helper.js";
-import{searchInquirerInHubSpot} from "../service/student.service.js";
-import{updateInquirerInHubSpot} from "../service/student.service.js";
-import{createInquirerInHubSpot} from "../service/student.service.js";
-
+import { buildHubSpotInquirerPayload } from "../utils/helper.js";
+import { searchInquirerInHubSpot } from "../service/student.service.js";
+import { updateInquirerInHubSpot } from "../service/student.service.js";
+import { createInquirerInHubSpot } from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -37,34 +37,22 @@ function loadProgress() {
 //     const records = await fetchInquirerRecords(); // call the function
 //     console.log("inquirerRecords", records.length);
 
-    
-
-
-
 //     let startIndex = loadProgress();
 
 //     for (let i = startIndex; i < records.length; i++) {
 
-      
 //       try {
-        
+
 //         const record = records[i];
-        
+
 //         let inquirerId = null;
 
-
-//        const Payloads = buildHubSpotInquirerPayload(record); // call the function 
+//        const Payloads = buildHubSpotInquirerPayload(record); // call the function
 
 //         console.log (" Records", record);
 //         console.log("Payloads", Payloads);
 //         return; // todo remove after testing
 //         // await createInquirerInHubSpot(Payloads);
-
-
-
-
-
-
 
 //         // Save progress after successful processing
 //         // saveProgress(i + 1);
@@ -88,7 +76,8 @@ async function syncInquirer() {
     const records = await fetchInquirerRecords(); // fetch all inquirer records
     console.log("Inquirer Records:", records.length);
 
-    let startIndex = loadProgress();
+    // let startIndex = loadProgress();
+    let startIndex = 0;
 
     for (let i = startIndex; i < records.length; i++) {
       try {
@@ -102,37 +91,33 @@ async function syncInquirer() {
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
         let searchResults = null;
-         searchResults = await searchInquirerInHubSpot(
-          record.collection_id
-    
-        );
+        searchResults = await searchInquirerInHubSpot(record.collection_id);
 
         if (searchResults && searchResults.length > 0) {
           // Inquirer exists → update
           let existingInquirerId = null;
-           existingInquirerId = searchResults[0].id;
+          existingInquirerId = searchResults[0].id;
           console.log(
             `Inquirer exists with id ${existingInquirerId}, updating...`
           );
           let updated = null;
-           updated = await updateInquirerInHubSpot(
-            existingInquirerId,
-            payload
-          );
+          updated = await updateInquirerInHubSpot(existingInquirerId, payload);
           console.log("✅ Inquirer updated:", updated.id);
         } else {
           // Inquirer does not exist → create
           let created = null;
-           created = await createInquirerInHubSpot(payload);
+          created = await createInquirerInHubSpot(payload);
           console.log("✅ Inquirer created:", created.id);
         }
+
+        // Find client based on linked_client field in STL -> Find client in HubSpot -> Associate Client and inquirer
 
         // Save progress after success
         // saveProgress(i + 1);
 
         break; // ❗ remove after testing
       } catch (error) {
-        console.error("Error processing record index", i, error);
+        console.error("Error processing record index", error);
 
         // Save progress to resume later
         // saveProgress(i);
@@ -147,8 +132,5 @@ async function syncInquirer() {
     return;
   }
 }
-
-
-
 
 export { syncInquirer };
