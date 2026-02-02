@@ -641,53 +641,144 @@ async function fetchAffiliateById(affiliateId, properties = []) {
   }
 }
 
+// async function associateObjects({
+//   fromObjectType,
+//   fromObjectId,
+//   toObjectType,
+//   toObjectId,
+//   associationTypeId,
+//   accessToken,
+// }) {
+//   if (!fromObjectType || !fromObjectId || !toObjectType || !toObjectId) {
+//     throw new Error("Missing required association parameters");
+//   }
+
+//   try {
+//     // 1️⃣ Resolve association type if not provided
+//     let typeId = associationTypeId;
+
+//     if (!typeId) {
+//       const labelsRes = await axios.get(
+//         `https://api.hubapi.com/crm/v4/associations/${fromObjectType}/${toObjectType}/labels`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${accessToken}`,
+//           },
+//         }
+//       );
+
+//       if (!labelsRes.data?.results?.length) {
+//         throw new Error(
+//           `No association types found between ${fromObjectType} and ${toObjectType}`
+//         );
+//       }
+
+//       // Prefer HUBSPOT_DEFINED, fallback to first
+//       const assoc =
+//         labelsRes.data.results.find((r) => r.category === "HUBSPOT_DEFINED") ||
+//         labelsRes.data.results[0];
+
+//       typeId = assoc.typeId;
+//     }
+
+//     // 2️⃣ Create association
+//     await axios.put(
+//       `https://api.hubapi.com/crm/v4/objects/${fromObjectType}/${fromObjectId}/associations/${toObjectType}/${toObjectId}/${typeId}`,
+//       null,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+//         },
+//       }
+//     );
+
+//     return {
+//       success: true,
+//       fromObjectType,
+//       fromObjectId,
+//       toObjectType,
+//       toObjectId,
+//       associationTypeId: typeId,
+//     };
+//   } catch (error) {
+//     console.error("HubSpot association failed", {
+//       fromObjectType,
+//       fromObjectId,
+//       toObjectType,
+//       toObjectId,
+//       status: error.response?.status,
+//       data: error.response?.data,
+//     });
+
+//     return null;
+//   }
+// }
 async function associateObjects({
   fromObjectType,
   fromObjectId,
   toObjectType,
   toObjectId,
-  associationTypeId,
+  associationTypeId, // optional
+  associationLabel, // 👈 NEW (preferred)
   accessToken,
 }) {
   if (!fromObjectType || !fromObjectId || !toObjectType || !toObjectId) {
-    throw new Error("Missing required association parameters");
+    console.warn("Missing required association parameters");
+    return null;
   }
 
+  // if (!accessToken) {
+  //   throw new Error("Missing HubSpot access token");
+  // }
+
   try {
-    // 1️⃣ Resolve association type if not provided
     let typeId = associationTypeId;
 
+    // 🔍 Resolve typeId via label if provided
     if (!typeId) {
       const labelsRes = await axios.get(
         `https://api.hubapi.com/crm/v4/associations/${fromObjectType}/${toObjectType}/labels`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
           },
         }
       );
 
-      if (!labelsRes.data?.results?.length) {
+      const results = labelsRes.data?.results;
+      if (!results?.length) {
         throw new Error(
           `No association types found between ${fromObjectType} and ${toObjectType}`
         );
       }
 
-      // Prefer HUBSPOT_DEFINED, fallback to first
-      const assoc =
-        labelsRes.data.results.find((r) => r.category === "HUBSPOT_DEFINED") ||
-        labelsRes.data.results[0];
+      let assoc;
+
+      // 🎯 Prefer label match if provided
+      if (associationLabel) {
+        assoc = results.find((r) => r.label === associationLabel);
+
+        if (!assoc) {
+          throw new Error(
+            `Association label "${associationLabel}" not found between ${fromObjectType} and ${toObjectType}`
+          );
+        }
+      } else {
+        // fallback logic (safe default)
+        assoc =
+          results.find((r) => r.category === "HUBSPOT_DEFINED") || results[0];
+      }
 
       typeId = assoc.typeId;
     }
 
-    // 2️⃣ Create association
+    // 🔗 Create association
     await axios.put(
       `https://api.hubapi.com/crm/v4/objects/${fromObjectType}/${fromObjectId}/associations/${toObjectType}/${toObjectId}/${typeId}`,
       null,
       {
         headers: {
-          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -699,13 +790,15 @@ async function associateObjects({
       toObjectType,
       toObjectId,
       associationTypeId: typeId,
+      associationLabel: associationLabel || null,
     };
   } catch (error) {
-    console.error("HubSpot association failed", {
+    console.error("❌ HubSpot association failed", {
       fromObjectType,
       fromObjectId,
       toObjectType,
       toObjectId,
+      associationLabel,
       status: error.response?.status,
       data: error.response?.data,
     });

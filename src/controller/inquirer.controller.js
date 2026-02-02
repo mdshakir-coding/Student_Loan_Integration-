@@ -14,11 +14,21 @@ import {
   associateObjects,
   fetchInquirerRecords,
   searchCustomObjectInHubSpot,
+<<<<<<< HEAD
 } from "../service/student.loan.Hubspot.js";
+=======
+} from "../service/student.Loan.Hubspot.js";
+import { getHubspotClient } from "../configs/hubspot.config.js";
+>>>>>>> c808191 (Add HubSpot integration and sync functionality in inquirer controller)
 
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
+
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 // Recreate __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -126,28 +136,44 @@ async function syncInquirer() {
         }
 
         // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
+        const hs_client = getHubspotClient();
 
         const client = await searchCustomObjectInHubSpot(
           "2-171843307",
           record.client_referral
         );
+        logger.info(`Client: ${JSON.stringify(client[0], null, 2)}`);
         const affiliate = await searchCustomObjectInHubSpot(
-          record.affiliate_referral
+          affiliateObject,
+          record?.affiliate_referral
         );
+        logger.info(`affiliate: ${JSON.stringify(affiliate[0], null, 2)}`);
+
         const inquirer = await searchCustomObjectInHubSpot(
           record.inquirer_referral0
         );
+        logger.info(`inquirer: ${JSON.stringify(inquirer[0], null, 2)}`);
 
         if (client[0]?.id && inquirer_record_id) {
+          logger.info(
+            `Client: ${client[0]?.id} : Inquirer: ${inquirer_record_id}`
+          );
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "2-171843307",
-            fromObjectId: client[0]?.id,
-            toObjectType: "0-1",
-            toObjectId: inquirer_record_id,
-            associationTypeId: 33,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "2-171843307", // Inquirer
+          //   fromObjectId: client[0].id,
+          //   toObjectType: "0-1", // Contact
+          //   toObjectId: inquirer_record_id,
+          //   associationLabel: "inquirers_to_clients",
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            inquirerObject,
+            inquirer_record_id,
+            clientObject,
+            client[0].id,
+            115
+          );
           logger.info(
             `✅ Inquirer ${inquirer_record_id} associated with Client ${
               client[0]?.id
@@ -155,19 +181,29 @@ async function syncInquirer() {
           );
         }
         if (affiliate[0]?.id && inquirer_record_id) {
+          logger.info(
+            `Affiliate: ${affiliate[0]?.id} : Inquirer: ${inquirer_record_id}`
+          );
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "2-171942530",
-            fromObjectId: affiliate[0]?.id,
-            toObjectType: "0-1",
-            toObjectId: inquirer_record_id,
-            associationTypeId: 71,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "2-171942530",
+          //   fromObjectId: affiliate[0]?.id,
+          //   toObjectType: "0-1",
+          //   toObjectId: inquirer_record_id,
+          //   associationTypeId: 71,
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            inquirerObject,
+            inquirer_record_id,
+            affiliateObject,
+            affiliate[0]?.id,
+            72
+          );
           logger.info(
             `✅ Inquirer ${inquirer_record_id} associated with affiliate ${
               affiliate[0]?.id
-            }: Association ${JSON.stringify(associate)}`
+            }: Association ${JSON.stringify(associate.results[0], null, 2)}`
           );
         }
         if (inquirer[0]?.id && inquirer_record_id) {
