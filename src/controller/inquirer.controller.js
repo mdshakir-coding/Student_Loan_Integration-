@@ -14,7 +14,7 @@ import {
   associateObjects,
   fetchInquirerRecords,
   searchCustomObjectInHubSpot,
-} from "../service/student.Loan.Hubspot.js";
+} from "../service/student.loan.Hubspot.js";
 
 import { fileURLToPath } from "url";
 import path from "path";

@@ -443,11 +443,9 @@ function buildHubSpotInquirerPayload(data = {}) {
     affiliate_referral_ivinex: data?.affiliate_referral || null, //
     entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
-    inquirer_loan_servicer_ivinex:data?.inquirer_loan_servicer || null,
+    inquirer_loan_servicer_ivinex: data?.inquirer_loan_servicer || null,
     eval_federal_loan_amount_ivinex: data?.eval__federal_loan_amount || null,
     inquirer_status_ivinex: data?.inquirer_status || null,
-
-    
 
     inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
     eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
@@ -604,8 +602,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     country: data?.country,
     date_of_tutor_fu: data?.date_of_tutor_fu,
     inquirer_loan_ivinex: data?.inquirer_loan || null,
-
-
 
     // New Error fields------------------------------------------------------------
     // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
@@ -1006,14 +1002,11 @@ function buildHubSpotClientPayload(data = {}) {
 
     first_name: data.first_name,
     last_name: data.last_name,
-    n2nd_contact___first_name:data?.first_name,
-    n2nd_contact___last_name:data?.last_name,
-    n2nd_contact___email:data?.email_1,
-    n2nd_contact___phone:data?.primary_phone,
+    n2nd_contact___first_name: data?.first_name,
+    n2nd_contact___last_name: data?.last_name,
+    n2nd_contact___email: data?.email_1,
+    n2nd_contact___phone: data?.primary_phone,
     client_name: data?.client_name,
-
-
-
 
     email_1: data.email_1,
     phone_1_type_ivinex: data?.phone_1_type, //
@@ -1359,35 +1352,76 @@ function buildHubspotOrderPayload(data = {}) {
 }
 // Text Message Payload
 
+// function buildTextMessagePayload(data = {}) {
+//   const payload = {
+//     collection_id: data?.collection_id,
+//     site_id: data?.site_id,
+//     fields_changed: data?.fields_changed,
+
+//     created_by: data?.created_by,
+//     modified_by: data?.modified_by,
+//     modified_date: data?.modified_date,
+//     created_date: data?.created_date,
+
+//     read_status: data?.read_status,
+//     status: data?.status,
+
+//     message: data?.message,
+
+//     text_number: data?.text_number,
+//     external_number: data?.external_number,
+
+//     external_id: data?.external_id,
+
+//     client: data?.client,
+
+//     group_text: data?.group_text,
+//     group_text_parent: data?.group_text_parent,
+//   };
+
+//   return cleanProps(payload);
+// }
+
+// new Text Message Payload
 function buildTextMessagePayload(data = {}) {
-  const payload = {
-    collection_id: data?.collection_id,
-    site_id: data?.site_id,
-    fields_changed: data?.fields_changed,
+  const lines = [];
 
-    created_by: data?.created_by,
-    modified_by: data?.modified_by,
-    modified_date: data?.modified_date,
-    created_date: data?.created_date,
+  if (data.collection_id) lines.push(`Collection ID: ${data.collection_id}`);
+  if (data.site_id) lines.push(`Site ID: ${data.site_id}`);
+  if (data.fields_changed) lines.push(`Fields Changed: ${data.fields_changed}`);
 
-    read_status: data?.read_status,
-    status: data?.status,
+  if (data.created_by) lines.push(`Created By: ${data.created_by}`);
+  if (data.modified_by) lines.push(`Modified By: ${data.modified_by}`);
+  if (data.modified_date) lines.push(`Modified Date: ${data.modified_date}`);
+  if (data.created_date) lines.push(`Created Date: ${data.created_date}`);
 
-    message: data?.message,
+  if (data.read_status) lines.push(`Read Status: ${data.read_status}`);
+  if (data.status) lines.push(`Status: ${data.status}`);
 
-    text_number: data?.text_number,
-    external_number: data?.external_number,
+  if (data.message) lines.push(`Message: ${data.message}`);
 
-    external_id: data?.external_id,
+  if (data.text_number) lines.push(`Text Number: ${data.text_number}`);
+  if (data.external_number) lines.push(`External Number: ${data.external_number}`);
 
-    client: data?.client,
+  if (data.external_id) lines.push(`External ID: ${data.external_id}`);
 
-    group_text: data?.group_text,
-    group_text_parent: data?.group_text_parent,
+  if (data.client) lines.push(`Client: ${data.client}`);
+
+  if (data.group_text) lines.push(`Group Text: ${data.group_text}`);
+  if (data.group_text_parent) lines.push(`Group Text Parent: ${data.group_text_parent}`);
+
+  if (lines.length === 0) {
+    throw new Error("❌ Text message payload is empty");
+  }
+
+  return {
+    properties: {
+      hs_note_body: lines.join("\n"),
+      hs_timestamp: new Date().toISOString(),
+    },
   };
-
-  return cleanProps(payload);
 }
+
 
 // Email Payload
 
@@ -1457,52 +1491,119 @@ function buildEmailPayload(data = {}) {
 
 // Create Activity Payload
 
+// function buildHubSpotActivityPayload(data = {}) {
+//   const payload = cleanProps({
+
+    
+
+//     collection_id: data?.collection_id,
+//     site_id: data?.site_id,
+//     fields_changed: data?.fields_changed,
+
+//     location: data?.location,
+//     date_email_opened: data?.date_email_opened,
+
+//     email_id: data?.email_id,
+//     subject: data?.subject,
+
+//     field_from: data?.field_from,
+//     email_to: data?.email_to,
+//     cc: data?.cc,
+//     bcc: data?.bcc,
+
+//     recurrence: data?.recurrence,
+//     all_day_event: data?.all_day_event,
+
+//     start_time: data?.start_time,
+//     end_time: data?.end_time,
+
+//     priority: data?.priority,
+//     status: data?.status,
+
+//     activity: data?.activity,
+//     description: data?.description,
+
+//     assigned: data?.assigned,
+
+//     created_date: data?.created_date,
+//     created_by: data?.created_by,
+
+//     modified_date: data?.modified_date,
+//     modified_by: data?.modified_by,
+
+//     date: data?.date,
+//   });
+
+//   if (!Object.keys(payload).length) {
+//     throw new Error("❌ Activity payload is empty");
+//   }
+
+//   return {
+//     payload: {
+//       hs_note_body: lines.join("\n"),
+//       hs_timestamp: new Date().toISOString(), // ✅ REQUIRED
+//     },
+//   };
+// }
+
+// new payload Activity
+
 function buildHubSpotActivityPayload(data = {}) {
-  const payload = cleanProps({
-    collection_id: data?.collection_id,
-    site_id: data?.site_id,
-    fields_changed: data?.fields_changed,
+  const lines = [];
 
-    location: data?.location,
-    date_email_opened: data?.date_email_opened,
+  if (data.collection_id) lines.push(`Collection ID: ${data.collection_id}`);
+  if (data.site_id) lines.push(`Site ID: ${data.site_id}`);
+  if (data.fields_changed) lines.push(`Fields Changed: ${data.fields_changed}`);
 
-    email_id: data?.email_id,
-    subject: data?.subject,
+  if (data.location) lines.push(`Location: ${data.location}`);
+  if (data.date_email_opened) lines.push(`Email Opened: ${data.date_email_opened}`);
 
-    field_from: data?.field_from,
-    email_to: data?.email_to,
-    cc: data?.cc,
-    bcc: data?.bcc,
+  if (data.email_id) lines.push(`Email ID: ${data.email_id}`);
+  if (data.subject) lines.push(`Subject: ${data.subject}`);
 
-    recurrence: data?.recurrence,
-    all_day_event: data?.all_day_event,
+  if (data.field_from) lines.push(`From: ${data.field_from}`);
+  if (data.email_to) lines.push(`To: ${data.email_to}`);
+  if (data.cc) lines.push(`CC: ${data.cc}`);
+  if (data.bcc) lines.push(`BCC: ${data.bcc}`);
 
-    start_time: data?.start_time,
-    end_time: data?.end_time,
+  if (data.recurrence) lines.push(`Recurrence: ${data.recurrence}`);
+  if (data.all_day_event !== undefined) lines.push(`All Day Event: ${data.all_day_event}`);
 
-    priority: data?.priority,
-    status: data?.status,
+  if (data.start_time) lines.push(`Start Time: ${data.start_time}`);
+  if (data.end_time) lines.push(`End Time: ${data.end_time}`);
 
-    activity: data?.activity,
-    description: data?.description,
+  if (data.priority) lines.push(`Priority: ${data.priority}`);
+  if (data.status) lines.push(`Status: ${data.status}`);
 
-    assigned: data?.assigned,
+  if (data.activity) lines.push(`Activity: ${data.activity}`);
+  if (data.description) lines.push(`Description: ${data.description}`);
 
-    created_date: data?.created_date,
-    created_by: data?.created_by,
+  if (data.assigned) lines.push(`Assigned: ${data.assigned}`);
 
-    modified_date: data?.modified_date,
-    modified_by: data?.modified_by,
+  if (data.created_date) lines.push(`Created Date: ${data.created_date}`);
+  if (data.created_by) lines.push(`Created By: ${data.created_by}`);
 
-    date: data?.date,
-  });
+  if (data.modified_date) lines.push(`Modified Date: ${data.modified_date}`);
+  if (data.modified_by) lines.push(`Modified By: ${data.modified_by}`);
 
-  if (!Object.keys(payload).length) {
-    throw new Error("❌ Activity payload is empty");
-  }
+  if (data.date) lines.push(`Date: ${data.date}`);
 
-  return { payload };
+  
+
+
+
+
+
+  return {
+    properties: {
+      hs_note_body: lines.join("\n"),
+      hs_timestamp: new Date().toISOString(), // ✅ REQUIRED
+    },
+  };
 }
+
+
+
 export {
   cleanProps,
   buildHubSpotInquirerPayload,
