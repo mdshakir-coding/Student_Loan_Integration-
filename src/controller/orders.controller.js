@@ -1,8 +1,8 @@
 import { fetchOrdersRecords } from "../service/student.loan.Hubspot.js";
-import{buildHubspotOrderPayload} from "../utils/helper.js"
-import{searchOrderInHubSpot} from "../service/student.service.js";
-import{updateOderInHubSpot} from "../service/student.service.js";
-import{createOrderInHubSpot} from "../service/student.service.js";
+import { buildHubspotOrderPayload } from "../utils/helper.js";
+import { searchOrderInHubSpot } from "../service/student.service.js";
+import { updateOderInHubSpot } from "../service/student.service.js";
+import { createOrderInHubSpot } from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -11,7 +11,10 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
-
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
 }
@@ -42,8 +45,7 @@ export { syncOrders };
 
 */
 
-
-// New Oorder controller 
+// New Oorder controller
 
 async function syncOrders() {
   try {
@@ -72,7 +74,6 @@ async function syncOrders() {
 
           const updated = await updateOderInHubSpot(existingOrderId, Payloads);
           console.log("✅ Order updated:", updated.id);
-
         } else {
           // Order does not exist, create new
           const created = await createOrderInHubSpot(Payloads);
@@ -96,6 +97,5 @@ async function syncOrders() {
     return;
   }
 }
-
 
 export { syncOrders };

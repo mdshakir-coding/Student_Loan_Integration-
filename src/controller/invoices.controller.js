@@ -1,8 +1,13 @@
-import { fetchInvoicesRecords } from "../service/student.loan.Hubspot.js";
+import {
+  fetchInvoicesRecords,
+  searchCustomObjectInHubSpot,
+} from "../service/student.loan.Hubspot.js";
 import { buildHubSpotInvoicePayload } from "../utils/helper.js";
 import { searchInvoiceInHubSpot } from "../service/student.service.js";
 import { createInvoiceInHubSpot } from "../service/student.service.js";
 import { updateInvoiceInHubSpot } from "../service/student.service.js";
+import { getHubspotClient } from "../configs/hubspot.config.js";
+import { logger } from "../utils/winston.logger.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -11,7 +16,10 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
-
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
 }
@@ -111,7 +119,7 @@ async function syncInvoices() {
 
           console.log("✅ Invoice created:", created.id);
         }
-
+        const hs_client = getHubspotClient();
         //  client affiliate inquirer
         const client = await searchCustomObjectInHubSpot(
           "2-171843307",
@@ -126,49 +134,72 @@ async function syncInvoices() {
 
         if (client[0]?.id && invoice_record_id) {
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "2-171843307",
-            fromObjectId: client[0]?.id,
-            toObjectType: "0-3",
-            toObjectId: invoice_record_id,
-            associationTypeId: 78,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "2-171843307",
+          //   fromObjectId: client[0]?.id,
+          //   toObjectType: "0-3",
+          //   toObjectId: invoice_record_id,
+          //   associationTypeId: 78,
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            invoiceObject,
+            invoice_record_id,
+            clientObject,
+            client[0].id,
+            79,
+            "USER_DEFINED"
+          );
           logger.info(
-            `✅ Inquirer ${invoice_record_id} associated with Client ${
+            `✅ Invoice ${invoice_record_id} associated with Client ${
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
         }
         if (affiliate[0]?.id && invoice_record_id) {
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "2-171942530",
-            fromObjectId: affiliate[0]?.id,
-            toObjectType: "0-3",
-            toObjectId: invoice_record_id,
-            associationTypeId: 78,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "2-171942530",
+          //   fromObjectId: affiliate[0]?.id,
+          //   toObjectType: "0-3",
+          //   toObjectId: invoice_record_id,
+          //   associationTypeId: 78,
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            inquirerObject,
+            invoice_record_id,
+            affiliateObject,
+            affiliate[0]?.id,
+            72,
+            "USER_DEFINED"
+          );
           logger.info(
-            `✅ Inquirer ${invoice_record_id} associated with affiliate ${
+            `✅ Invoice ${invoice_record_id} associated with affiliate ${
               affiliate[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
         }
         if (inquirer[0]?.id && invoice_record_id) {
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "0-3",
-            fromObjectId: inquirer[0]?.id,
-            toObjectType: "0-3",
-            toObjectId: invoice_record_id,
-            associationTypeId: 451,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "0-3",
+          //   fromObjectId: inquirer[0]?.id,
+          //   toObjectType: "0-3",
+          //   toObjectId: invoice_record_id,
+          //   associationTypeId: 451,
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            inquirerObject,
+            invoice_record_id,
+            inquirerObject,
+            inquirer[0]?.id,
+            3
+          );
 
           logger.info(
-            `✅ Inquirer ${invoice_record_id} associated with inquirer ${
+            `✅ Invoice ${invoice_record_id} associated with inquirer ${
               inquirer[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );

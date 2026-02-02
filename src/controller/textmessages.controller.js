@@ -1,8 +1,8 @@
 import { fetchTextMessagesRecords } from "../service/student.loan.Hubspot.js";
-import{buildTextMessagePayload} from "../utils/helper.js";
-import{searchTextMessageInHubSpot} from "../service/student.service.js";
-import{createTextMessageInHubSpot} from "../service/student.service.js";
-import{updateTextMessageInHubSpot} from "../service/student.service.js";
+import { buildTextMessagePayload } from "../utils/helper.js";
+import { searchTextMessageInHubSpot } from "../service/student.service.js";
+import { createTextMessageInHubSpot } from "../service/student.service.js";
+import { updateTextMessageInHubSpot } from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -11,7 +11,10 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
-
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
 }
@@ -112,4 +115,3 @@ async function syncTextMessages() {
 }
 
 export { syncTextMessages };
-

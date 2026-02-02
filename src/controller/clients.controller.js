@@ -1,10 +1,8 @@
 import { fetchClientsRecords } from "../service/student.loan.Hubspot.js";
-import{buildHubSpotClientPayload} from "../utils/helper.js";
+import { buildHubSpotClientPayload } from "../utils/helper.js";
 import { searchClientInHubSpot } from "../service/student.service.js";
-import {createClientInHubSpot} from "../service/student.service.js";
+import { createClientInHubSpot } from "../service/student.service.js";
 import { updateClientInHubSpot } from "../service/student.service.js";
-
-
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -13,6 +11,11 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
+
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
@@ -67,7 +70,6 @@ function loadProgress() {
 //   }
 // }
 
-
 // New code Client Function
 
 async function syncClients() {
@@ -87,17 +89,10 @@ async function syncClients() {
         console.log("Record:", record);
         console.log("Payload:", Payloads);
 
-
-
         // 🔍 Search existing client by collection_id
-        const searchResults = await searchClientInHubSpot(
-          record.collection_id
-          
-        );
+        const searchResults = await searchClientInHubSpot(record.collection_id);
 
-
-        if (searchResults && searchResults.length > 0)
-           {
+        if (searchResults && searchResults.length > 0) {
           // Client exists → Update
           const existingClientId = searchResults[0].id;
           console.log(`Client exists with id ${existingClientId}, updating...`);
@@ -118,7 +113,6 @@ async function syncClients() {
 
         // Save progress after successful processing
         // saveProgress(i + 1);
-
       } catch (error) {
         console.error("Error processing record index", i, error);
         break; // 🔥 remove after testing
@@ -134,13 +128,5 @@ async function syncClients() {
     return;
   }
 }
-
-
-
-
-
-
-
-
 
 export { syncClients };

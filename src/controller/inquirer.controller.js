@@ -14,12 +14,8 @@ import {
   associateObjects,
   fetchInquirerRecords,
   searchCustomObjectInHubSpot,
-<<<<<<< HEAD
 } from "../service/student.loan.Hubspot.js";
-=======
-} from "../service/student.Loan.Hubspot.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
->>>>>>> c808191 (Add HubSpot integration and sync functionality in inquirer controller)
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -172,7 +168,8 @@ async function syncInquirer() {
             inquirer_record_id,
             clientObject,
             client[0].id,
-            115
+            115,
+            "USER_DEFINED"
           );
           logger.info(
             `✅ Inquirer ${inquirer_record_id} associated with Client ${
@@ -198,7 +195,8 @@ async function syncInquirer() {
             inquirer_record_id,
             affiliateObject,
             affiliate[0]?.id,
-            72
+            72,
+            "USER_DEFINED"
           );
           logger.info(
             `✅ Inquirer ${inquirer_record_id} associated with affiliate ${
@@ -208,14 +206,21 @@ async function syncInquirer() {
         }
         if (inquirer[0]?.id && inquirer_record_id) {
           // ➡️ associate here
-          const associate = await associateObjects({
-            fromObjectType: "0-1",
-            fromObjectId: inquirer[0]?.id,
-            toObjectType: "0-1",
-            toObjectId: inquirer_record_id,
-            associationTypeId: 449,
-            accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          });
+          // const associate = await associateObjects({
+          //   fromObjectType: "0-1",
+          //   fromObjectId: inquirer[0]?.id,
+          //   toObjectType: "0-1",
+          //   toObjectId: inquirer_record_id,
+          //   associationTypeId: 449,
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            inquirerObject,
+            inquirer_record_id,
+            inquirerObject,
+            inquirer[0]?.id,
+            449
+          );
 
           logger.info(
             `✅ Inquirer ${inquirer_record_id} associated with inquirer ${

@@ -23,11 +23,8 @@ app.listen(PORT, () => {
   // syncClients(); //done
   // syncOrders(); //done
   // syncTextMessages(); //done
-  syncEmails(); // done
+  // syncEmails(); // done
 
   console.log(`Server running on port ${PORT}`);
-<<<<<<< HEAD
-=======
-  syncInquirer();
->>>>>>> c808191 (Add HubSpot integration and sync functionality in inquirer controller)
+  syncInvoices();
 });

@@ -1,8 +1,8 @@
 import { fetchAffiliateRecords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotAffiliatePayload } from "../utils/helper.js";
 import { createAffiliateInHubSpot } from "../service/student.service.js";
-import {updateAffiliateInHubSpot} from "../service/student.service.js";
-import {searchAffiliateByInHubspot} from "../service/student.service.js";
+import { updateAffiliateInHubSpot } from "../service/student.service.js";
+import { searchAffiliateByInHubspot } from "../service/student.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -11,6 +11,10 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
+const inquirerObject = "0-1";
+const clientObject = "2-171843307";
+const affiliateObject = "2-171942530";
+const invoiceObject = "0-3";
 
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
@@ -47,7 +51,7 @@ function loadProgress() {
 
 //         let affiliateId = null;
 
-//         const Payloads = buildHubSpotAffiliatePayload(record); // call the function for payload 
+//         const Payloads = buildHubSpotAffiliatePayload(record); // call the function for payload
 
 //         console.log(" Records", record);
 //         console.log("Payloads", Payloads);
@@ -59,7 +63,6 @@ function loadProgress() {
 //         const create = await createAffiliateInHubSpot(Payloads);
 //         console.log("✅ Affiliate created", affiliateId);
 //         affiliateId = create?.id || null;
-        
 
 //         // Save progress after successful processing
 //         // saveProgress(i + 1);
@@ -86,7 +89,7 @@ async function syncAffiliate() {
 
     for (let i = startIndex; i < records.length; i++) {
       try {
-        const record = records[i]; 
+        const record = records[i];
 
         // Build payload
         const Payloads = buildHubSpotAffiliatePayload(record);
@@ -96,19 +99,21 @@ async function syncAffiliate() {
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
-          record.collection_id,
-          
+          record.collection_id
         );
 
         if (searchResults && searchResults.length > 0) {
           // Affiliate exists, update it
           const existingAffiliateId = searchResults[0].id;
-          console.log(`Affiliate exists with id ${existingAffiliateId}, updating...`);
+          console.log(
+            `Affiliate exists with id ${existingAffiliateId}, updating...`
+          );
 
-          const updated = await updateAffiliateInHubSpot(existingAffiliateId, Payloads);
+          const updated = await updateAffiliateInHubSpot(
+            existingAffiliateId,
+            Payloads
+          );
           console.log("✅ Affiliate updated:", updated.id);
-          
-
         } else {
           // Affiliate does not exist, create new
           const created = await createAffiliateInHubSpot(Payloads);
@@ -129,13 +134,8 @@ async function syncAffiliate() {
     console.log("🎄 All Affiliates Processed");
   } catch (error) {
     console.error("Error fetching affiliate records", error);
-     return;
+    return;
   }
 }
-
-
-
-
-
 
 export { syncAffiliate };
