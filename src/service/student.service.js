@@ -786,6 +786,8 @@ async function createEmailInHubSpot(payload) {
 //   }
 // }
 
+// new code search fuunction for Activity in hubspot
+
 async function searchActivityInHubSpot(collectionId) {
   if (!collectionId) return null;
 
