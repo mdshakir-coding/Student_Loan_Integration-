@@ -15,16 +15,17 @@ import {
   fetchInquirerRecords,
   searchCustomObjectInHubSpot,
 } from "../service/student.loan.Hubspot.js";
-import { getHubspotClient } from "../configs/hubspot.config.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
 
+import { getHubspotClient } from "../configs/hubspot.config.js";
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
+
 // Recreate __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

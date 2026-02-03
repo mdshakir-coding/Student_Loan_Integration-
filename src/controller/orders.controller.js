@@ -1,4 +1,7 @@
-import { fetchOrdersRecords } from "../service/student.loan.Hubspot.js";
+import {
+  fetchOrdersRecords,
+  searchCustomObjectInHubSpot,
+} from "../service/student.loan.Hubspot.js";
 import { buildHubspotOrderPayload } from "../utils/helper.js";
 import { searchOrderInHubSpot } from "../service/student.service.js";
 import { updateOderInHubSpot } from "../service/student.service.js";
@@ -11,10 +14,14 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
+
+import { logger } from "../utils/winston.logger.js";
+import { getHubspotClient } from "../configs/hubspot.config.js";
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
+const orderObject = "0-5";
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
 }
@@ -57,12 +64,13 @@ async function syncOrders() {
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
+        let order_record_id = null;
 
         // Build payload
         const Payloads = buildHubspotOrderPayload(record);
 
         console.log("Record:", record);
-        console.log("Payload:", Payloads);
+        // console.log("Payload:", Payloads);
 
         // First, search existing order by collection_id
         const searchResults = await searchOrderInHubSpot(record.collection_id);
@@ -70,6 +78,7 @@ async function syncOrders() {
         if (searchResults && searchResults.length > 0) {
           // Order exists, update it
           const existingOrderId = searchResults[0].id;
+          order_record_id = searchResults[0].id;
           console.log(`Order exists with id ${existingOrderId}, updating...`);
 
           const updated = await updateOderInHubSpot(existingOrderId, Payloads);
@@ -77,8 +86,44 @@ async function syncOrders() {
         } else {
           // Order does not exist, create new
           const created = await createOrderInHubSpot(Payloads);
+          order_record_id = created.id;
           console.log("✅ Order created:", created.id);
         }
+        // Associate client and order
+        const hs_client = getHubspotClient();
+        const client = await searchCustomObjectInHubSpot(
+          "2-171843307",
+          record.client
+        );
+
+        if (client[0]?.id && order_record_id) {
+          logger.info(
+            `Client: ${client[0]?.id} : Inquirer: ${order_record_id}`
+          );
+          // ➡️ associate here
+          // const associate = await associateObjects({
+          //   fromObjectType: "2-171843307", // Inquirer
+          //   fromObjectId: client[0].id,
+          //   toObjectType: "0-1", // Contact
+          //   toObjectId: inquirer_record_id,
+          //   associationLabel: "inquirers_to_clients",
+          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+          // });
+          const associate = await hs_client.associations.associate(
+            orderObject,
+            order_record_id,
+            clientObject,
+            client[0].id,
+            109,
+            "USER_DEFINED"
+          );
+          logger.info(
+            `✅ order_record_id ${order_record_id} associated with Client ${
+              client[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
+        }
+
         break; // todo remove after testing
 
         // Save progress after successful processing
