@@ -1,3 +1,5 @@
+import { logger } from "../index.js";
+
 import { fetchClientsRecords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotClientPayload } from "../utils/helper.js";
 import { searchClientInHubSpot } from "../service/student.service.js";
@@ -86,8 +88,8 @@ async function syncClients() {
         // Build payload
         const Payloads = buildHubSpotClientPayload(record);
 
-        console.log("Record:", record);
-        console.log("Payload:", Payloads);
+        logger.info(`Clients Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(`Clients Payload: ${JSON.stringify(Payloads, null, 2)}`);
 
         // 🔍 Search existing client by collection_id
         const searchResults = await searchClientInHubSpot(record.collection_id);
@@ -102,11 +104,11 @@ async function syncClients() {
             Payloads
           );
 
-          console.log("✅ Client updated:", updated.id);
+          console.log(`✅ Client updated:${updated.id}`);
         } else {
           // Client does not exist → Create
           const created = await createClientInHubSpot(Payloads);
-          console.log("✅ Client created:", created.id);
+          console.log(`✅ Client created: ${created.id}`);
         }
 
         break; // 🔥 remove after testing
@@ -114,7 +116,7 @@ async function syncClients() {
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
-        console.error("Error processing record index", i, error);
+        console.error("Error processing record index", error);
         break; // 🔥 remove after testing
 
         // Save progress if needed

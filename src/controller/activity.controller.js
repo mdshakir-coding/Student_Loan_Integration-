@@ -1,3 +1,5 @@
+import { logger } from "../index.js";
+
 import { fetchActivityReords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotActivityPayload } from "../utils/helper.js";
 import { searchActivityInHubSpot } from "../service/student.service.js";
@@ -90,8 +92,8 @@ async function syncActivity() {
         // Build HubSpot payload
         const payload = buildHubSpotActivityPayload(record);
 
-        console.log("Activity Record:", record);
-        console.log("Activity Payload:", payload);
+        logger.info(`Activity Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(`Activity Payload: ${JSON.stringify(Payloads, null, 2)}`);
 
         // 🔍 Search existing activity (by collection_id or email_id)
         let searchResults = null;

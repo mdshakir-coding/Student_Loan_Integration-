@@ -1,3 +1,5 @@
+import { logger } from "../index.js";
+
 import { fetchEmailsRecords } from "../service/student.loan.Hubspot.js";
 import { buildEmailPayload } from "../utils/helper.js";
 import { searchEmailInHubSpot } from "../service/student.service.js";
@@ -36,9 +38,9 @@ function loadProgress() {
 async function syncEmails() {
   try {
     const response = await fetchEmailsRecords();
-    console.log("Emails respoce", response.length);
+    logger.info("Emails respoce", response.length);
   } catch (error) {
-    console.error("Error feching records", error);
+    logger.error("Error feching records", error);
     return;
   }
 }
@@ -48,7 +50,7 @@ export { syncEmails };
 async function syncEmails() {
   try {
     const records = await fetchEmailsRecords(); // fetch all email records
-    console.log("Emails Records:", records.length);
+    logger.info("Emails Records:", records.length);
 
     let startIndex = loadProgress();
 
@@ -59,8 +61,8 @@ async function syncEmails() {
         // Build HubSpot payload
         const payload = buildEmailPayload(record);
 
-        console.log("Email Record:", record);
-        console.log("Email Payload:", payload);
+        logger.info(`Emails Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(`Emails Payload: ${JSON.stringify(payload, null, 2)}`);
 
         // 🔍 Search existing email (example: by collection_id or external_id)
         let searchResults = null;
@@ -73,18 +75,18 @@ async function syncEmails() {
           let existingEmailId = null;
           existingEmailId = searchResults[0].id;
 
-          console.log(`Email exists with id ${existingEmailId}, updating...`);
+          logger.info(`Email exists with id ${existingEmailId}, updating...`);
 
           let updated = null;
           updated = await updateEmailInHubSpot(existingEmailId, payload);
 
-          console.log("✅ Email updated:", updated.id);
+          logger.info(`✅ Email updated: ${updated.id}`);
         } else {
           // Email does not exist → create
           let created = null;
           created = await createEmailInHubSpot(payload);
 
-          console.log("✅ Email created:", created.id);
+          logger.info(`✅ Email created: ${created.id}`);
         }
 
         // Save progress after success
@@ -92,7 +94,7 @@ async function syncEmails() {
 
         break; // ❗ remove after testing
       } catch (error) {
-        console.error("Error processing Email index", i, error);
+        logger.error("Error processing Email index", i, error);
 
         // Save progress to resume later
         // saveProgress(i);
@@ -101,9 +103,9 @@ async function syncEmails() {
       }
     }
 
-    console.log("📧 All Emails Processed");
+    logger.info("📧 All Emails Processed");
   } catch (error) {
-    console.error("Error fetching email records", error);
+    logger.error("Error fetching email records", error);
     return;
   }
 }

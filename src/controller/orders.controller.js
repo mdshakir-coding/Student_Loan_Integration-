@@ -1,3 +1,5 @@
+import { logger } from "../index.js";
+
 import {
   fetchOrdersRecords,
   searchCustomObjectInHubSpot,
@@ -15,7 +17,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "progress.json");
 
-import { logger } from "../utils/winston.logger.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
@@ -42,9 +43,9 @@ function loadProgress() {
 async function syncOrders() {
   try {
     const response = await fetchOrdersRecords();
-    console.log("Orders response", response.length);
+    logger.info("Orders response", response.length);
   } catch (error) {
-    console.error("Error feching records", error);
+    logger.error("Error feching records", error);
     return;
   }
 }
@@ -57,7 +58,7 @@ export { syncOrders };
 async function syncOrders() {
   try {
     const records = await fetchOrdersRecords(); // fetch all order records
-    console.log("Orders Records", records.length);
+    logger.info(`Orders Records : ${records.length}`);
 
     let startIndex = loadProgress();
 
@@ -69,8 +70,8 @@ async function syncOrders() {
         // Build payload
         const Payloads = buildHubspotOrderPayload(record);
 
-        console.log("Record:", record);
-        // console.log("Payload:", Payloads);
+        logger.info(`Orders Record: ${JSON.stringify(record, null, 2)}`);
+        // logger.info("Payload:", Payloads);
 
         // First, search existing order by collection_id
         const searchResults = await searchOrderInHubSpot(record.collection_id);
@@ -79,15 +80,15 @@ async function syncOrders() {
           // Order exists, update it
           const existingOrderId = searchResults[0].id;
           order_record_id = searchResults[0].id;
-          console.log(`Order exists with id ${existingOrderId}, updating...`);
+          logger.info(`Order exists with id ${existingOrderId}, updating...`);
 
           const updated = await updateOderInHubSpot(existingOrderId, Payloads);
-          console.log("✅ Order updated:", updated.id);
+          logger.info(`✅ Order updated: ${updated.id}`);
         } else {
           // Order does not exist, create new
           const created = await createOrderInHubSpot(Payloads);
           order_record_id = created.id;
-          console.log("✅ Order created:", created.id);
+          logger.info(`✅ Order created: ${created.id}`);
         }
         // Associate client and order
         const hs_client = getHubspotClient();
@@ -129,17 +130,14 @@ async function syncOrders() {
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
-        console.error("Error processing record index", i, error);
+        logger.error("Error processing record index", i, error);
         break; // todo remove after testing
         // Save progress here to resume later if needed
         // saveProgress(i);
       }
     }
-
-    console.log("📦 All Orders Processed");
   } catch (error) {
-    console.error("Error fetching order records", error);
-    return;
+    logger.error("Error fetching order records", error);
   }
 }
 

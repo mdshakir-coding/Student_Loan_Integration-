@@ -1,3 +1,5 @@
+import { logger } from "../index.js";
+
 import { fetchAffiliateRecords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotAffiliatePayload } from "../utils/helper.js";
 import { createAffiliateInHubSpot } from "../service/student.service.js";
@@ -94,8 +96,8 @@ async function syncAffiliate() {
         // Build payload
         const Payloads = buildHubSpotAffiliatePayload(record);
 
-        console.log("Record:", record);
-        console.log("Payload:", Payloads);
+        logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(`Affiliate Payload: ${JSON.stringify(Payloads, null, 2)}`);
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(

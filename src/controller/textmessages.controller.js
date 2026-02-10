@@ -1,3 +1,5 @@
+import { logger } from "../utils/winston.logger.js";
+
 import { fetchTextMessagesRecords } from "../service/student.loan.Hubspot.js";
 import { buildTextMessagePayload } from "../utils/helper.js";
 import { searchTextMessageInHubSpot } from "../service/student.service.js";
@@ -36,9 +38,9 @@ function loadProgress() {
 async function syncTextMessages() {
   try {
     const response = await fetchTextMessagesRecrds(); // call the function
-    console.log("TextMessages response", response.length);
+    logger.info("TextMessages response", response.length);
   } catch (error) {
-    console.error("Error feching records", error);
+    logger.error("Error feching records", error);
     return;
   }
 }
@@ -49,7 +51,7 @@ export { syncTextMessages };
 async function syncTextMessages() {
   try {
     const records = await fetchTextMessagesRecords(); // fetch all text message records
-    console.log("TextMessages Records:", records.length);
+    logger.info(`TextMessages Records: ${records.length}`);
 
     let startIndex = loadProgress();
 
@@ -60,8 +62,10 @@ async function syncTextMessages() {
         // Build HubSpot payload
         const payload = buildTextMessagePayload(record);
 
-        console.log("TextMessage Record:", record);
-        console.log("TextMessage Payload:", payload);
+        logger.info(`TextMessages Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(
+          `TextMessages Payload: ${JSON.stringify(payload, null, 2)}`
+        );
 
         // 🔍 Search existing text message (example: by collection_id or message_id)
         let searchResults = null;
@@ -74,7 +78,7 @@ async function syncTextMessages() {
           let existingMessageId = null;
           existingMessageId = searchResults[0].id;
 
-          console.log(
+          logger.info(
             `TextMessage exists with id ${existingMessageId}, updating...`
           );
 
@@ -84,13 +88,13 @@ async function syncTextMessages() {
             payload
           );
 
-          console.log("✅ TextMessage updated:", updated.id);
+          logger.info(`✅ TextMessage updated: ${updated.id}`);
         } else {
           // Text Message does not exist → create
           let created = null;
           created = await createTextMessageInHubSpot(payload);
 
-          console.log("✅ TextMessage created:", created.id);
+          logger.info(`✅ TextMessage created: ${created.id}`);
         }
 
         // Save progress after success
@@ -98,7 +102,7 @@ async function syncTextMessages() {
 
         break; // ❗ remove after testing
       } catch (error) {
-        console.error("Error processing TextMessage index", i, error);
+        logger.error("Error processing TextMessage index", error);
 
         // Save progress to resume later
         // saveProgress(i);
@@ -106,10 +110,8 @@ async function syncTextMessages() {
         break; // ❗ remove after testing
       }
     }
-
-    console.log("📩 All TextMessages Processed");
   } catch (error) {
-    console.error("Error fetching text message records", error);
+    logger.error("Error fetching text message records", error);
     return;
   }
 }

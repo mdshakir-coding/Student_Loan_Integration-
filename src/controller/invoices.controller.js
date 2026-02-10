@@ -1,3 +1,5 @@
+import { logger } from "../utils/winston.logger.js";
+
 import {
   fetchInvoicesRecords,
   searchCustomObjectInHubSpot,
@@ -7,7 +9,6 @@ import { searchInvoiceInHubSpot } from "../service/student.service.js";
 import { createInvoiceInHubSpot } from "../service/student.service.js";
 import { updateInvoiceInHubSpot } from "../service/student.service.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
-import { logger } from "../utils/winston.logger.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -40,7 +41,7 @@ function loadProgress() {
 // async function syncInvoices() {
 //   try {
 //     const records = await fetchInvoicesRecords();
-//     console.log("Invoices records", records.length);
+//     logger.info("Invoices records", records.length);
 
 //     let startIndex = loadProgress();
 
@@ -52,22 +53,22 @@ function loadProgress() {
 
 //         const Payloads = buildHubSpotInvoicePayload(record); // call the function
 
-//         console.log(" Records", record);
-//         console.log("Payloads", Payloads);
+//         logger.info(" Records", record);
+//         logger.info("Payloads", Payloads);
 //         return; // todo remove after testing
 //         // await createInquirerInHubSpot(Payloads);
 
 //         // Save progress after successful processing
 //         // saveProgress(i + 1);
 //       } catch (error) {
-//         console.error(error);
+//         logger.error(error);
 //         // saveProgress(i);
 //         // break; // todo remove after testing
 //       }
 //     }
-//     console.log(" All Invoices Processed");
+//     logger.info(" All Invoices Processed");
 //   } catch (error) {
-//     console.error("Error feching records", error);
+//     logger.error("Error feching records", error);
 //     return;
 //   }
 // }
@@ -77,20 +78,21 @@ function loadProgress() {
 async function syncInvoices() {
   try {
     const records = await fetchInvoicesRecords(); // fetch all invoice records
-    console.log("Invoices Records:", records.length);
+    logger.info(`Invoices Records: ${records.length}`);
 
     let startIndex = loadProgress();
 
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
+        logger.info(`Invoices Record: ${JSON.stringofy(record, null, 2)}`);
+
         let invoice_record_id = null;
 
         // Build HubSpot payload
         const payload = buildHubSpotInvoicePayload(record);
 
-        console.log("Record:", record);
-        console.log("Payload:", payload);
+        logger.info(`Invoices Payload : ${JSON.stringify(payload, null, 2)}`);
 
         // 🔍 Search existing invoice using collection_id
         const searchResults = await searchInvoiceInHubSpot(
@@ -100,7 +102,7 @@ async function syncInvoices() {
         if (searchResults && searchResults.length > 0) {
           // Invoice exists → Update
           const existingInvoiceId = searchResults[0].id;
-          console.log(
+          logger.info(
             `Invoice exists with id ${existingInvoiceId}, updating...`
           );
 
@@ -111,13 +113,13 @@ async function syncInvoices() {
 
           invoice_record_id = updated.id;
 
-          console.log("✅ Invoice updated:", updated.id);
+          logger.info("✅ Invoice updated:", updated.id);
         } else {
           // Invoice does not exist → Create
           const created = await createInvoiceInHubSpot(payload);
           invoice_record_id = created.id;
 
-          console.log("✅ Invoice created:", created.id);
+          logger.info("✅ Invoice created:", created.id);
         }
         const hs_client = getHubspotClient();
         //  client affiliate inquirer
@@ -209,15 +211,15 @@ async function syncInvoices() {
 
         // saveProgress(i + 1);
       } catch (error) {
-        console.error("Error processing invoice index", i, error);
+        logger.error("Error processing invoice index", i, error);
         break; // 🔥 remove after testing
         // saveProgress(i);
       }
     }
 
-    console.log("🎄 All Invoices Processed");
+    logger.info("🎄 All Invoices Processed");
   } catch (error) {
-    console.error("Error fetching invoice records", error);
+    logger.error("Error fetching invoice records", error);
     return;
   }
 }

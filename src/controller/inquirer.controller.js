@@ -1,6 +1,4 @@
-// import logger from "../../logger.js";
-
-import { logger } from "../utils/winston.logger.js";
+import { logger } from "../index.js";
 // import { fetchInquirerRecords } from "../service/student.loan.Hubspot.js";
 import { buildHubSpotInquirerPayload } from "../utils/helper.js";
 import { searchInquirerInHubSpot } from "../service/student.service.js";
@@ -53,7 +51,7 @@ function loadProgress() {
 // async function syncInquirer() {
 //   try {
 //     const records = await fetchInquirerRecords(); // call the function
-//     console.log("inquirerRecords", records.length);
+//     logger.info("inquirerRecords", records.length);
 
 //     let startIndex = loadProgress();
 
@@ -67,22 +65,22 @@ function loadProgress() {
 
 //        const Payloads = buildHubSpotInquirerPayload(record); // call the function
 
-//         console.log (" Records", record);
-//         console.log("Payloads", Payloads);
+//         logger.info (" Records", record);
+//         logger.info("Payloads", Payloads);
 //         return; // todo remove after testing
 //         // await createInquirerInHubSpot(Payloads);
 
 //         // Save progress after successful processing
 //         // saveProgress(i + 1);
 //       } catch (error) {
-//         console.error(error);
+//         logger.error(error);
 //         // saveProgress(i);
 //         // break; // todo remove after testing
 //       }
 //     }
-//     console.log ("👨‍🎓 All Inquirer Processed");
+//     logger.info ("👨‍🎓 All Inquirer Processed");
 //   } catch (error) {
-//     console.error("Error Fecting Inquirer Records", error);
+//     logger.error("Error Fecting Inquirer Records", error);
 //     return;
 //   }
 // }
@@ -92,7 +90,7 @@ function loadProgress() {
 async function syncInquirer() {
   try {
     const records = await fetchInquirerRecords(); // fetch all inquirer records
-    console.log("Inquirer Records:", records.length);
+    logger.info("Inquirer Records:", records.length);
 
     // let startIndex = loadProgress();
     let startIndex = 0;
@@ -104,8 +102,8 @@ async function syncInquirer() {
         // Build HubSpot payload
         const payload = buildHubSpotInquirerPayload(record);
 
-        console.log("Record:", record);
-        console.log("Payload:", payload);
+        logger.info(`Inquirer Record: ${JSON.stringify(record, null, 2)}`);
+        logger.info(`Inquirer Payload: ${JSON.stringify(payload, null, 2)}`);
 
         // 🔍 Search existing inquirer (example: by collection_id or name)
         let inquirer_record_id = null;
@@ -117,19 +115,19 @@ async function syncInquirer() {
           // Inquirer exists → update
           let existingInquirerId = null;
           existingInquirerId = searchResults[0].id;
-          console.log(
+          logger.info(
             `Inquirer exists with id ${existingInquirerId}, updating...`
           );
           let updated = null;
           updated = await updateInquirerInHubSpot(existingInquirerId, payload);
-          console.log("✅ Inquirer updated:", updated.id);
+          logger.info(`✅ Inquirer updated: ${updated.id}`);
         } else {
           // Inquirer does not exist → create
           let created = null;
           created = await createInquirerInHubSpot(payload);
           inquirer_record_id = created.id;
 
-          console.log("✅ Inquirer created:", created.id);
+          logger.info(`✅ Inquirer created: ${created.id}`);
         }
 
         // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
@@ -237,7 +235,7 @@ async function syncInquirer() {
 
         return; // ❗ remove after testing
       } catch (error) {
-        console.error("Error processing record index", error);
+        logger.error("Error processing record index", error);
 
         // Save progress to resume later
         // saveProgress(i);
@@ -245,10 +243,8 @@ async function syncInquirer() {
         return; // ❗ remove after testing
       }
     }
-
-    console.log("👨‍🎓 All Inquirers Processed");
   } catch (error) {
-    console.error("Error fetching inquirer records", error);
+    logger.error("Error fetching inquirer records", error);
     return;
   }
 }
