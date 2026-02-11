@@ -1,8 +1,7 @@
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
-
-
+// import dotenv from "dotenv";
+// dotenv.config();
+import { logger } from "../index.js";
 
 // Create Affiliate in Hubspot
 
@@ -30,7 +29,6 @@ async function createAffiliateInHubSpot(payload) {
 
 // Update Function for Affiliate in hubspot
 
-
 async function updateAffiliateInHubSpot(affiliateId, payload) {
   const url = `https://api.hubapi.com/crm/v3/objects/2-171942530/${affiliateId}`;
 
@@ -40,7 +38,7 @@ async function updateAffiliateInHubSpot(affiliateId, payload) {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
       },
-    }); 
+    });
 
     console.log("✅ Affiliate updated:", response.data);
     return response.data;
@@ -52,9 +50,6 @@ async function updateAffiliateInHubSpot(affiliateId, payload) {
     throw error; // IMPORTANT
   }
 }
-
-
-
 
 // code for search Affiliate
 async function searchAffiliateByInHubspot(collectionId) {
@@ -99,12 +94,10 @@ async function searchAffiliateByInHubspot(collectionId) {
   }
 }
 
-
-
 // Search Client function
 async function searchClientInHubSpot(collectionId) {
   if (!collectionId) return [];
-  
+
   const payload = {
     filterGroups: [
       {
@@ -113,11 +106,11 @@ async function searchClientInHubSpot(collectionId) {
             propertyName: "collection_id",
             operator: "EQ",
             value: collectionId,
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
-    limit: 1
+    limit: 1,
   };
 
   try {
@@ -127,8 +120,8 @@ async function searchClientInHubSpot(collectionId) {
       {
         headers: {
           Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
@@ -144,13 +137,10 @@ async function searchClientInHubSpot(collectionId) {
   }
 }
 
-
-
 // Create function in client
 
 async function createClientInHubSpot(payload) {
   const url = "https://api.hubapi.com/crm/v3/objects/2-171843307";
-  
 
   try {
     const response = await axios.post(url, payload, {
@@ -163,17 +153,13 @@ async function createClientInHubSpot(payload) {
     console.log("✅ Client created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating client:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating client:", error.response?.data || error);
     // throw error; // IMPORTANT (same as affiliate)
     return {};
   }
 }
 
-
-// Update client function 
+// Update client function
 
 async function updateClientInHubSpot(clientId, payload) {
   const url = `https://api.hubapi.com/crm/v3/objects/2-171843307/${clientId}`;
@@ -209,11 +195,11 @@ async function searchInvoiceInHubSpot(collectionId) {
             propertyName: "collection_id",
             operator: "EQ",
             value: String(collectionId),
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
-    limit: 1
+    limit: 1,
   };
 
   try {
@@ -223,24 +209,18 @@ async function searchInvoiceInHubSpot(collectionId) {
       {
         headers: {
           Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
     return response.data.results || [];
   } catch (error) {
-    console.error(
-      "❌ Error listing invoices:",
-      error.response?.data || error
-    );
-   
+    console.error("❌ Error listing invoices:", error.response?.data || error);
+
     return [];
   }
 }
-
-
-
 
 // Create Invoice function in hubspot
 async function createInvoiceInHubSpot(payload) {
@@ -257,15 +237,11 @@ async function createInvoiceInHubSpot(payload) {
     console.log("✅ Invoice created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating invoice:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating invoice:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
 }
-
 
 // Update Invoice function in hubspot
 async function updateInvoiceInHubSpot(invoiceId, payload) {
@@ -335,8 +311,6 @@ async function searchInquirerInHubSpot(collectionId) {
   }
 }
 
-
-
 // Update Inquirer in Hubspot
 async function updateInquirerInHubSpot(inquirerId, payload) {
   const url = `https://api.hubapi.com/crm/v3/objects/0-1/${inquirerId}`;
@@ -352,15 +326,11 @@ async function updateInquirerInHubSpot(inquirerId, payload) {
     console.log("✅ Inquirer updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error updating inquirer:",
-      error.response?.data || error
-    );
+    console.error("❌ Error updating inquirer:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
 }
-
 
 // async function updateInquirerInHubSpot(inquirerId, properties) {
 //   const url = `https://api.hubapi.com/crm/v3/objects/0-1/${inquirerId}`;
@@ -395,10 +365,8 @@ async function updateInquirerInHubSpot(inquirerId, payload) {
 //   }
 // }
 
-
 // create Inquirer in Hubspot
 async function createInquirerInHubSpot(payload) {
-  
   const url = "https://api.hubapi.com/crm/v3/objects/0-1";
 
   try {
@@ -412,10 +380,7 @@ async function createInquirerInHubSpot(payload) {
     console.log("✅ Inquirer created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating inquirer:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating inquirer:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return null;
   }
@@ -506,15 +471,11 @@ async function createOrderInHubSpot(payload) {
     console.log("✅ Order created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating order:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating order:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
 }
-
 
 // Search Text Message in hubspot
 
@@ -572,7 +533,7 @@ async function searchTextMessageInHubSpot(collectionId) {
         },
         params: {
           limit: 100, // max items per request
-          properties: 'hs_note_body,hs_timestamp',
+          properties: "hs_note_body,hs_timestamp",
         },
       }
     );
@@ -580,11 +541,14 @@ async function searchTextMessageInHubSpot(collectionId) {
     const notes = response.data.results || [];
 
     // Filter notes whose body contains the collectionId string
-    const filteredNotes = notes.filter(note =>
+    const filteredNotes = notes.filter((note) =>
       note.properties.hs_note_body?.includes(collectionId)
     );
 
-    console.log("✅ Text Message fallback filtered count:", filteredNotes.length);
+    console.log(
+      "✅ Text Message fallback filtered count:",
+      filteredNotes.length
+    );
     return filteredNotes;
   } catch (error) {
     console.error(
@@ -594,7 +558,6 @@ async function searchTextMessageInHubSpot(collectionId) {
     return [];
   }
 }
-
 
 // Update Text Message In hubspot
 
@@ -645,7 +608,6 @@ async function createTextMessageInHubSpot(payload) {
     return {};
   }
 }
-
 
 // Email Search Function in hubspot
 
@@ -706,15 +668,11 @@ async function updateEmailInHubSpot(inquirerId, payload) {
     console.log("✅ Email updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error updating email:",
-      error.response?.data || error
-    );
+    console.error("❌ Error updating email:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
 }
-
 
 // Create Email In hubspot
 
@@ -732,10 +690,7 @@ async function createEmailInHubSpot(payload) {
     console.log("✅ Email created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating email:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating email:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -775,7 +730,7 @@ async function createEmailInHubSpot(payload) {
 
 //     const results = response.data?.results?.[0] || null;
 //     console.log("✅ Activity search by collection_id:", results.length);
-   
+
 //     return results;
 //   } catch (error) {
 //     console.error(
@@ -828,13 +783,10 @@ async function searchActivityInHubSpot(collectionId) {
     return result;
   } catch (error) {
     // ❗ downgrade to warn (this is expected)
-    console.warn(
-      "⚠️ Activity search skipped (HubSpot limitation)"
-    );
+    console.warn("⚠️ Activity search skipped (HubSpot limitation)");
     return null;
   }
 }
-
 
 // update Activity In hubspot
 
@@ -852,10 +804,7 @@ async function updateActivityInHubSpot(activityId, payload) {
     console.log("✅ Activity updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error updating activity:",
-      error.response?.data || error
-    );
+    console.error("❌ Error updating activity:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -870,33 +819,41 @@ async function createActivityInHubSpot(payload) {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
-        
       },
     });
 
     console.log("✅ Activity created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
-      "❌ Error creating activity:",
-      error.response?.data || error
-    );
+    console.error("❌ Error creating activity:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
 }
 
-
-
-
-
-export {createAffiliateInHubSpot,
+export {
+  createAffiliateInHubSpot,
   updateAffiliateInHubSpot,
-  searchAffiliateByInHubspot,searchClientInHubSpot,
-  createClientInHubSpot,updateClientInHubSpot,searchInvoiceInHubSpot,createInvoiceInHubSpot,
+  searchAffiliateByInHubspot,
+  searchClientInHubSpot,
+  createClientInHubSpot,
+  updateClientInHubSpot,
+  searchInvoiceInHubSpot,
+  createInvoiceInHubSpot,
   updateInvoiceInHubSpot,
-  updateInquirerInHubSpot,searchInquirerInHubSpot,createInquirerInHubSpot,
-searchOrderInHubSpot,updateOderInHubSpot,createOrderInHubSpot,
-searchTextMessageInHubSpot,createTextMessageInHubSpot,updateTextMessageInHubSpot,
-searchEmailInHubSpot,updateEmailInHubSpot,createEmailInHubSpot,
-searchActivityInHubSpot,updateActivityInHubSpot,createActivityInHubSpot};
+  updateInquirerInHubSpot,
+  searchInquirerInHubSpot,
+  createInquirerInHubSpot,
+  searchOrderInHubSpot,
+  updateOderInHubSpot,
+  createOrderInHubSpot,
+  searchTextMessageInHubSpot,
+  createTextMessageInHubSpot,
+  updateTextMessageInHubSpot,
+  searchEmailInHubSpot,
+  updateEmailInHubSpot,
+  createEmailInHubSpot,
+  searchActivityInHubSpot,
+  updateActivityInHubSpot,
+  createActivityInHubSpot,
+};

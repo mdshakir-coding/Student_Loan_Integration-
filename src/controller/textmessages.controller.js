@@ -1,10 +1,14 @@
-import { logger } from "../utils/winston.logger.js";
+import { logger } from "../index.js";
 
-import { fetchTextMessagesRecords } from "../service/student.loan.Hubspot.js";
+import {
+  fetchTextMessagesRecords,
+  searchCustomObjectInHubSpotBasedonCustomeField,
+} from "../service/student.loan.Hubspot.js";
 import { buildTextMessagePayload } from "../utils/helper.js";
 import { searchTextMessageInHubSpot } from "../service/student.service.js";
 import { createTextMessageInHubSpot } from "../service/student.service.js";
 import { updateTextMessageInHubSpot } from "../service/student.service.js";
+import { getHubspotClient } from "../configs/hubspot.config.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -17,6 +21,7 @@ const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
+
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
 }
@@ -68,46 +73,72 @@ async function syncTextMessages() {
         );
 
         // 🔍 Search existing text message (example: by collection_id or message_id)
-        let searchResults = null;
-        searchResults = await searchTextMessageInHubSpot(
+        let upsertTextMessage = null;
+        upsertTextMessage = await searchTextMessageInHubSpot(
           record.collection_id // or record.message_id
         );
 
-        if (searchResults && searchResults.length > 0) {
+        if (upsertTextMessage) {
           // Text Message exists → update
           let existingMessageId = null;
-          existingMessageId = searchResults[0].id;
+          existingMessageId = upsertTextMessage[0].id || upsertTextMessage?.id;
 
           logger.info(
             `TextMessage exists with id ${existingMessageId}, updating...`
           );
 
-          let updated = null;
-          updated = await updateTextMessageInHubSpot(
+          upsertTextMessage = await updateTextMessageInHubSpot(
             existingMessageId,
             payload
           );
 
-          logger.info(`✅ TextMessage updated: ${updated.id}`);
+          logger.info(`✅ TextMessage updated: ${upsertTextMessage.id}`);
         } else {
           // Text Message does not exist → create
-          let created = null;
-          created = await createTextMessageInHubSpot(payload);
+          upsertTextMessage = await createTextMessageInHubSpot(payload);
 
-          logger.info(`✅ TextMessage created: ${created.id}`);
+          logger.info(`✅ TextMessage created: ${upsertTextMessage.id}`);
+        }
+
+        // Find client based on linked_client field in Hubspot ->(Client)
+        const hs_client = getHubspotClient();
+
+        //  client affiliate inquirer
+        const client = await searchCustomObjectInHubSpotBasedonCustomeField(
+          "2-171843307",
+          "phone_1_type_ivinex",
+          record.external_number
+        );
+
+        logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
+
+        if (client && client[0]?.id && upsertTextMessage?.id) {
+          // ➡️ associate here
+
+          const associate = await hs_client.associations.associate(
+            "notes",
+            upsertTextMessage?.id,
+            clientObject,
+            client[0].id,
+            26,
+            "USER_DEFINED"
+          );
+          logger.info(
+            `✅ upsertTextMessage Id ${
+              upsertTextMessage?.id
+            } associated with Client ${
+              client[0]?.id
+            }: Association ${JSON.stringify(associate)}`
+          );
         }
 
         // Save progress after success
         // saveProgress(i + 1);
-
-        break; // ❗ remove after testing
       } catch (error) {
         logger.error("Error processing TextMessage index", error);
 
         // Save progress to resume later
         // saveProgress(i);
-
-        break; // ❗ remove after testing
       }
     }
   } catch (error) {

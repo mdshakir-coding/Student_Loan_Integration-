@@ -1,5 +1,6 @@
 import axios from "axios";
 import { cleanProps } from "../utils/helper.js";
+import { logger } from "../index.js";
 
 // fetch Inquirer Records
 // async function fetchInquirerRecords() {
@@ -847,8 +848,56 @@ async function searchCustomObjectInHubSpot(objectType, collectionId) {
     return null;
   }
 }
+async function searchCustomObjectInHubSpotBasedonCustomeField(
+  objectType,
+  customField,
+  customValue
+) {
+  if (!objectType || !customField || !customValue) {
+    logger.warn("Missing required association parameters");
+    return null;
+  }
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: customField,
+            operator: "EQ",
+            value: String(customValue),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      `https://api.hubapi.com/crm/v3/objects/${objectType}/search`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const results = response.data?.results || null;
+    return results;
+  } catch (error) {
+    console.error(
+      `❌ Error searching custom Object by collection_id: ${objectType}`,
+      error.response?.data || error
+    );
+    return null;
+  }
+}
 
 export {
+  searchCustomObjectInHubSpotBasedonCustomeField,
   searchCustomObjectInHubSpot,
   associateObjects,
   fetchAffiliateById,
