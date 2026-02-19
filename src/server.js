@@ -19,7 +19,7 @@ app.listen(PORT, () => {
   // syncAffiliate(); //done
   // syncActivity(); // done
   // syncInvoices();    //done
-  // syncClients(); //done
+  syncClients(); //done
   // syncOrders(); //done
   // syncTextMessages(); //done
   // syncEmails(); // done

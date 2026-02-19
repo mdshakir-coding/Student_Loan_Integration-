@@ -129,7 +129,7 @@ async function syncInquirer() {
 
           logger.info(`✅ Inquirer created: ${created.id}`);
         }
-
+        // return;
         // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
         const hs_client = getHubspotClient();
 

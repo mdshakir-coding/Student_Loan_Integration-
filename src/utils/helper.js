@@ -51,190 +51,727 @@ function cleanProps(obj) {
   return cleaned;
 }
 
-// Create Payload in Inquirer
-const loanStatusMapping = {
-  1: "Unknown",
-  2: "Current",
-  3: "Deferment or Forbearance",
-  4: "Default",
-  5: "Past Due",
-  6: "Garnishment",
-  7: "App in Process",
+// lead_owner Picklist value mapped for Inquirer
+
+const affiliateleadOwnerMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
 };
 
-const enteredInfoMapping = {
-  1: "Yes",
-  2: "No",
-};
-const affiliateReferralMapping = {
-  1: "Yes",
-  2: "No",
+// Phone_1_type picklist mapping
+const phone1TypeMapping = {
+  10246: "Cell",
+  10247: "Home",
+  10248: "Work"
 };
 
-const evalFederalMapping = {
-  1: "Less than $60k",
-  2: "$60k - $75k",
-  3: "$75k - $100k",
-  4: "$100k - $150k",
-  5: "$150k - $200k",
-  6: "$200k - $300k",
-  7: "$300k+",
+
+// phone_2_type picklist mapping
+const phone2TypeMapping = {
+  10250: "Cell",
+  10251: "Home",
+  10252: "Work"
 };
 
-const contractorReferredmapping = {
-  1: "Tony F.",
-};
 
-const duFinancialPlannerMapping = {
-  1: "Belle Ives (NM) - Tony",
-};
-
-const duSltOutereachMapping = {
-  1: "Not Listed yet",
-};
-const emloymenttypes = {
-  1: "Self Employed - Business Owner",
-  2: "Self Employed - No Entity Set Up Yet",
-  3: "W2 Employee",
-  4: "Multiple (Self Employed/W2)",
-  5: "Unemployed",
-  6: "Retired",
-  7: "Self Employed",
-  8: "W2",
-  9: "1099",
-  10: "	Multiple,",
-};
-const spounceHasMapping = {
-  1: "Yes",
-  2: "No",
-  3: "Unknown",
-};
-
-const evalTaxesmapping = {
-  1: "Jointly",
-  2: "Seperate",
-};
-
-const householdIncomeMapping = {
-  1: "HH1 - $22,590",
-  2: "HH2 - $30,660",
-  3: "HH3 - $38,730",
-  4: "HH4 - $46,800",
-  5: "HH5 - $54,870",
-  6: "HH6 - $62,940",
-  7: "HH7 - $71,010",
-  8: "HH8 - $79,080",
-  9: "HH9 - $87,150",
-  10: "HH10 - $95,220",
-  11: "HH11 - $103,290",
-  12: "HH12 - $111,360",
-  13: "HH13 - $119,430",
-  14: "HH14 - $127,500",
-  15: "HH15 - $135,570",
-  16: "HH16 - $add $8,070 each",
-};
-
-const inquirerCurrentMapping = {
-  1: "Unknown",
-  2: "Balance Based",
-  3: "Income Driven",
-  4: "Recent Grad(Not setup yet)",
-};
-const loanServicerMapping = {
-  1: "Nelnet",
-  2: "AidVantage",
-  3: "EdFinancial",
-  4: "Mohela",
-  5: "CRI (Central Research Incorporated)",
-  6: "Multiple Servicers",
-  7: "A.E.S",
-  8: "A.C.S",
-  9: "Navient (Inactive)",
-  10: "SLOAN",
-  11: "Cornerstone",
-  12: "Granite State (Inactive)",
-  13: "Aspire (Inactive)",
-  14: "UHEAA",
-  15: "Collections Agency",
-  16: "OSLA",
-  17: "Trellis (Higher Ed)",
-  18: "Fedloan",
-  19: "Great Lakes (Inactive)",
-};
-const loanMapping = {
-  1: "Unknown",
-  2: "Current",
-  3: "Deferment or Forbearance",
-  4: "Default",
-  5: "Past Due",
-  6: "Garnishment",
-  7: "App in Process",
-};
-
-const professionMapping = {
-  1: "Chiropractor",
-  2: "Unknown",
-  3: "Naturopath",
-  4: "Acupuncturist",
-  5: "Medical Practitioner",
-  6: "Dentist",
-  7: "Doctorate / PHD",
-  8: "Attorney",
-  9: "Finance",
-  10: "Veterinarian",
-  11: "Nurse",
-  12: "Psychologist",
-  13: "Therapist",
-  14: "Nutritionist",
-  15: "Teacher",
-  16: "Self Employed (Generic)",
-  17: "W-2 (Generic)",
-  18: "Sales",
-  19: "Optometrist",
-  20: "Pharmacist",
-  21: "Other",
-};
+// inquirer_status picklist mapping
 const inquirerStatusMapping = {
-  1: "New",
-  2: "(DU) Hot Lead - Nurturing",
-  3: "$0 Payment Currently",
-  4: "Action Needed",
-  5: "Bad Lead",
-  6: "Became Client",
-  7: "Canceled by inquirer",
-  8: "DNC/DQ",
-  9: "Eval Call Set",
-  10: "Eval Reschedule - Pending",
-  11: "F&F Became Client",
-  12: "GF Became Client",
-  13: "HF PCS",
-  14: "MIA/Ghost",
-  15: "No Resp. 1st Att.",
-  16: "No Resp. 2nd Att.",
-  17: "No Resp. Final Att.",
-  18: "No Sale (tutor)",
-  19: "No Show (Planning Call)",
-  20: "Not Interested (eval)",
-  21: "Outstanding Invoice",
-  22: "Pending PC - Link Sent to book",
-  23: "Planning Call (not paid yet)",
-  24: "Planning Call Set",
-  25: "Promise to Schedule",
-  26: "Rehab Default",
-  27: "Req to stop Texting - Drip 2",
-  28: "Rescheduled Eval Call",
-  29: "Sent to Cohen - Eval",
-  30: "Setter Following Up - 1st Attempt",
-  31: "Setter Following Up - 2nd Attempt",
-  32: "Setter Following Up - Final",
-  33: "Setter Hot Lead - Nurturing",
-  34: "Student",
-  35: "To Be Deleted",
-  36: "TRAINING",
-  37: "Tutor AAR Follow up",
-  38: "Tutor Following Up",
-  39: "Unqualified Lead",
+  10261: "New",
+  15030: "Canceled by inquirer",
+  10263: "Bad Lead",
+  13070: "Unqualified Lead",
+  12989: "No Resp. 1st Att.",
+  13061: "No Resp. 2nd Att.",
+  13062: "No Resp. Final Att.",
+  13063: "MIA/Ghost",
+  13161: "Pending PC - Link Sent to book",
+  10262: "Eval Call Set",
+  15164: "Rescheduled Eval Call",
+  15165: "Eval Reschedule - Pending",
+  14857: "Setter Following Up - 1st Attempt",
+  15270: "Setter Following Up - 2nd Attempt",
+  15271: "Setter Following Up - Final",
+  15309: "Setter Hot Lead - Nurturing",
+  10264: "Not Interested (eval)",
+  15302: "Req to stop Texting - Drip 2",
+  15085: "Sent to Cohen - Eval",
+  15237: "HF PCS",
+  13058: "Planning Call (not paid yet)",
+  10265: "Planning Call Set",
+  15041: "No Show (Planning Call)",
+  13016: "Tutor Following Up",
+  15286: "$0 Payment Currently",
+  15101: "Tutor ARR Follow up",
+  13049: "No Sale (tutor)",
+  15285: "Outstanding Invoice",
+  12865: "Became Client",
+  13055: "GF Became Client",
+  14201: "F&F Became Client",
+  11518: "DNC/DQ",
+  12866: "Rehab Default",
+  11517: "Student",
+  13064: "Action Needed",
+  14196: "TRAINING",
+  15306: "(DU) Hot Lead - Nurturing",
+  14882: "To Be Deleted"
 };
+
+
+// time_zone0 picklist mapping
+
+const timeZone0Mapping = {
+  10275: "america_slash_new_york",         // EST
+  10276: "america_slash_chicago",          // CST
+  10277: "america_slash_denver",           // MST
+  13056: "america_slash_pheonix",          // MST (Arizona, no DST)
+  10278: "america_slash_los_angeles",      // PST
+  10279: "pacific_slash_honolulu",         // HAST
+  10280: "america_slash_anchorage",        // AKST
+  11522: "america_slash_anchorage",        // AK
+  11520: "america_slash_anchorage",        // AKS
+  11523: "america_slash_halifax",          // HAT
+  13398: "pacific_slash_honolulu",         // HST
+  11524: "america_slash_san_juan",         // PR
+  11521: "utc"                             // UTC
+};
+
+
+
+// standy_list picklist mapping
+const standyListMapping = {
+  15203: "Low Importance",
+  15204: "High Importance"
+};
+
+
+// pc_appointment_confirmation picklist mapping
+const pcAppointmentConfirmationMapping = {
+  15207: "Confirmed",
+  15208: "Rescheduled"
+};
+
+// slt_referring_rep picklist mapping
+const sltReferringRepMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+// lead_type picklist mapping
+
+const leadTypeMapping = {
+  12919: "Client Referral",
+  12923: "SLT Contractor Referral",
+  13333: "Outbound Affiliates (Financial Planner) - NO APC",
+  12922: "SLT/Tutor Affiliates",
+  15311: "Webinar - Dani",
+  14234: "Email Campaign (Marketing)",
+  14210: "Low Balance Lead",
+  12932: "Conferences",
+  13395: "FB Groups/Word of Mouth",
+  15032: "Non-Client Referral/Direct Mention",
+  13293: "Undetermined",
+  13036: "Spouse/Partner",
+  14232: "Podcast",
+  14774: "Webinar",
+  14928: "Csaba",
+  15031: "Non-Commission Referrals (Csaba)",
+  15236: "Non-qual HF Lead",
+  14993: "Dani PR",
+  15068: "Dani - Partner Link",
+  15153: "Dani - Conferences",
+  14940: "PR Articles - Dani",
+  14984: "Parker University - Tony",
+  12921: "DU Website (dont use)",
+  15082: "DU Dani/Csaba Split",
+  14937: "DU Csaba FA",
+  14938: "DU Csaba - PSLF",
+  13140: "DU Digital Ad (Marketing)",
+  12992: "DU Chiro Assoc. Affiliate (don't use)",
+  13059: "DU SLT In-house Marketing (dont use)",
+  13076: "DU Direct Outreach (dont use)",
+  12987: "DU Kyle FB Ad/Affiliate Marketing (Don't use)",
+  12920: "DU Online Generic (dont use)",
+  14901: "DU M Physicians"
+};
+
+// affiliate_presenting_tutor picklist mapping
+const affiliatePresentingTutorMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+// conferences_dani_pr_sources picklist mapping
+
+const conferencesDaniPrSourcesMapping = {
+  15305: "Texas Chiro Assoc. Conference 2025 - Derek and Kevin",
+  15096: "Better Wealth FA Conference - CO - Dani/Michael",
+  14991: "Chiro Congress 2023",
+  15001: "Kentucky Assoc. of Chiropractics - Dani",
+  15003: "California Chiro Assoc 2023/2024 - Dani",
+  15004: "Colorado Chiro Newsletter - Dani",
+  15005: "Virginia Chiro Newsletter - Dani",
+  15006: "Texas Chiro Newsletter - Dani",
+  15007: "Georgia Chiro Newsletter - Dani",
+  15008: "Missouri Chiro Newsletter - Dani",
+  15009: "Florida Chiro Newsletter - Dani",
+  15010: "Ohio Chiro Newsletter - Dani",
+  15011: "Arizona Chiro Newsletter - Dani",
+  15012: "Illinois Chiro Newsletter - Dani",
+  15013: "Utah Chiro Newsletter - Dani",
+  15023: "OSCA Newsletter - Dani",
+  15046: "Washington Chiro Newsletter - Dani PR",
+  15060: "NC Chiro Association - Dani",
+  15062: "MyBalto - Dani",
+  15063: "Open Door Consults - Dani",
+  15064: "Florida Chiro Association",
+  15065: "Illinois State Veterinary Assoc. - Dani",
+  15066: "Texas Veterinary Med Assoc. - Dani",
+  15070: "CE - Chiro Economics",
+  15093: "Texas Chiro Assoc. Conference 2024 - Tony and Kevin",
+  14992: "MAC - Michigan Chiro 2023",
+  14987: "OSCA 2023 - Ohio",
+  13073: "Whiplash Group 2020",
+  15024: "TCA Webinar 2024 - Tony",
+  14939: "Texas Chiro Expo 2023 - Tony and Derek",
+  14979: "Unison 2023",
+  14220: "2022 Whiplash - Derek and Max",
+  13077: "Idaho Chiro Association (old)",
+  13078: "California Chiro Association (old)",
+  13079: "Utah Chiro Association (old)",
+  13096: "Washington Chiro Association (old)",
+  13157: "Texas Chiro Conference (2018/2019)",
+  13266: "Colorado Chiro Conference",
+  13393: "2021 Washington State (WSCA) - Derek",
+  14752: "ABCA 2022 KCMO",
+  14893: "ACS - Alaska Chiro Society Oct 2022",
+  13158: "Virginia Chiro Conference 2020",
+  14931: "Texas Chiro Expo - 2023 - Tony and Derek"
+};
+
+// podcast mapping picklist mapping
+const podcastMapping = {
+  14230: "Zeitgeist Podcast (Except the Charles Episode)",
+  14226: "Charles Eisenstein Podcast",
+  14227: "Lions of Liberty (Michael Podcast)",
+  14229: "Life Benefits/Wealth Talks/Tom Mcfie",
+  14231: "Lifestyle Practice Builders Podcast - Haley Day",
+  14894: "Kim Besuden Podcast - Tony",
+  14933: "PPP - Dr Jay LaGuardia - Tony",
+  14936: "Money Mastery Coaching - Michael",
+  14942: "The Culture Podcast",
+  14944: "Animal Chiro - Katie Lackey",
+  15047: "Chiropractic Connection - Dani",
+  15061: "Practice on Purpose - Dani",
+  15189: "Better Wealth Podcast - Dani",
+  15190: "Expect Miracles Podcast - Kevin",
+  15319: "Wealthy Practitioner - Dani"
+};
+// du_financial_planner picklist mapping
+const duFinancialPlannerMapping = {
+  14241: "Belle Ives (NM) - Tony",
+  14238: "Dani Converse (NM) - Tony",
+  14240: "Hannah Morando (NM) - Tony",
+  14239: "Van Everett (NM) - Tony",
+  14256: "Lauren Peter (NM) - Tony",
+  14751: "Trina Sessions (NM) - Tony",
+  14754: "Alex Morgan (NM) - Tony",
+  14755: "Nicki Morgan (NM) - Tony",
+  14759: "Kimmy Schimek (NM) - Tony",
+  14760: "Matt Schimek (NM) - Tony",
+  14242: "John Coeuille (Ed Jones)",
+  14753: "Hannah Moeller (NM) - Tony",
+  14237: "Renata (Ed.Jones) - Tony",
+  14746: "Myron (Chris) Henley - Derek"
+};
+
+// du_slt_outreach_affiliate_source picklist mapping
+const duSltOutreachAffiliateSourceMapping = {
+  13264: "Not Listed Yet",
+  13117: "KSL Ad Michael Did",
+  13127: "Mass Mutual (Michael)",
+  14756: "KC Credit",
+  13156: "Renata EdJones (Tony)",
+  14215: "Dani Converse (NW M) - Tony",
+  14225: "Van Everett (NW M) - Tony",
+  14235: "Hannah Morando (NW M) - Tony",
+  14236: "Belle Ives (NW M) - Tony",
+  13120: "Ian Hoffman Student Loan Eraser",
+  13128: "Amber Landry (pslf service/michael)",
+  13121: "UCPA (Utah Physicians Chiropractic Association)",
+  13126: "WSCA (Washington State Chiropractic Association)",
+  13132: "UVCA (Virginia Chiropractic Association)",
+  13133: "TCA (Texas Chiropractic Association)",
+  13137: "IACP (Idaho Association of Chiropractic Physicians)",
+  13138: "Calchiro (California Chiropractic Association)",
+  13139: "FCA (Florida Chiropractic Association)",
+  13227: "Florida Acupuncture Assoc",
+  13228: "AT/DC Articles",
+  13240: "ABCA",
+  13256: "Life West Zoom",
+  13267: "Women's FB Chiro Group",
+  13355: "John Coeuille (Ed Jones)",
+  14221: "Wealth Factory",
+  14222: "Tom Pratt (Financial Planner)"
+};
+
+// contractor_referred_by picklist mapping
+
+const contractorReferredByMapping = {
+  13097: "Michael/Maomi",
+  13099: "Derek S.",
+  13101: "Tony F.",
+  13102: "Zack/Madeline",
+  13112: "Genevieve B.",
+  13125: "Amie E.",
+  14974: "Kevin H.",
+  14975: "Adam D.",
+  14976: "Terni B.",
+  14977: "Joe F.",
+  14978: "Sara R.",
+  13113: "Adam S.",
+  13114: "Casey D.",
+  14198: "Katie R.",
+  14199: "Max B.",
+  13100: "Amrit D."
+};
+
+// inquirer_profession picklist mapping
+const inquirerProfessionMapping = {
+  10331: "Chiropractor",
+  10335: "Unknown",
+  12730: "Naturopath",
+  12729: "Acupuncturist",
+  10332: "Medical Practitioner",
+  10330: "Dentist",
+  10333: "Doctorate / PHD",
+  10334: "Attorney",
+  12731: "Finance",
+  12732: "Veterinarian",
+  13330: "Nurse",
+  13331: "Psychologist",
+  13332: "Therapist",
+  13363: "Nutritionist",
+  14187: "Teacher",
+  14190: "Self Employed (generic)",
+  14191: "W-2 (generic)",
+  14192: "Sales",
+  14967: "Optometrist",
+  15167: "Pharmacist",
+  10336: "Other"
+};
+// inquirer_employment_type picklist mapping
+const inquirerEmploymentTypeMapping = {
+  12925: "Self Employed",
+  10325: "W2",
+  10326: "1099",
+  10327: "Unemployed",
+  12913: "Multiple",
+  15166: "Retired"
+};
+
+// marital_status picklist mapping
+const maritalStatusMapping = {
+  10303: "Married",
+  10304: "Single",
+  10305: "Divorced",
+  10306: "Engaged",
+  10307: "Separated"
+};
+
+// eval___taxes_jointly_separate_picklist mapping
+const evalTaxesJointlySeparateMapping = {
+  14250: "Jointly",
+  14251: "Separate"
+};
+
+//eval___spouse_has_loans picklist mapping
+const evalSpouseHasLoansMapping = {
+  10317: "Yes",
+  10318: "No",
+  10319: "Unknown"
+};
+
+// inquirer_loan_status picklist mapping
+const inquirerLoanStatusMapping = {
+  12930: "Unknown",
+  10296: "Current",
+  10297: "Deferment Or Forbearance",
+  10298: "Default",
+  10299: "Past Due",
+  10300: "Garnishment",
+  10301: "App in Process"
+};
+
+// inquirer_current_repayment_plan picklist mapping
+const inquirerCurrentRepaymentPlanMapping = {
+  10323: "Unknown",
+  10321: "Balance Based",
+  10322: "Income Driven",
+  13364: "Recent Grad (Not setup yet)"
+};
+// tutor_name picklist mapping
+const tutorNameMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+// slt_rep_referred_by picklist mapping
+const sltRepReferredByMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+// eval___spouse_pay_frequency picklist mapping
+const evalSpousePayFrequencyMapping = {
+  11971: "Weekly",
+  11972: "Bi-Weekly",
+  11973: "Semi-Monthly",
+  11974: "Monthly",
+  11975: "Annually",
+  12914: "Daily",
+  12915: "Quarterly"
+};
+// lead_owner picklist mapping
+const leadOwnerMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+// fed_loan_amount_old picklist mapping
+
+const fedLoanAmountOldMapping = {
+  10286: "0",
+  10287: "Less than 10K",
+  10288: "10K-30K",
+  10289: "30K-50K",
+  10290: "50K-100K",
+  10291: "100K-150K",
+  10292: "150K-200K",
+  10293: "200K-300K",
+  10294: "More than 300K"
+};
+
+// inquirer_loan_servicer picklist mapping
+const inquirerLoanServicerMapping = {
+  13301: "Nelnet",
+  14203: "AidVantage",
+  13309: "EdFinancial",
+  13308: "Mohela",
+  15275: "CRI (Central Research Incorporated)",
+  13305: "Multiple Servicers",
+  13306: "A.E.S.",
+  13307: "A.C.S.",
+  13302: "Navient (Inactive)",
+  15050: "SLOAN",
+  13310: "Cornerstone",
+  13311: "Granite State (Inactive)",
+  13312: "Aspire (Inactive)",
+  13314: "UHEAA",
+  13313: "Collections Agency",
+  13315: "OSLA",
+  14211: "Trellis (Higher Ed)",
+  13303: "Fedloan",
+  13304: "Great Lakes (Inactive)"
+};
+
+//household_size___income_threshold__150__ picklist mapping
+const householdSizeIncomeThreshold150Mapping = {
+  12897: "HH1 - $23,475",
+  12898: "HH2 - $31,725",
+  12899: "HH3 - $39,975",
+  12900: "HH4 - $48,225",
+  12901: "HH5 - $56,475",
+  12902: "HH6 - $64,725",
+  12903: "HH7 - $72,975",
+  12904: "HH8 - $81,225",
+  12905: "HH9 - $89,475",
+  12906: "HH10 - $97,725",
+  12907: "HH11 - $105,975",
+  12908: "HH12 - $114,225",
+  12909: "HH13 - $122,475",
+  12910: "HH14 - $130,725",
+  12911: "HH15 - $138,975",
+  12912: "16+ - add $8,250 each"
+};
+
+// income_amount_and_pay_frequency picklist mapping
+const incomeAmountAndPayFrequencyMapping = {
+  12873: "Bi-weekly",
+  12874: "Semi-Monthly",
+  12875: "Weekly",
+  12888: "Monthly",
+  12877: "Annually",
+  12876: "Quarterly",
+  12878: "Daily"
+};
+
+// pay_frequency_stream_2 picklist mapping
+const payFrequencyStream2Mapping = {
+  12881: "Bi-weekly",
+  12882: "Semi-Monthly",
+  12887: "Weekly",
+  12883: "Monthly",
+  12885: "Annually",
+  12884: "Quarterly",
+  12886: "Daily"
+};
+
+// pay_frequency_stream_3 picklist mapping
+const payFrequencyStream3Mapping = {
+  12890: "Bi-weekly",
+  12891: "Semi-Monthly",
+  12893: "Weekly",
+  12892: "Monthly",
+  12895: "Annually",
+  12894: "Quarterly",
+  12896: "Daily"
+};
+
 
 function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
@@ -436,6 +973,41 @@ function buildHubSpotInquirerPayload(data = {}) {
 
     // New Inquirer Mapping fields:-
 
+    // New Picklist value Mapped here
+
+    affiliate_lead_owner:affiliateleadOwnerMapping[data?.affiliate_lead_owner] || null,
+    phone_1_type: phone1TypeMapping[data?.phone_1_type] || null, 
+    phone_2_type: phone2TypeMapping[data?.phone_2_type] || null, 
+    inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
+    hs_timezone: timeZone0Mapping[data?.time_zone0] ||null, 
+    standby_list: standyListMapping[data?.standby_list] || null, 
+    pc_appointment_confirmation: pcAppointmentConfirmationMapping[data?.pc_appointment_confirmation] || null,
+     slt_referring_rep: sltReferringRepMapping[data?.slt_referring_rep] || null,
+     lead_type: leadTypeMapping[data?.lead_type] || null,
+     affiliate_presenting_tutor: affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto] || null,
+     conferences_dani_pr_sources: conferencesDaniPrSourcesMapping[data?.conferencesdani_pr_sourc] ||null,
+     podcast: podcastMapping[data?.podcast] ||null,
+    du_financial_planner: duFinancialPlannerMapping[data?.du_financial_planner] || null,
+    du_slt_outreach_affiliate_source: duSltOutreachAffiliateSourceMapping[data?.du_slt_outreachaffiliate] || null,
+    contractor_referred_by: contractorReferredByMapping[data?.contractor_referred_by] || null,
+    inquirer_profession: inquirerProfessionMapping[data?.inquirer_profession] || null,
+    inquirer_employment_type: inquirerEmploymentTypeMapping[data?.inquirer_employment_type] || null,
+    marital_status: maritalStatusMapping[data?.marital_status] || null,
+    eval___taxes_jointly_separate_: evalTaxesJointlySeparateMapping[data?.eval__taxes_jointlysepa] || null,
+    eval___spouse_has_loans: evalSpouseHasLoansMapping[data?.eval__spouse_has_loans] || null,
+      eval___spouse_pay_frequency: evalSpousePayFrequencyMapping[data?.eval__pay_frequency] || null,// hubspot data single-line text
+      inquirer_loan_status: inquirerLoanStatusMapping[data?.inquirer_loan_status] || null,
+      inquirer_current_repayment_plan: inquirerCurrentRepaymentPlanMapping[data?.inquirer_current_repaymen] ||null,
+      tutor_name_: tutorNameMapping[data?.tutor_name] || null,
+      slt_rep_referred_by: sltRepReferredByMapping[data?.slt_rep_referred_by] || null, //hubspot data single-line text
+      fed_loan_amount_old: fedLoanAmountOldMapping[data?.fed_loan_amount_old] || null, // hubspot data single-line text
+      inquirer_loan_servicer: inquirerLoanServicerMapping[data?.inquirer_loan_servicer] || null,
+      household_size___income_threshold__150__: householdSizeIncomeThreshold150Mapping[data?.household_size__income_t0] ||null,
+      income_amount_and_pay_frequency: incomeAmountAndPayFrequencyMapping[data?.pay_frequency_stream_1] || null,
+      pay_frequency_stream_2: payFrequencyStream2Mapping[data?.pay_frequency_stream_2] || null,
+      pay_frequency_stream_3: payFrequencyStream3Mapping[data?.pay_frequency_stream_3] || null,
+    
+    inquirer_status_ivinex: data?.inquirer_status || null,
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
     eval_taxes_jointlysepa_ivinex: data?.eval__taxes_jointlysepa || null, //
     du_slt_outreachaffiliate_ivinex: data?.du_slt_outreachaffiliate || null, //
@@ -445,7 +1017,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
     inquirer_loan_servicer_ivinex: data?.inquirer_loan_servicer || null,
     eval_federal_loan_amount_ivinex: data?.eval__federal_loan_amount || null,
-    inquirer_status_ivinex: data?.inquirer_status || null,
 
     inquirer_current_repaymen_ivinex: data?.inquirer_current_repaymen || null,
     eval__federal_loan_amoun: data?.eval__federal_loan_amoun || null,
@@ -454,7 +1025,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_profession_ivinex: data?.inquirer_profession || null,
     field_of_study: data?.fields_changed || null,
 
-    si_creation_date: data?.si_creation_date,
+    si_creation_date: data?.si_creation_date || null,
     zip: data?.zip,
     collection_id: data?.collection_id,
     site_id: data?.site_id,
@@ -464,7 +1035,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     address_2: data?.address_2,
     city: data?.city,
     state: data?.state,
-    fed_loan_amount_old: data?.fed_loan_amount_old,
     spouse: data?.spouse,
     client_referral: data?.client_referral,
     convert_to_client: data?.convert_to_client,
@@ -544,7 +1114,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     current_year_pretax_annu: data?.current_year_pretax_annu,
     anything_else_we_should_k: data?.anything_else_we_should_k,
     inquirer_referral0: data?.inquirer_referral0,
-    slt_rep_referred_by: data?.slt_rep_referred_by,
     date_of_initial_strategy_: data?.date_of_initial_strategy_,
     years_until_tax_imp_expe: data?.years_until_tax_imp_expe,
     tax_imp_goal: data?.tax_imp_goal,
@@ -564,7 +1133,6 @@ function buildHubSpotInquirerPayload(data = {}) {
 
     est_tax_burden: data?.est_tax_burden,
     created_date: data?.created_date,
-    lead_owner: data?.lead_owner,
     first_name: data?.first_name,
     modified_by: data?.modified_by,
     last_name: data?.last_name,
@@ -574,8 +1142,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     setter_needs_attention: data?.setter_needs_attention,
     under_admin_review__s_k: data?.under_admin_review__s_k,
     spouse_fed_loan_amount: data?.spouse_fed_loan_amount0,
-    eval___spouse_pay_frequency: data?.eval__pay_frequency,
-    time_zone__custom: data?.time_zone0,
+  
     counting_spouse_in_hh_size_: data?.counting_spouse_in_hh_siz,
     add___other__dependents: data?.add_other_dependents,
     add__child_dependents__incl__adult_children_: data?.add_child_dependents_in,
@@ -584,7 +1151,7 @@ function buildHubSpotInquirerPayload(data = {}) {
     sps__already_enrolled_in_autopay_: data?.sps_already_enrolled_in_,
     inquirer___last_year___agi: data?.inquirer__last_year__ag,
     inquirer_current_monthly_payment: data?.inquirer_current_monthly_,
-    tutor_name_: data?.tutor_name,
+    // tutor_name_: data?.tutor_name,
     notes_on_pricing_quoted_etc_: data?.notes_on_pricing_quoted_e,
     spouse__last_year__agi: data?.spouse__last_year__agi,
     sps___of_sub_loans: data?.sps__of_sub_loans,
@@ -615,18 +1182,14 @@ function buildHubSpotInquirerPayload(data = {}) {
 
     // hs_created_by_user_id: data?.created_by,
     // modified_date: data?.modified_date,
-    // phone_1_type: data?.phone_1_type,
     // phone_2_type: data?.phone_2_type,
     // lead_source_dont_use: data?.lead_source_dont_use,
     // date_became_client: data?.date_became_client,
     // inquirer_employment_type: data?.inquirer_employment_type,
     // pay_frequency_stream_2: data?.pay_frequency_stream_2,
     // pay_frequency_stream_3: data?.pay_frequency_stream_3,
-    // lead_type: data?.lead_type,
     // marital_status: data?.marital_status_s,
     // employment_type: data?.employment_type_s,
-    // standby_list: data?.standby_list,
-    // slt_referring_rep: data?.slt_referring_rep,
     // podcast: data?.podcast,
     // affiliate_lead_owner: data?.affiliate_lead_owner,
     //----------------------------------------------------------------------------
@@ -868,6 +1431,352 @@ function buildHubSpotInvoicePayload(data = {}) {
   return { properties };
 }
 
+
+// clients picklist value mapped here
+ 
+//tutor_name picklist mapping
+
+const clientsNameMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+// processor_name picklist mapping
+
+const processorNameMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+//slt_referring_rep_nfm picklist mapping
+const sltReferringRepNfm = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+//phone_1_type Mapping fields
+const phone1TypeMappingClient = {
+  11174: "Cell",
+  11175: "Home",
+  11176: "Work"
+};
+
+//phone_2_type Mapping fields
+const phone2TypeMappingClient= {
+  11178: "Cell",
+  11179: "Home",
+  11180: "Work"
+};
+
+//time_zone Mapping fields
+const timeZoneMapping = {
+  11203: "Eastern Standard Time (EST)",
+  11204: "Central Standard Time (CST)",
+  11205: "Mountain Standard Time (MST)",
+  13057: "Mountain Standard Time (Arizona) (MST)",
+  11206: "Pacific Standard Time (PST)",
+  11207: "Hawaii–Aleutian Standard Time (HAST)",
+  11208: "Alaska Standard Time (AKST)",
+  13399: "Hawaii Standard Time (HST)"
+};
+// status Mapping fields
+const statusMapping = {
+  13383: "(please select)",
+  15073: "Pending - No Sale - Tutor Following Up",
+  15021: "Pending - No Sale - Outstanding Invoice",
+  14995: "Tutor Strategy Call Needed / Work Order Review",
+  14208: "New Client Pending - Intake Scheduled",
+  14195: "No Show Intake - Tutor Following Up",
+  11893: "Gathering",
+  13379: "Waiting to Submit",
+  11894: "App Submitted",
+  14185: "Ready for Sign-Off",
+  11556: "Complete",
+  15320: "Processor Consultation in Process",
+  11558: "Manual AAR Booking in Process",
+  13786: "AAR - Booked",
+  15252: "AAR - No Show - Rescheduling",
+  11895: "AAR - Gathering",
+  11896: "AAR - App Submitted",
+  13385: "INACTIVE (Select Reason)",
+  14929: "IA Client ONLY",
+  12712: "Test",
+  14197: "Training"
+};
+
+// inactive_specifics Mapping fields
+const inactiveSpecificsMapping = {
+  13788: "Tutor Escalation/Rehash Needed",
+  13790: "Self-Managed Recert",
+  15199: "Self-Managed - Can't Afford Services",
+  13791: "In School",
+  13792: "Do Not Call",
+  14184: "Loans Forgiven",
+  13789: "Paying Loans In Full",
+  14209: "Client Refinanced",
+  14883: "Deceased",
+  14886: "Bankruptcy",
+  13787: "MIA",
+  13793: "MIA - Processor Final Escalation Needed",
+  15094: "Tutor No Sale or Refunded"
+};
+
+//current_idr_plan Mapping fields
+const currentIdrPlanMapping = {
+  15251: "(please select)",
+  15244: "SAVE",
+  15245: "IBR",
+  15327: "IBR New - After 07/01/2014",
+  15246: "ICR",
+  15247: "PAYE",
+  15273: "MULTIPLE",
+  15250: "IDR-Alternative",
+  15243: "None - Balance Based",
+  15248: "None - In School",
+  15249: "None - Default"
+};
+
+//type_of_idr_app_submitted Mapping fields
+const typeOfIdrAppSubmittedMapping = {
+  15253: "(please select)",
+  15254: "Enter into IDR - SAVE",
+  15255: "Enter into IDR - IBR",
+  15256: "Enter into IDR - PAYE",
+  15257: "Enter into IDR - ICR",
+  15258: "Plan Change - to SAVE",
+  15260: "Plan Change - to PAYE",
+  15259: "Plan Change - to IBR",
+  15261: "Plan Change - to ICR",
+  15262: "Recertification",
+  15263: "Recalculation",
+  15308: "Multiple IDR Plans"
+};
+
+// client_is_pslf_ Mapping fields
+const clientIsPslfMapping = {
+  13004: "(please select)",
+  13001: "No",
+  13002: "Yes",
+  13003: "Yes - New Enrollment",
+  15283: "No Plan to Fulfill 120 mo. req.",
+  13033: "Plans to Open Non-Profit",
+  13034: "Maybe Someday"
+};
+
+
+//calculation_performed_by Mapping fields
+const calculationPerformedByMapping = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+//aar_fee Mapping fields
+const aarFeeMapping = {
+  11552: "$250",
+  11493: "$450",
+  13370: "$600",
+  15325: "$800",
+  14253: "$400 (Low Bal./Spouse)",
+  14200: "$300 (F&F)",
+  13130: "Other (Trade etc.)"
+};
+//current_servicer Mapping fields
+const currentServicerMapping = {
+  11964: "(Please Select)",
+  11969: "Multiple Servicers",
+  11965: "Nelnet.studentaid.gov",
+  13043: "Mohela.com (FFEL)",
+  15239: "Servicing.Mohela.com",
+  15071: "Mohela.studentaid.gov",
+  14202: "AidVantage.studentaid.gov",
+  13044: "EdFinancial.studentaid.gov",
+  15168: "CRI.studentaid.gov",
+  15051: "Sloanservicing.com (FFEL)",
+  13041: "A.E.S. (FFEL)",
+  13155: "UHEAA (FFEL)",
+  13047: "Aspire (FFEL)",
+  13048: "-Collections Agency",
+  15040: "N/A - HF Client only",
+  11968: "Great Lakes (Inactive)",
+  11966: "Navient (Inactive)",
+  11967: "FedLoan (Inactive)",
+  13042: "A.C.S. (Inactive)",
+  13254: "OSLA (Inactive)",
+  13045: "Cornerstone (Inactive)",
+  15176: "FFEL - servicing.mohela.com",
+  14212: "Trellis (Higher Ed)",
+  13046: "Granite State (Inactive)"
+};
+// new_client_or_aar0 Mapping fields
+const newClientOrAar0Mapping = {
+  15178: "New Client",
+  15179: "Annual Review"
+};
+
+
 // Create Clients Payload
 
 function buildHubSpotClientPayload(data = {}) {
@@ -876,6 +1785,25 @@ function buildHubSpotClientPayload(data = {}) {
   }
   const properties = cleanProps({
     // Old Mapping Fields...
+
+    // picklist Mapping fields:-
+
+    tutor_name: clientsNameMapping[data?.tutor_name] ||null, // hubspot user
+    processor_name: processorNameMapping[data?.processor_name] ||null, // hubspot user
+    slt_referring_rep_nfm: sltReferringRepNfm[data?.slt_referring_rep_nfm] ||null, // hubspot user
+    phone_1_type: phone1TypeMappingClient[data?.phone_1_type] ||null,
+    phone_2_type: phone2TypeMappingClient[data?.phone_2_type] ||null,
+    time_zone: timeZoneMapping[data?.time_zone0] ||null, // hubspot single test-line
+    status :statusMapping[data?.fields_changed] ||null,
+    // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
+    current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null,
+    type_of_idr_app_submitted: typeOfIdrAppSubmittedMapping[data?.type_of_idr_app_submitted] || null,
+    client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
+    calculation_performed_by: calculationPerformedByMapping[data?.calculation_performed_by] ||null, //hubspot user
+    aar_fee: aarFeeMapping[data?.aar_fee] || null,
+    current_servicer: currentServicerMapping[data?.current_servicer0] || null,
+    new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null // hubspot missing fileds
+
 
     client_consolidation___loan_type_description:
       data?.client_consolidation__lo,
