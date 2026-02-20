@@ -153,6 +153,7 @@ async function syncInquirer() {
           logger.info(
             `Client: ${client[0]?.id} : Inquirer: ${inquirer_record_id}`
           );
+       
           // ➡️ associate here
           // const associate = await associateObjects({
           //   fromObjectType: "2-171843307", // Inquirer

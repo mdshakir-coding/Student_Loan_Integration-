@@ -1429,19 +1429,19 @@ const conferenceMapping = {
 
 // time_zone Mapping fields
 const timeZoneMappingAffilate = {
-  14334: "Eastern Standard Time (EST)",
+   14334: "Eastern Standard Time (EST)",
   14335: "Central Standard Time (CST)",
   14336: "Mountain Standard Time (MST)",
-  14337: "Mountain Standard Time - Arizona (MST - Arizona)",
+  14337: "Mountain Standard Time (Arizona)",
   14338: "Pacific Standard Time (PST)",
   14339: "Hawaii-Aleutian Standard Time (HAST)",
   14340: "Alaska Standard Time (AKST)",
-  14341: "Alaska Time (AK)",
-  14342: "Alaska Standard Time (AKS)",
+  14341: "Alaska (AK)",
+  14342: "Alaska Standard (AKS)",
   14343: "Hawaii-Aleutian Time (HAT)",
   14344: "Hawaii Standard Time (HST)",
-  14345: "Puerto Rico Time (PR)",
-  14346: "Coordinated Universal Time (UTC)",
+  14345: "Puerto Rico (PR)",
+  14346: "Coordinated Universal Time (UTC)"
 };
 
 //  code for Affiliate Payload
@@ -1538,7 +1538,7 @@ function buildHubSpotAffiliatePayload(data = {}) {
     comp_super_affiliate:
       compSuperAffiliateMapping[data?.comp_super_affiliate] || null,
     conference: conferenceMapping[data?.conference] || null,
-    time_zone: timeZoneMappingAffilate[data?.time_zone0] || null,
+    time_zone0: timeZoneMappingAffilate[data?.time_zone0] || null,
 
     collection_id: data.collection_id,
     site_id: data.site_id,
@@ -1593,7 +1593,7 @@ function buildHubSpotAffiliatePayload(data = {}) {
     email__business_type: data.email__business_type,
     firm_name: data.firm_name,
     primary_state: data.primary_state,
-    time_zone0: data.time_zone0,
+    // time_zone0: data.time_zone0,
     affiliate_status_ivinex: data.affiliate_status,
     lead_source_ivinex: data.lead_source,
     of_registered_states: data?._of_registered_states,
@@ -1902,7 +1902,7 @@ const inactiveSpecificsMapping = {
 
 //current_idr_plan Mapping fields
 const currentIdrPlanMapping = {
-  15251: "(please select)",
+  // 15251: "(please select)",
   15244: "SAVE",
   15245: "IBR",
   15327: "IBR New - After 07/01/2014",
@@ -2188,7 +2188,7 @@ function buildHubSpotClientPayload(data = {}) {
     time_zone: timeZoneMapping[data?.time_zone0] || null, // hubspot single test-line
     status: statusMapping[data?.fields_changed] || null,
     // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
-    current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null,
+    current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null, //
     type_of_idr_app_submitted:
       typeOfIdrAppSubmittedMapping[data?.type_of_idr_app_submitted] || null,
     client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
@@ -2236,8 +2236,8 @@ function buildHubSpotClientPayload(data = {}) {
     lpa_sent: data.lpa_sent,
     lpa_received: data.lpa_received,
 
-    idr_app_submitted_date: data.idr_app_submitted_date,
-    days_since_app_sub: data.days_since_app_sub,
+    // idr_app_submitted_date: data.idr_app_submitted_date,
+    // days_since_app_sub: data.days_since_app_sub,
     error_with_payments: data.error_with_payments,
     date_of_birth: data.date_of_birth,
     primary_phone0: data.primary_phone0,
