@@ -70,8 +70,10 @@ async function syncOrders() {
         // Build payload
         const Payloads = buildHubspotOrderPayload(record);
 
+
         logger.info(`Orders Record: ${JSON.stringify(record, null, 2)}`);
-        // logger.info("Payload:", Payloads);
+
+        logger.info(`Orders Payload: ${JSON.stringify(Payloads, null, 2)}`);
 
         // First, search existing order by collection_id
         const searchResults = await searchOrderInHubSpot(record.collection_id);
@@ -90,6 +92,7 @@ async function syncOrders() {
           order_record_id = created.id;
           logger.info(`✅ Order created: ${created.id}`);
         }
+        return;
         // Associate client and order
         const hs_client = getHubspotClient();
         const client = await searchCustomObjectInHubSpot(
@@ -130,7 +133,7 @@ async function syncOrders() {
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
-        logger.error("Error processing record index", i, error);
+        logger.error("Error processing record index",i, error);
         break; // todo remove after testing
         // Save progress here to resume later if needed
         // saveProgress(i);
@@ -140,5 +143,8 @@ async function syncOrders() {
     logger.error("Error fetching order records", error);
   }
 }
+
+
+
 
 export { syncOrders };
