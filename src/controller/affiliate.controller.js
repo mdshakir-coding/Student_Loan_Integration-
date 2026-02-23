@@ -99,7 +99,6 @@ async function syncAffiliate() {
 
         logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
         logger.info(`Affiliate Payload: ${JSON.stringify(Payloads, null, 2)}`);
-        return;
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
@@ -123,13 +122,11 @@ async function syncAffiliate() {
           const created = await createAffiliateInHubSpot(Payloads);
           console.log("✅ Affiliate created:", created.id);
         }
-        break; // todo remove after testing
 
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
         console.error("Error processing record index", i, error);
-        break; // todo remove after testing
         // Save progress here to resume later if needed
         // saveProgress(i);
       }

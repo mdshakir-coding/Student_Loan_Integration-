@@ -2181,9 +2181,20 @@ function buildHubSpotClientPayload(data = {}) {
 
     // picklist Mapping fields:-
 
-    // tutor_name: clientsNameMapping[data?.tutor_name] ||null, // hubspot user
-    // processor_name: processorNameMapping[data?.processor_name] ||null, // hubspot user
-    // slt_referring_rep_nfm: sltReferringRepNfm[data?.slt_referring_rep_nfm] ||null, // hubspot user
+    tutor_name: buildOwnerMapping(clientsNameMapping[data?.tutor_name]) || null, // hubspot user
+    processor_name:
+      buildOwnerMapping(processorNameMapping[data?.processor_name]) || null, // hubspot user
+    slt_referring_rep_nfm:
+      buildOwnerMapping(sltReferringRepNfm[data?.slt_referring_rep_nfm]) ||
+      null, // hubspot user
+    // slt_referring_rep_nfm:
+    //   buildOwnerMapping(
+    //     sltReferringRepNfmMapping[data?.slt_referring_rep_nfm]
+    //   ) || null, // hubspot user
+    calculation_performed_by:
+      buildOwnerMapping(
+        calculationPerformedByMapping[data?.calculation_performed_by]
+      ) || null, //hubspot user
     phone_1_type: phone1TypeMappingClient[data?.phone_1_type] || null,
     phone_2_type: phone2TypeMappingClient[data?.phone_2_type] || null,
     time_zone: timeZoneMapping[data?.time_zone0] || null, // hubspot single test-line
@@ -2193,12 +2204,10 @@ function buildHubSpotClientPayload(data = {}) {
     type_of_idr_app_submitted:
       typeOfIdrAppSubmittedMapping[data?.type_of_idr_app_submitted] || null,
     client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
-    // calculation_performed_by: calculationPerformedByMapping[data?.calculation_performed_by] ||null, //hubspot user
     aar_fee: aarFeeMapping[data?.aar_fee] || null,
     current_servicer: currentServicerMapping[data?.current_servicer0] || null,
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
-    // slt_referring_rep_nfm: sltReferringRepNfmMapping[data?.slt_referring_rep_nfm] ||null, // hubspot user
     // ia_inquirer_status: iaInquirerStatusMapping[data?.ia_inquirer_status] ||null,
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
     // ia_insurance_status: iaInsuranceStatusMapping[data?.ia_insurance_status] ||null, // hubspot missing fields

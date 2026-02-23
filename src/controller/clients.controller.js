@@ -90,6 +90,7 @@ async function syncClients() {
 
         logger.info(`Clients Record: ${JSON.stringify(record, null, 2)}`);
         logger.info(`Clients Payload: ${JSON.stringify(Payloads, null, 2)}`);
+        return;
 
         // 🔍 Search existing client by collection_id
         const searchResults = await searchClientInHubSpot(record.collection_id);
@@ -111,13 +112,10 @@ async function syncClients() {
           console.log(`✅ Client created: ${created.id}`);
         }
 
-        break; // 🔥 remove after testing
-
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
         console.error("Error processing record index", error);
-        break; // 🔥 remove after testing
 
         // Save progress if needed
         // saveProgress(i);
