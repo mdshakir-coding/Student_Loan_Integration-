@@ -766,6 +766,54 @@ const payFrequencyStream3Mapping = {
   12896: "Daily",
 };
 
+// lead_owner picklist mapping
+const leadOwnerMappingInquirer = {
+  53: "Adam Deutsch",
+  26: "Amie Engberg",
+  68: "Anica Vasquez",
+  56: "Api User",
+  100: "Carlee Finlinson",
+  94: "Chris Mcginnis",
+  67: "Christopher Michael",
+  66: "Csaba Soos",
+  71: "Dani Lynch",
+  33: "Derek Snel",
+  42: "Genevieve Bronson",
+  93: "Heather Ballard",
+  96: "Jamison Ryan",
+  101: "Jarom Bischoff",
+  92: "Jennifer Sbaiti",
+  62: "Joe Fiacco",
+  95: "Joseph Bronson",
+  84: "Julia Guerin",
+  99: "Juvane Real",
+  58: "Kelli Case",
+  75: "Kerry Derry",
+  69: "Kevin Harvey",
+  98: "Maitri Chheda",
+  70: "Matt Bronson",
+  14: "Michael Wheelwright",
+  81: "Misha Theofilatos",
+  102: "Nadia McCrary",
+  97: "Nadine Lochtefeld",
+  90: "Nadya Fejeran",
+  87: "Rachael Davis",
+  79: "Rocky Christensen",
+  77: "Sabrina Adamson",
+  55: "Sara Redman",
+  86: "Sasha Miller",
+  47: "Savannah Ferra",
+  88: "Shade Conover",
+  89: "Stefano Quarta",
+  80: "Stephanie Hassoldt",
+  52: "Terni Blood",
+  73: "Thatcher Norton",
+  41: "Tony Ferra",
+  83: "Victor Martell",
+  49: "Zack Geist"
+};
+
+
 function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
     // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
@@ -969,7 +1017,9 @@ function buildHubSpotInquirerPayload(data = {}) {
     // New Picklist value Mapped here
 
     affiliate_lead_owner:
-      affiliateleadOwnerMapping[data?.affiliate_lead_owner] || null,
+     buildOwnerMapping( affiliateleadOwnerMapping[data?.affiliate_lead_owner]) || null, // hubspot user 
+      slt_referring_rep: buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) || null, // hubspot user 
+      lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null, 
     phone_1_type: phone1TypeMapping[data?.phone_1_type] || null,
     phone_2_type: phone2TypeMapping[data?.phone_2_type] || null,
     inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
@@ -978,7 +1028,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     pc_appointment_confirmation:
       pcAppointmentConfirmationMapping[data?.pc_appointment_confirmation] ||
       null,
-    slt_referring_rep: sltReferringRepMapping[data?.slt_referring_rep] || null,
     lead_type: leadTypeMapping[data?.lead_type] || null,
     affiliate_presenting_tutor:
       affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto] || null,
