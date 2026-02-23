@@ -1030,7 +1030,7 @@ function buildHubSpotInquirerPayload(data = {}) {
       null,
     lead_type: leadTypeMapping[data?.lead_type] || null,
     affiliate_presenting_tutor:
-      affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto] || null,
+      buildOwnerMapping(affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto]) || null,
     conferences_dani_pr_sources:
       conferencesDaniPrSourcesMapping[data?.conferencesdani_pr_sourc] || null,
     podcast: podcastMapping[data?.podcast] || null,
