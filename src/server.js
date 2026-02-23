@@ -20,9 +20,9 @@ app.listen(PORT, () => {
   // syncActivity(); // done
   // syncInvoices();    //done
   // syncClients(); //done
-  // syncOrders(); //done
-  // syncTextMessages(); //done
-  // syncEmails(); // done
+  syncOrders(); //done
+  syncTextMessages(); //done
+  syncEmails(); // done
 
   console.log(`Server running on port ${PORT}`);
   // syncTextMessages();
