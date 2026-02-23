@@ -40,7 +40,7 @@ async function updateAffiliateInHubSpot(affiliateId, payload) {
       },
     });
 
-    console.log("✅ Affiliate updated:", response.data);
+    // console.log("✅ Affiliate updated:", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -461,7 +461,9 @@ async function createOrderInHubSpot(payload) {
   const url = "https://api.hubapi.com/crm/v3/objects/0-5";
 
   try {
+    
     const response = await axios.post(url, payload, {
+
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",

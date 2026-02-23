@@ -2884,7 +2884,10 @@ function buildHubspotOrderPayload(data = {}) {
     eligible_for_ibr_new_all: data?.eligible_for_ibr_new_all,
     year0: data?.year0,
 
-    estimated_payment: data?.estimated_payment,
+    // estimated_payment: data?.estimated_payment,
+    estimated_payment: Number(
+      String(data?.estimated_payment || "").replace(/[^0-9.]/g, "")
+    ),
     client: data?.client,
     actual_payment: data?.actual_payment,
     // tax_saving_status_apc: data?.tax_saving_status_apc,

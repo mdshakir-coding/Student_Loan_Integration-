@@ -110,6 +110,7 @@ async function syncClients() {
           const created = await createClientInHubSpot(Payloads);
           logger.info(`✅ Client created: ${created.id}`);
         }
+        return;
 
         // Save progress after successful processing
         // saveProgress(i + 1);

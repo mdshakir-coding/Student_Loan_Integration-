@@ -160,6 +160,7 @@ async function syncActivity() {
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
+          return; // todo remove after testing
         }
 
         // Save progress after success
