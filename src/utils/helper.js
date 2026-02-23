@@ -1222,7 +1222,7 @@ function buildHubSpotInquirerPayload(data = {}) {
 
 // picklist Mapping Affiliate
 // lead_owner picklist mapping
-const leadOwnerMappingAffiliate = {
+const STL_Owner_Mapping = {
   53: "Adam Deutsch",
   26: "Amie Engberg",
   68: "Anica Vasquez",
@@ -1242,7 +1242,7 @@ const leadOwnerMappingAffiliate = {
   95: "Joseph Bronson",
   84: "Julia Guerin",
   99: "Juvane Real",
-  58: "Kelli Case",
+  58: "Kelli Christine Case",
   75: "Kerry Derry",
   69: "Kevin Harvey",
   98: "Maitri Chheda",
@@ -1429,7 +1429,7 @@ const conferenceMapping = {
 
 // time_zone Mapping fields
 const timeZoneMappingAffilate = {
-   14334: "Eastern Standard Time (EST)",
+  14334: "Eastern Standard Time (EST)",
   14335: "Central Standard Time (CST)",
   14336: "Mountain Standard Time (MST)",
   14337: "Mountain Standard Time (Arizona)",
@@ -1441,7 +1441,7 @@ const timeZoneMappingAffilate = {
   14343: "Hawaii-Aleutian Time (HAT)",
   14344: "Hawaii Standard Time (HST)",
   14345: "Puerto Rico (PR)",
-  14346: "Coordinated Universal Time (UTC)"
+  14346: "Coordinated Universal Time (UTC)",
 };
 
 //  code for Affiliate Payload
@@ -1526,8 +1526,12 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
     //Picklist Mapping here
 
-    // lead_owner: leadOwnerMappingAffiliate[data?.lead_owner] || null, // hubspot user
-    // presenting_rep: presentingRepMapping[data?.presenting_rep] || null, // hubspot user
+    // lead_owner: lead_owner_id || null, // hubspot user
+    // presenting_rep: presenting_rep_id || null, // hubspot user
+    lead_owner: buildOwnerMapping(STL_Owner_Mapping[data?.lead_owner]) || null,
+    presenting_rep:
+      buildOwnerMapping(STL_Owner_Mapping[data?.presenting_rep]) || null,
+
     primary_phone_line_type:
       primaryPhoneLineTypeMapping[data?.primary_phone_line_type] || null,
     phone_2_type: phone2TypeMappingAffiliate[data?.phone_2_type] || null,
@@ -2674,7 +2678,7 @@ const field2025Ibrpaye15Mapping = {
   15224: "HH7 - $72975",
   15235: "HH8 - $81225",
   15277: "HH9 - $89475",
-  15278: "HH10 - $97725"
+  15278: "HH10 - $97725",
 };
 //field_2025_icr__20 mapping fields
 const field2025Icr20Mapping = {
@@ -2688,7 +2692,7 @@ const field2025Icr20Mapping = {
   15234: "HH7 - $48650",
   15276: "HH8 - $54150",
   15279: "HH9 - $59650",
-  15280: "HH10 - $65150"
+  15280: "HH10 - $65150",
 };
 // Order Payload
 
@@ -2706,10 +2710,11 @@ function buildHubspotOrderPayload(data = {}) {
     // work_needed: workNeededMapping[data?.work_needed] || null,
     pslf: pslfMapping[data?.pslf] || null,
     // forbearance_needed:
-      // forbearanceNeededMapping[data?.forbearance_needed] || null,
+    // forbearanceNeededMapping[data?.forbearance_needed] || null,
     hh_size__income_threshol:
       hhSizeIncomeThresholdMapping[data?.hh_size__income_threshol] || null, // hubspot single-text-line
-    field_2025_ibrpaye__15: field2025Ibrpaye15Mapping[data?.field_2025_ibrpaye__15] || null, //hubspot single text line
+    field_2025_ibrpaye__15:
+      field2025Ibrpaye15Mapping[data?.field_2025_ibrpaye__15] || null, //hubspot single text line
     field_2025_icr__20: field2025Icr20Mapping[data?.field_2025_icr__20] || null, //hubspot single text line
 
     income_doc_type_ivinex: data?.income_doc_type,
@@ -3085,7 +3090,81 @@ function buildHubSpotActivityPayload(data = {}) {
   };
 }
 
+function normalizeName(firstName = "", lastName = "") {
+  return `${firstName} ${lastName}`.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function buildOwnerMap(owners) {
+  const map = new Map();
+
+  for (const owner of owners) {
+    if (owner.archived) continue; // skip archived
+
+    const key = normalizeName(owner.firstName, owner.lastName);
+
+    if (!key) continue; // skip empty names
+
+    map.set(key, owner.userId); // userId = hubspot_owner_id
+  }
+
+  return map;
+}
+
+const ownerMapping = {
+  "Priya Dhall": "48368390",
+  "Juvane Real": "63051842",
+  "Cerin Xavier": "63110840",
+  "Mohak Sethi": "63139842",
+  "INSIDEA Onboarding": "63667720",
+  "Rahib Azam": "67876480",
+  "Damini Lakshmana": "69195266",
+  "Mahi Tasnimul": "70465145",
+  "Manik Soi": "75522716",
+  "Avishek Koley": "78599046",
+  "Tony Ferra": "159009872",
+  "Csaba Soos": "159202068",
+  "Genevieve Bronson": "159202069",
+  "Matt Bronson": "159308437",
+  "Savannah Ferra": "161053638",
+  "Kelli Christine Case": "161053639",
+  "Anica Vasquez": "161053640",
+  "Rachael Davis": "161053641",
+  "Sasha Miller": "161053642",
+  "Heather Ballard": "161053643",
+  "Michael Wheelwright": "161053664",
+  "Joe Fiacco": "161053665",
+  "Kevin Harvey": "161053666",
+  "Thatcher Norton": "161053667",
+  "Julia Guerin": "161053668",
+  "Jamison Ryan": "161053669",
+  "Derek Snel": "161053670",
+  "Amie Engberg": "161053672",
+  "Kerry Derry": "161053673",
+  "Victor Martell": "161053675",
+  "Chris McGinnis": "161053676",
+  "Terni Blood": "161053681",
+  "Adam Deutsch": "161053682",
+  "Sara Redman": "161053683",
+  "Chris Rudert": "161053684",
+  "Stephanie Hassoldt": "161053685",
+  "Rocky Christensen": "161053686",
+  "Sabrina Adamson": "161053687",
+  "Shade Conover": "161053688",
+  "Stefano Quarta": "161053689",
+  "Jennifer Sbaiti": "161053690",
+  "Joseph Bronson": "161053691",
+  "Jarom Bischoff": "161053692",
+  "Carlee Finlinson": "161053693",
+};
+function buildOwnerMapping(owner) {
+  const ownerId = ownerMapping[owner];
+
+  return ownerId;
+}
+
 export {
+  buildOwnerMap,
+  normalizeName,
   cleanProps,
   buildHubSpotInquirerPayload,
   buildHubSpotAffiliatePayload,
@@ -3095,4 +3174,6 @@ export {
   buildHubspotOrderPayload,
   buildTextMessagePayload,
   buildEmailPayload,
+  presentingRepMapping,
+  // leadOwnerMappingAffiliate,
 };

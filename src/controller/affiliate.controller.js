@@ -93,11 +93,25 @@ async function syncAffiliate() {
       try {
         const record = records[i];
 
+        // const lead_owner =
+        //   leadOwnerMappingAffiliate[record?.lead_owner] || null;
+        // const presenting_rep =
+        //   presentingRepMapping[record?.presenting_rep] || null;
+
+        // logger.info(
+        //   `lead_owner: ${lead_owner} | presenting_rep: ${presenting_rep}`
+        // );
+
         // Build payload
-        const Payloads = buildHubSpotAffiliatePayload(record);
+        const Payloads = buildHubSpotAffiliatePayload(
+          record
+          // lead_owner_id,
+          // presenting_rep_id
+        );
 
         logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
         logger.info(`Affiliate Payload: ${JSON.stringify(Payloads, null, 2)}`);
+        return;
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
