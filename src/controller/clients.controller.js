@@ -77,7 +77,7 @@ function loadProgress() {
 async function syncClients() {
   try {
     const records = await fetchClientsRecords(); // fetch all client records
-    console.log("Clients Records", records.length);
+    logger.info(`Clients Records :${records.length}`);
 
     let startIndex = loadProgress();
 
@@ -90,7 +90,6 @@ async function syncClients() {
 
         logger.info(`Clients Record: ${JSON.stringify(record, null, 2)}`);
         logger.info(`Clients Payload: ${JSON.stringify(Payloads, null, 2)}`);
-        return;
 
         // 🔍 Search existing client by collection_id
         const searchResults = await searchClientInHubSpot(record.collection_id);
@@ -98,18 +97,18 @@ async function syncClients() {
         if (searchResults && searchResults.length > 0) {
           // Client exists → Update
           const existingClientId = searchResults[0].id;
-          console.log(`Client exists with id ${existingClientId}, updating...`);
+          logger.info(`Client exists with id ${existingClientId}, updating...`);
 
           const updated = await updateClientInHubSpot(
             existingClientId,
             Payloads
           );
 
-          console.log(`✅ Client updated:${updated.id}`);
+          logger.info(`✅ Client updated:${updated.id}`);
         } else {
           // Client does not exist → Create
           const created = await createClientInHubSpot(Payloads);
-          console.log(`✅ Client created: ${created.id}`);
+          logger.info(`✅ Client created: ${created.id}`);
         }
 
         // Save progress after successful processing
@@ -122,9 +121,9 @@ async function syncClients() {
       }
     }
 
-    console.log("🎄 All Clients Processed");
+    logger.info("🎄 All Clients Processed");
   } catch (error) {
-    console.error("Error fetching client records", error);
+    logger.error("Error fetching client records", error);
     return;
   }
 }
