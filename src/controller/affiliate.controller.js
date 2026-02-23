@@ -5,6 +5,7 @@ import { buildHubSpotAffiliatePayload } from "../utils/helper.js";
 import { createAffiliateInHubSpot } from "../service/student.service.js";
 import { updateAffiliateInHubSpot } from "../service/student.service.js";
 import { searchAffiliateByInHubspot } from "../service/student.service.js";
+// import {buildAffiliateHubspotUser} from '../utils/helper.js'
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -93,41 +94,28 @@ async function syncAffiliate() {
       try {
         const record = records[i];
 
-        // const lead_owner =
-        //   leadOwnerMappingAffiliate[record?.lead_owner] || null;
-        // const presenting_rep =
-        //   presentingRepMapping[record?.presenting_rep] || null;
-
-        // logger.info(
-        //   `lead_owner: ${lead_owner} | presenting_rep: ${presenting_rep}`
-        // );
-
         // Build payload
-        const Payloads = buildHubSpotAffiliatePayload(
-          record
-          // lead_owner_id,
-          // presenting_rep_id
-        );
+        const Payloads = buildHubSpotAffiliatePayload(record);
 
-        logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
+        // logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
         logger.info(`Affiliate Payload: ${JSON.stringify(Payloads, null, 2)}`);
         return;
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
-          record.collection_id
+          record.collection_id,
         );
 
         if (searchResults && searchResults.length > 0) {
           // Affiliate exists, update it
           const existingAffiliateId = searchResults[0].id;
           console.log(
-            `Affiliate exists with id ${existingAffiliateId}, updating...`
+            `Affiliate exists with id ${existingAffiliateId}, updating...`,
           );
 
           const updated = await updateAffiliateInHubSpot(
             existingAffiliateId,
-            Payloads
+            Payloads,
           );
           console.log("✅ Affiliate updated:", updated.id);
         } else {
