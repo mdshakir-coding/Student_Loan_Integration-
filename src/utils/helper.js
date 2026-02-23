@@ -1526,8 +1526,9 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
     //Picklist Mapping here
 
-    // lead_owner: leadOwnerMappingAffiliate[data?.lead_owner] || null, // hubspot user
-    // presenting_rep: presentingRepMapping[data?.presenting_rep] || null, // hubspot user
+    lead_owner: buildOwnerMapping(STL_Owner_Mapping[data?.lead_owner]) || null, // hubspot user
+    presenting_rep:
+      buildOwnerMapping(STL_Owner_Mapping[data?.presenting_rep]) || null, // hubspot user
     primary_phone_line_type:
       primaryPhoneLineTypeMapping[data?.primary_phone_line_type] || null,
     phone_2_type: phone2TypeMappingAffiliate[data?.phone_2_type] || null,
