@@ -92,7 +92,7 @@ async function syncOrders() {
           order_record_id = created?.id;
           logger.info(`✅ Order created: ${created.id}`);
         }
-        // return;
+        return;
         // Associate client and order
         const hs_client = getHubspotClient();
         const client = await searchCustomObjectInHubSpot(
