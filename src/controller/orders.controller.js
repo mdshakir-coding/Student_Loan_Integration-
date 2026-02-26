@@ -89,7 +89,7 @@ async function syncOrders() {
         } else {
           // Order does not exist, create new
           const created = await createOrderInHubSpot(Payloads);
-          order_record_id = created.id;
+          order_record_id = created?.id;
           logger.info(`✅ Order created: ${created.id}`);
         }
         return;
@@ -100,10 +100,13 @@ async function syncOrders() {
           record.client
         );
 
+        logger.info(`Client: ${JSON.stringify(client, null, 2)}`);
+
         if (client[0]?.id && order_record_id) {
           logger.info(
             `Client: ${client[0]?.id} : Inquirer: ${order_record_id}`
           );
+         
           // ➡️ associate here
           // const associate = await associateObjects({
           //   fromObjectType: "2-171843307", // Inquirer
@@ -126,15 +129,15 @@ async function syncOrders() {
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
+          return; // todo remove after testing
         }
 
-        break; // todo remove after testing
-
+       
+        // break; // todo remove after testing
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
         logger.error("Error processing record index",i, error);
-        break; // todo remove after testing
         // Save progress here to resume later if needed
         // saveProgress(i);
       }

@@ -85,7 +85,7 @@ async function syncInvoices() {
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
-        logger.info(`Invoices Record: ${JSON.stringofy(record, null, 2)}`);
+        logger.info(`Invoices Record: ${JSON.stringify(record, null, 2)}`);
 
         let invoice_record_id = null;
 
@@ -119,7 +119,7 @@ async function syncInvoices() {
           const created = await createInvoiceInHubSpot(payload);
           invoice_record_id = created.id;
 
-          logger.info("✅ Invoice created:", created.id);
+          logger.info("✅ Invoice created:", created);
         }
         const hs_client = getHubspotClient();
         //  client affiliate inquirer
@@ -211,7 +211,7 @@ async function syncInvoices() {
 
         // saveProgress(i + 1);
       } catch (error) {
-        logger.error("Error processing invoice index", i, error);
+        logger.error("Error processing invoice index",error);
         break; // 🔥 remove after testing
         // saveProgress(i);
       }
