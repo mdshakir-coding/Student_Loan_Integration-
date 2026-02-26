@@ -154,12 +154,13 @@ async function syncActivity() {
             "USER_DEFINED"
           );
           logger.info(
-            `✅ upsertActivity Id ${
+            `✅ Association Completed | upsertActivity Id ${
               upsertActivity?.id
             } associated with Client ${
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
+          return;
         }
 
         // Save progress after success
