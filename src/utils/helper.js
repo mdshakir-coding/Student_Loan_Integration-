@@ -2283,7 +2283,7 @@ function buildHubSpotClientPayload(data = {}) {
     // lead_owner: data.lead_owner,
     phone_2: data.phone_2,
     email_2: data.email_2,
-    address_1: data.address_1,
+    address_1: data?.address_1,
     address_2: data.address_2,
     city: data.city,
     state: data.state,
@@ -2299,7 +2299,7 @@ function buildHubSpotClientPayload(data = {}) {
     // days_since_app_sub: data.days_since_app_sub,
     error_with_payments: data.error_with_payments,
     date_of_birth: data.date_of_birth,
-    primary_phone0: data.primary_phone0,
+    phone_1: data?.primary_phone0,
     primary_phone_type: data.primary_phone_type,
     secondary_phone: data.secondary_phone,
     secondary_phone_type: data.secondary_phone_type,
@@ -2364,8 +2364,7 @@ function buildHubSpotClientPayload(data = {}) {
     roa_sent_to_servicer: data.roa_sent_to_servicer,
     time_zone0: data.time_zone0,
     // client_current_plan_idr_history: data.client_current_planidr_h,
-    primary_phone0: data?.primary_phone,
-    address_1: data.address,
+    // primary_phone0: data?.primary_phone,
     desired_servicer_s: data?.servicer_account_,
     // days_to_recert: data?.days_to_recert,
     // possible_testimonial: data?.possible_testimonial,
@@ -2395,8 +2394,8 @@ function buildHubSpotClientPayload(data = {}) {
     client_name: data?.client_name,
 
     email_1: data.email_1,
-    phone_1_type_ivinex: data?.phone_1_type, //
-    phone_2_type_ivinex: data?.phone_2_type, //
+    // phone_1_type_ivinex: data?.phone_1_type, //
+    // phone_2_type_ivinex: data?.phone_2_type, //
     spouse_has_loans_ivinex: data?.spouse_has_loans, //
     // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
