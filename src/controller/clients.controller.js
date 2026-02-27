@@ -110,15 +110,16 @@ async function syncClients() {
           const created = await createClientInHubSpot(Payloads);
           logger.info(`✅ Client created: ${created.id}`);
         }
-        return;
+        // return; // todo remove after testing
 
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
-        console.error("Error processing record index", error);
+        logger.error("Error processing record index", error);
 
         // Save progress if needed
         // saveProgress(i);
+        // break; // todo remove after testing
       }
     }
 

@@ -876,140 +876,140 @@ function buildHubSpotInquirerPayload(data = {}) {
     // "podcast": "0",
 
     // "affiliate_lead_owner": "0",
-    // inquirer_avg_interest_ra: data.inquirer_avg_interest_ra,
-    // inquirer_years_towards_fo: data.inquirer_years_towards_fo,
-    // already_enrolled_in_autop: data.already_enrolled_in_autop,
-    // inquirer_outstanding_prin: data.inquirer_outstanding_prin,
-    // counting_spouse_in_hh_siz: data.counting_spouse_in_hh_siz,
-    // add_other_dependents: data.add_other_dependents,
-    // add_child_dependents_in: data.add_child_dependents_in,
-    // spouse_annual_documented_: data.spouse_annual_documented_,
-    // total_streams_of_taxable_: data.total_streams_of_taxable_,
-    // sps__of_sub_loans: data.sps__of_sub_loans,
-    // sps_already_enrolled_in_: data.sps_already_enrolled_in_,
-    // notes_on_pricing_quoted_e: data.notes_on_pricing_quoted_e,
+    // inquirer_avg_interest_ra: data?.inquirer_avg_interest_ra,
+    // inquirer_years_towards_fo: data?.inquirer_years_towards_fo,
+    // already_enrolled_in_autop: data?.already_enrolled_in_autop,
+    // inquirer_outstanding_prin: data?.inquirer_outstanding_prin,
+    // counting_spouse_in_hh_siz: data?.counting_spouse_in_hh_siz,
+    // add_other_dependents: data?.add_other_dependents,
+    // add_child_dependents_in: data?.add_child_dependents_in,
+    // spouse_annual_documented_: data?.spouse_annual_documented_,
+    // total_streams_of_taxable_: data?.total_streams_of_taxable_,
+    // sps__of_sub_loans: data?.sps__of_sub_loans,
+    // sps_already_enrolled_in_: data?.sps_already_enrolled_in_,
+    // notes_on_pricing_quoted_e: data?.notes_on_pricing_quoted_e,
     //------------------------------------------------------------------------------
 
     // Old Mapping Fields--------------------------------------------------------------
-    // inquirer___last_year___agi: data.inquirer__last_year__ag,
-    // eval___spouse_pay_frequency: data.eval__pay_frequency,
-    // inquirer_profession_if_o: data.inquirer_profession_if_o,
+    // inquirer___last_year___agi: data?.inquirer__last_year__ag,
+    // eval___spouse_pay_frequency: data?.eval__pay_frequency,
+    // inquirer_profession_if_o: data?.inquirer_profession_if_o,
 
-    // collection_id: data.collection_id,
-    // site_id: data.site_id,
-    // phone_2: data.phone_2,
-    // email_2: data.email_2,
-    // address_1: data.address_1,
-    // address_2: data.address_2,
-    // city: data.city,
-    // state: data.state,
-    // fed_loan_amount_old: data.fed_loan_amount_old,
-    // si_creation_date: data.si_creation_date,
-    // zip: data.zip,
-    // spouse: data.spouse,
-    // client_referral: data.client_referral,
-    // convert_to_client: data.convert_to_client,
-    // go_converting_to_client__: data.go_converting_to_client__,
-    // click_on_convert_1: data.click_on_convert_1,
-    // click_on_convert_2: data.click_on_convert_2,
-    // inquirer_no_sale_reason: data.inquirer_no_sale_reason,
-    // fed_loan_amount_s: data.fed_loan_amount_s,
-    // actively_in_school_s: data.actively_in_school_s,
-    // loan_status_s: data.loan_status_s,
-    // fed_loan_payment_s: data.fed_loan_payment_s,
-    // type_of_repayment_s: data.type_of_repayment_s,
-    // inquirer_middle_name: data.inquirer_middle_name,
-    // field_30_day_income_s: data.field_30_day_income_s,
-    // spouse_fed_loans_payment: data.spouse_fed_loans_payment,
-    // orders: data.orders,
-    // inquirer_total_balance: data.inquirer_total_balance,
-    // of_subsidized_loans: data.of_subsidized_loans,
-    // inquirer_consolidation__0: data.inquirer_consolidation__0,
-    // inquirer_current_planidr: data.inquirer_current_planidr,
-    // married: data.married,
-    // sps_total_balance: data.sps_total_balance,
-    // household_size_notes: data.household_size_notes,
-    // annual_documented_income: data.annual_documented_income,
-    // adj_gross_amount_stream_: data.adj_gross_amount_stream_,
-    // pay_frequency_stream_1: data.pay_frequency_stream_1,
-    // adj_gross_amount_stream_0: data.adj_gross_amount_stream_0,
-    // adj_gross_amount_stream_1: data.adj_gross_amount_stream_1,
-    // combined_annual_documente: data.combined_annual_documente,
-    // income_documentation_note: data.income_documentation_note,
-    // tax_filing_status: data.tax_filing_status,
-    // spouse_loan_description: data.spouse_loan_description,
-    // savings_summary: data.savings_summary,
-    // balance_based_scenarios: data.balance_based_scenarios,
-    // tutor_approx_value_of_sav: data.tutor_approx_value_of_sav,
-    // loan_servicer_notes: data.loan_servicer_notes,
-    // sps_outstanding_principal: data.sps_outstanding_principal,
-    // sps_avg_interest_rate: data.sps_avg_interest_rate,
-    // sps_years_towards_forgiv: data.sps_years_towards_forgiv,
-    // sps_loan_types: data.sps_loan_types,
-    // sps_loan_servicers: data.sps_loan_servicers,
-    // inquirer_household_size_n: data.inquirer_household_size_n,
-    // date_of_planning_call: data.date_of_planning_call,
-    // date_marketing_reconciled: data.date_marketing_reconciled,
-    // conferencesdani_pr_sourc: data.conferencesdani_pr_sourc,
-    // kyle_affiliatefb_marketi0: data.kyle_affiliatefb_marketi0,
-    // online_generic_dont_use: data.online_generic_dont_use,
-    // inquiry_source_notes_esp0: data.inquiry_source_notes_esp0,
-    // inquirer_date_of_last_con: data.inquirer_date_of_last_con,
-    // referral_from_financial_a: data.referral_from_financial_a,
-    // linked_client: data.linked_client,
-    // copy_info: data.copy_info,
-    // calculator_results: data.calculator_results,
-    // inquirer_calculator_repor: data.inquirer_calculator_repor,
-    // sps_calc_report_link: data.sps_calc_report_link,
-    // eval_notes: data.eval_notes,
-    // spouse__last_year__agi: data.spouse__last_year__agi,
-    // eval__spouse_pay_frequen: data.eval__spouse_pay_frequen,
-    // notes: data.notes,
-    // under_admin_review__t_k: data.under_admin_review__t_k,
-    // affiliate_presenting_tuto: data.affiliate_presenting_tuto,
-    // spacer: data.spacer,
-    // date_of_tutor_fu: data.date_of_tutor_fu,
-    // date_eval_occured: data.date_eval_occured,
-    // graduation_year: data.graduation_year,
-    // eval__current_income: data.eval__current_income,
-    // eval__spouse_current_inc: data.eval__spouse_current_inc,
-    // good_timing_for_strategy_0: data.good_timing_for_strategy_0,
-    // financial_experience: data.financial_experience,
-    // assets__insurances: data.assets__insurances,
-    // renting_or_owning_if_hom: data.renting_or_owning_if_hom,
-    // liabilities: data.liabilities,
-    // interested_in_values_base: data.interested_in_values_base,
-    // current_year_pretax_annu: data.current_year_pretax_annu,
-    // anything_else_we_should_k: data.anything_else_we_should_k,
-    // inquirer_referral0: data.inquirer_referral0,
-    // slt_rep_referred_by: data.slt_rep_referred_by,
-    // date_of_initial_strategy_: data.date_of_initial_strategy_,
-    // years_until_tax_imp_expe: data.years_until_tax_imp_expe,
-    // tax_imp_goal: data.tax_imp_goal,
-    // na_note_from_referring_r: data.na_note_from_referring_r,
-    // student__date_of_graduat: data.student__date_of_graduat,
-    // marketing_source: data.marketing_source,
-    // dani_pr_source: data.dani_pr_source,
-    // standby_notes__availabli: data.standby_notes__availabli,
-    // pc_appointment_confirmati: data.pc_appointment_confirmati,
-    // pc_follow_up_to_book: data.pc_follow_up_to_book,
-    // coordinator_notes: data.coordinator_notes,
-    // no_call_no_show_1: data.no_call_no_show_1,
-    // no_call_no_show_2: data.no_call_no_show_2,
-    // no_call_no_show_3: data.no_call_no_show_3,
-    // rescheduled_date: data.rescheduled_date,
-    // standby_marked_date: data.standby_marked_date,
-    // est_tax_burden: data.est_tax_burden,
-    // created_date: data.created_date,
-    // lead_owner: data.lead_owner,
-    // first_name: data.first_name,
-    // modified_by: data.modified_by,
-    // last_name: data.last_name,
-    // primary_phone: data.primary_phone,
-    // email_1: data.email_1,
-    // tutor_needs_attention: data.tutor_needs_attention,
-    // setter_needs_attention: data.setter_needs_attention,
-    // under_admin_review__s_k: data.under_admin_review__s_k,
+    // collection_id: data?.collection_id,
+    // site_id: data?.site_id,
+    // phone_2: data?.phone_2,
+    // email_2: data?.email_2,
+    // address_1: data?.address_1,
+    // address_2: data?.address_2,
+    // city: data?.city,
+    // state: data?.state,
+    // fed_loan_amount_old: data?.fed_loan_amount_old,
+    // si_creation_date: data?.si_creation_date,
+    // zip: data?.zip,
+    // spouse: data?.spouse,
+    // client_referral: data?.client_referral,
+    // convert_to_client: data?.convert_to_client,
+    // go_converting_to_client__: data?.go_converting_to_client__,
+    // click_on_convert_1: data?.click_on_convert_1,
+    // click_on_convert_2: data?.click_on_convert_2,
+    // inquirer_no_sale_reason: data?.inquirer_no_sale_reason,
+    // fed_loan_amount_s: data?.fed_loan_amount_s,
+    // actively_in_school_s: data?.actively_in_school_s,
+    // loan_status_s: data?.loan_status_s,
+    // fed_loan_payment_s: data?.fed_loan_payment_s,
+    // type_of_repayment_s: data?.type_of_repayment_s,
+    // inquirer_middle_name: data?.inquirer_middle_name,
+    // field_30_day_income_s: data?.field_30_day_income_s,
+    // spouse_fed_loans_payment: data?.spouse_fed_loans_payment,
+    // orders: data?.orders,
+    // inquirer_total_balance: data?.inquirer_total_balance,
+    // of_subsidized_loans: data?.of_subsidized_loans,
+    // inquirer_consolidation__0: data?.inquirer_consolidation__0,
+    // inquirer_current_planidr: data?.inquirer_current_planidr,
+    // married: data?.married,
+    // sps_total_balance: data?.sps_total_balance,
+    // household_size_notes: data?.household_size_notes,
+    // annual_documented_income: data?.annual_documented_income,
+    // adj_gross_amount_stream_: data?.adj_gross_amount_stream_,
+    // pay_frequency_stream_1: data?.pay_frequency_stream_1,
+    // adj_gross_amount_stream_0: data?.adj_gross_amount_stream_0,
+    // adj_gross_amount_stream_1: data?.adj_gross_amount_stream_1,
+    // combined_annual_documente: data?.combined_annual_documente,
+    // income_documentation_note: data?.income_documentation_note,
+    // tax_filing_status: data?.tax_filing_status,
+    // spouse_loan_description: data?.spouse_loan_description,
+    // savings_summary: data?.savings_summary,
+    // balance_based_scenarios: data?.balance_based_scenarios,
+    // tutor_approx_value_of_sav: data?.tutor_approx_value_of_sav,
+    // loan_servicer_notes: data?.loan_servicer_notes,
+    // sps_outstanding_principal: data?.sps_outstanding_principal,
+    // sps_avg_interest_rate: data?.sps_avg_interest_rate,
+    // sps_years_towards_forgiv: data?.sps_years_towards_forgiv,
+    // sps_loan_types: data?.sps_loan_types,
+    // sps_loan_servicers: data?.sps_loan_servicers,
+    // inquirer_household_size_n: data?.inquirer_household_size_n,
+    // date_of_planning_call: data?.date_of_planning_call,
+    // date_marketing_reconciled: data?.date_marketing_reconciled,
+    // conferencesdani_pr_sourc: data?.conferencesdani_pr_sourc,
+    // kyle_affiliatefb_marketi0: data?.kyle_affiliatefb_marketi0,
+    // online_generic_dont_use: data?.online_generic_dont_use,
+    // inquiry_source_notes_esp0: data?.inquiry_source_notes_esp0,
+    // inquirer_date_of_last_con: data?.inquirer_date_of_last_con,
+    // referral_from_financial_a: data?.referral_from_financial_a,
+    // linked_client: data?.linked_client,
+    // copy_info: data?.copy_info,
+    // calculator_results: data?.calculator_results,
+    // inquirer_calculator_repor: data?.inquirer_calculator_repor,
+    // sps_calc_report_link: data?.sps_calc_report_link,
+    // eval_notes: data?.eval_notes,
+    // spouse__last_year__agi: data?.spouse__last_year__agi,
+    // eval__spouse_pay_frequen: data?.eval__spouse_pay_frequen,
+    // notes: data?.notes,
+    // under_admin_review__t_k: data?.under_admin_review__t_k,
+    // affiliate_presenting_tuto: data?.affiliate_presenting_tuto,
+    // spacer: data?.spacer,
+    // date_of_tutor_fu: data?.date_of_tutor_fu,
+    // date_eval_occured: data?.date_eval_occured,
+    // graduation_year: data?.graduation_year,
+    // eval__current_income: data?.eval__current_income,
+    // eval__spouse_current_inc: data?.eval__spouse_current_inc,
+    // good_timing_for_strategy_0: data?.good_timing_for_strategy_0,
+    // financial_experience: data?.financial_experience,
+    // assets__insurances: data?.assets__insurances,
+    // renting_or_owning_if_hom: data?.renting_or_owning_if_hom,
+    // liabilities: data?.liabilities,
+    // interested_in_values_base: data?.interested_in_values_base,
+    // current_year_pretax_annu: data?.current_year_pretax_annu,
+    // anything_else_we_should_k: data?.anything_else_we_should_k,
+    // inquirer_referral0: data?.inquirer_referral0,
+    // slt_rep_referred_by: data?.slt_rep_referred_by,
+    // date_of_initial_strategy_: data?.date_of_initial_strategy_,
+    // years_until_tax_imp_expe: data?.years_until_tax_imp_expe,
+    // tax_imp_goal: data?.tax_imp_goal,
+    // na_note_from_referring_r: data?.na_note_from_referring_r,
+    // student__date_of_graduat: data?.student__date_of_graduat,
+    // marketing_source: data?.marketing_source,
+    // dani_pr_source: data?.dani_pr_source,
+    // standby_notes__availabli: data?.standby_notes__availabli,
+    // pc_appointment_confirmati: data?.pc_appointment_confirmati,
+    // pc_follow_up_to_book: data?.pc_follow_up_to_book,
+    // coordinator_notes: data?.coordinator_notes,
+    // no_call_no_show_1: data?.no_call_no_show_1,
+    // no_call_no_show_2: data?.no_call_no_show_2,
+    // no_call_no_show_3: data?.no_call_no_show_3,
+    // rescheduled_date: data?.rescheduled_date,
+    // standby_marked_date: data?.standby_marked_date,
+    // est_tax_burden: data?.est_tax_burden,
+    // created_date: data?.created_date,
+    // lead_owner: data?.lead_owner,
+    // first_name: data?.first_name,
+    // modified_by: data?.modified_by,
+    // last_name: data?.last_name,
+    // primary_phone: data?.primary_phone,
+    // email_1: data?.email_1,
+    // tutor_needs_attention: data?.tutor_needs_attention,
+    // setter_needs_attention: data?.setter_needs_attention,
+    // under_admin_review__s_k: data?.under_admin_review__s_k,
     //----------------------------------------------------------------------------
 
     // New Inquirer Mapping fields:-
@@ -1497,64 +1497,64 @@ const timeZoneMappingAffilate = {
 
 function buildHubSpotAffiliatePayload(data = {}) {
   const properties = {
-    // presenting_rep: data.presenting_rep,
+    // presenting_rep: data?.presenting_rep,
     // old Mapping Fileds..
 
-    // collection_id: data.collection_id,
-    // site_id: data.site_id,
-    // fields_changed: data.fields_changed,
-    // date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
-    // created_by: data.created_by,
-    // employment_type_s: data.employment_type_s,
-    // field_30_day_income_s: data.field_30_day_income_s,
-    // tome_zone_intake: data.tome_zone_intake,
-    // lead_description__specia0: data.lead_description__specia0,
-    // date_of_last_contact: data.date_of_last_contact,
-    // bd_andor_ria_rep: data.bd_andor_ria_rep,
-    // date_of_birth__year: data.date_of_birth__year,
-    // receives_texts: data.receives_texts,
-    // name_stated_on_vm: data.name_stated_on_vm,
-    // date_of_fa_presentation: data.date_of_fa_presentation,
-    // title: data.title,
-    // marital_status_s: data.marital_status_s,
-    // vip_affiliate: data.vip_affiliate,
-    // of_registered_states: data._of_registered_states,
-    // of_years_an_agent_new: data._of_years_an_agent_new,
-    // of_years_an_agent_old: data.of_years_an_agent_old,
-    // email__personal_type: data.email__personal_type,
-    // linkedin: data.linkedin,
-    // has_referrals_in_mind_asa: data.has_referrals_in_mind_asa,
-    // date_of_first_client_refe: data.date_of_first_client_refe,
-    // affiliate_nurturing_call: data.affiliate_nurturing_call,
-    // revenue_share: data.revenue_share,
-    // fa_draw: data.fa_draw,
-    // field_1st: data.field_1st,
-    // field_2nd: data.field_2nd,
-    // field_3rd: data.field_3rd,
-    // primary_address_1: data.primary_address_1,
-    // modified_by: data.modified_by,
-    // modified_date: data.modified_date,
-    // phone_2: data.phone_2,
-    // email__business2_type: data.email__business2_type,
-    // time_zone0: data.time_zone0,
-    // spouse_has_loans_s: data.spouse_has_loans_s,
-    // primary_address_2: data.primary_address_2,
-    // primary_city: data.primary_city,
-    // no_sale_reason: data.no_sale_reason,
-    // type_of_repayment_s: data.type_of_repayment_s,
-    // fed_loan_payment_s: data.fed_loan_payment_s,
-    // loan_status_s: data.loan_status_s,
-    // actively_in_school_s: data.actively_in_school_s,
-    // fed_loan_amount_s: data.fed_loan_amount_s,
-    // click_on_convert_2: data.click_on_convert_2,
-    // click_on_convert_1: data.click_on_convert_1,
-    // primary_zip_code: data.primary_zip_code,
-    // first_name: data.first_name,
-    // last_name: data.last_name,
-    // primary_phone: data.primary_phone,
-    // email__business_type: data.email__business_type,
-    // firm_name: data.firm_name,
-    // primary_state: data.primary_state,
+    // collection_id: data?.collection_id,
+    // site_id: data?.site_id,
+    // fields_changed: data?.fields_changed,
+    // date_setter_spoke_w_affi: data?.date_setter_spoke_w_affi,
+    // created_by: data?.created_by,
+    // employment_type_s: data?.employment_type_s,
+    // field_30_day_income_s: data?.field_30_day_income_s,
+    // tome_zone_intake: data?.tome_zone_intake,
+    // lead_description__specia0: data?.lead_description__specia0,
+    // date_of_last_contact: data?.date_of_last_contact,
+    // bd_andor_ria_rep: data?.bd_andor_ria_rep,
+    // date_of_birth__year: data?.date_of_birth__year,
+    // receives_texts: data?.receives_texts,
+    // name_stated_on_vm: data?.name_stated_on_vm,
+    // date_of_fa_presentation: data?.date_of_fa_presentation,
+    // title: data?.title,
+    // marital_status_s: data?.marital_status_s,
+    // vip_affiliate: data?.vip_affiliate,
+    // of_registered_states: data?._of_registered_states,
+    // of_years_an_agent_new: data?._of_years_an_agent_new,
+    // of_years_an_agent_old: data?.of_years_an_agent_old,
+    // email__personal_type: data?.email__personal_type,
+    // linkedin: data?.linkedin,
+    // has_referrals_in_mind_asa: data?.has_referrals_in_mind_asa,
+    // date_of_first_client_refe: data?.date_of_first_client_refe,
+    // affiliate_nurturing_call: data?.affiliate_nurturing_call,
+    // revenue_share: data?.revenue_share,
+    // fa_draw: data?.fa_draw,
+    // field_1st: data?.field_1st,
+    // field_2nd: data?.field_2nd,
+    // field_3rd: data?.field_3rd,
+    // primary_address_1: data?.primary_address_1,
+    // modified_by: data?.modified_by,
+    // modified_date: data?.modified_date,
+    // phone_2: data?.phone_2,
+    // email__business2_type: data?.email__business2_type,
+    // time_zone0: data?.time_zone0,
+    // spouse_has_loans_s: data?.spouse_has_loans_s,
+    // primary_address_2: data?.primary_address_2,
+    // primary_city: data?.primary_city,
+    // no_sale_reason: data?.no_sale_reason,
+    // type_of_repayment_s: data?.type_of_repayment_s,
+    // fed_loan_payment_s: data?.fed_loan_payment_s,
+    // loan_status_s: data?.loan_status_s,
+    // actively_in_school_s: data?.actively_in_school_s,
+    // fed_loan_amount_s: data?.fed_loan_amount_s,
+    // click_on_convert_2: data?.click_on_convert_2,
+    // click_on_convert_1: data?.click_on_convert_1,
+    // primary_zip_code: data?.primary_zip_code,
+    // first_name: data?.first_name,
+    // last_name: data?.last_name,
+    // primary_phone: data?.primary_phone,
+    // email__business_type: data?.email__business_type,
+    // firm_name: data?.firm_name,
+    // primary_state: data?.primary_state,
 
     // Error fields----------------------------------------------------------------------
     // "industry": "14738",
@@ -1590,76 +1590,76 @@ function buildHubSpotAffiliatePayload(data = {}) {
     conference: conferenceMapping[data?.conference] || null,
     time_zone0: timeZoneMappingAffilate[data?.time_zone0] || null,
 
-    collection_id: data.collection_id,
-    site_id: data.site_id,
-    fields_changed: data.fields_changed,
-    date_setter_spoke_w_affi: data.date_setter_spoke_w_affi,
-    created_by: data.created_by,
-    employment_type_s: data.employment_type_s,
-    field_30_day_income_s: data.field_30_day_income_s,
-    tome_zone_intake: data.tome_zone_intake,
-    lead_description__specia0: data.lead_description__specia0,
-    date_of_last_contact: data.date_of_last_contact,
-    bd_andor_ria_rep: data.bd_andor_ria_rep,
-    date_of_birth__year: data.date_of_birth__year,
-    name_stated_on_vm: data.name_stated_on_vm,
-    date_of_fa_presentation: data.date_of_fa_presentation,
-    title: data.title,
-    marital_status_s: data.marital_status_s,
-    receives_texts_ivinex: data.receives_texts, //
-    vip_affiliate_ivinex: data.vip_affiliate, //
-    has_referrals_in_mind_asa_ivinex: data.has_referrals_in_mind_asa, //
-    affiliate_nurturing_call_ivinex: data.affiliate_nurturing_call, //
-    revenue_share_ivinex: data.revenue_share, //
-    comp_super_affiliate_ivinex: data.comp_super_affiliate, //
-    _of_years_an_agent_new: data._of_years_an_agent_new,
-    email__personal_type: data.email__personal_type,
-    linkedin: data.linkedin,
-    date_of_first_client_refe: data.date_of_first_client_refe,
-    fa_draw: data.fa_draw,
-    field_1st: data.field_1st,
-    field_2nd: data.field_2nd,
-    field_3rd: data.field_3rd,
-    primary_address_1: data.primary_address_1,
-    modified_by: data.modified_by,
-    modified_date: data.modified_date,
-    phone_2: data.phone_2,
-    email__business2_type: data.email__business2_type,
-    spouse_has_loans_s: data.spouse_has_loans_s,
-    primary_address_2: data.primary_address_2,
-    primary_city: data.primary_city,
-    no_sale_reason: data.no_sale_reason,
-    type_of_repayment_s: data.type_of_repayment_s,
-    fed_loan_payment_s: data.fed_loan_payment_s,
-    loan_status_s: data.loan_status_s,
-    actively_in_school_s: data.actively_in_school_s,
-    fed_loan_amount_s: data.fed_loan_amount_s,
-    click_on_convert_2: data.click_on_convert_2,
-    click_on_convert_1: data.click_on_convert_1,
-    primary_zip_code: data.primary_zip_code,
-    first_name: data.first_name,
-    last_name: data.last_name,
-    primary_phone: data.primary_phone,
-    email__business_type: data.email__business_type,
-    firm_name: data.firm_name,
-    primary_state: data.primary_state,
-    // time_zone0: data.time_zone0,
-    affiliate_status_ivinex: data.affiliate_status,
-    lead_source_ivinex: data.lead_source,
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+    date_setter_spoke_w_affi: data?.date_setter_spoke_w_affi,
+    created_by: data?.created_by,
+    employment_type_s: data?.employment_type_s,
+    field_30_day_income_s: data?.field_30_day_income_s,
+    tome_zone_intake: data?.tome_zone_intake,
+    lead_description__specia0: data?.lead_description__specia0,
+    date_of_last_contact: data?.date_of_last_contact,
+    bd_andor_ria_rep: data?.bd_andor_ria_rep,
+    date_of_birth__year: data?.date_of_birth__year,
+    name_stated_on_vm: data?.name_stated_on_vm,
+    date_of_fa_presentation: data?.date_of_fa_presentation,
+    title: data?.title,
+    marital_status_s: data?.marital_status_s,
+    receives_texts_ivinex: data?.receives_texts, //
+    vip_affiliate_ivinex: data?.vip_affiliate, //
+    has_referrals_in_mind_asa_ivinex: data?.has_referrals_in_mind_asa, //
+    affiliate_nurturing_call_ivinex: data?.affiliate_nurturing_call, //
+    revenue_share_ivinex: data?.revenue_share, //
+    comp_super_affiliate_ivinex: data?.comp_super_affiliate, //
+    _of_years_an_agent_new: data?._of_years_an_agent_new,
+    email__personal_type: data?.email__personal_type,
+    linkedin: data?.linkedin,
+    date_of_first_client_refe: data?.date_of_first_client_refe,
+    fa_draw: data?.fa_draw,
+    field_1st: data?.field_1st,
+    field_2nd: data?.field_2nd,
+    field_3rd: data?.field_3rd,
+    primary_address_1: data?.primary_address_1,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    phone_2: data?.phone_2,
+    email__business2_type: data?.email__business2_type,
+    spouse_has_loans_s: data?.spouse_has_loans_s,
+    primary_address_2: data?.primary_address_2,
+    primary_city: data?.primary_city,
+    no_sale_reason: data?.no_sale_reason,
+    type_of_repayment_s: data?.type_of_repayment_s,
+    fed_loan_payment_s: data?.fed_loan_payment_s,
+    loan_status_s: data?.loan_status_s,
+    actively_in_school_s: data?.actively_in_school_s,
+    fed_loan_amount_s: data?.fed_loan_amount_s,
+    click_on_convert_2: data?.click_on_convert_2,
+    click_on_convert_1: data?.click_on_convert_1,
+    primary_zip_code: data?.primary_zip_code,
+    first_name: data?.first_name,
+    last_name: data?.last_name,
+    primary_phone: data?.primary_phone,
+    email__business_type: data?.email__business_type,
+    firm_name: data?.firm_name,
+    primary_state: data?.primary_state,
+    // time_zone0: data?.time_zone0,
+    affiliate_status_ivinex: data?.affiliate_status,
+    lead_source_ivinex: data?.lead_source,
     of_registered_states: data?._of_registered_states,
-    industry_ivinex: data.industry,
-    conference_ivinex: data.conference,
+    industry_ivinex: data?.industry,
+    conference_ivinex: data?.conference,
 
     // New error Fields ------------------------------------------------------------------
 
-    // phone_2_type: data.phone_2_type,
-    // profession: data.profession,
-    // lead_owner: data.lead_owner,
-    // presenting_rep: data.presenting_rep,
-    // _of_years_an_agent_old: data._of_years_an_agent_old,
-    // created_date: data.created_date,
-    // time_zone: data.time_zone,
-    // primary_phone_line_type: data.primary_phone_line_type,
+    // phone_2_type: data?.phone_2_type,
+    // profession: data?.profession,
+    // lead_owner: data?.lead_owner,
+    // presenting_rep: data?.presenting_rep,
+    // _of_years_an_agent_old: data?._of_years_an_agent_old,
+    // created_date: data?.created_date,
+    // time_zone: data?.time_zone,
+    // primary_phone_line_type: data?.primary_phone_line_type,
     //----------------------------------------------------------------------------------
   };
   const cleanedProperties = cleanProps(properties);
@@ -1910,7 +1910,7 @@ const timeZoneMapping = {
 };
 // status Mapping fields
 const statusMapping = {
-  13383: "(please select)",
+  // 13383: "(please select)",
   15073: "Pending - No Sale - Tutor Following Up",
   15021: "Pending - No Sale - Outstanding Invoice",
   14995: "Tutor Strategy Call Needed / Work Order Review",
@@ -1967,7 +1967,7 @@ const currentIdrPlanMapping = {
 
 //type_of_idr_app_submitted Mapping fields
 const typeOfIdrAppSubmittedMapping = {
-  15253: "(please select)",
+  // 15253: "(please select)",
   15254: "Enter into IDR - SAVE",
   15255: "Enter into IDR - IBR",
   15256: "Enter into IDR - PAYE",
@@ -1983,7 +1983,7 @@ const typeOfIdrAppSubmittedMapping = {
 
 // client_is_pslf_ Mapping fields
 const clientIsPslfMapping = {
-  13004: "(please select)",
+  // 13004: "(please select)",
   13001: "No",
   13002: "Yes",
   13003: "Yes - New Enrollment",
@@ -2051,7 +2051,7 @@ const aarFeeMapping = {
 };
 //current_servicer Mapping fields
 const currentServicerMapping = {
-  11964: "(Please Select)",
+  // 11964: "(Please Select)",
   11969: "Multiple Servicers",
   11965: "Nelnet.studentaid.gov",
   13043: "Mohela.com (FFEL)",
@@ -2268,102 +2268,102 @@ function buildHubSpotClientPayload(data = {}) {
     //   data?.client_consolidation__lo,
     // client_avg__interest_rate: data?.client_avg_interest_rate,
     hs_object_id: data?.hs_object_id,
-    servicer___username: data.servicer__username,
-    servicer___password: data.servicer__password,
-    payment_problem_to_resolve: data.payment_problem_to_resolve,
-    collection_notes: data.collection_notes,
-    date_calculation_ran: data.date_calculation_ran,
+    servicer___username: data?.servicer__username,
+    servicer___password: data?.servicer__password,
+    payment_problem_to_resolve: data?.payment_problem_to_resolve,
+    collection_notes: data?.collection_notes,
+    date_calculation_ran: data?.date_calculation_ran,
 
-    collection_id: data.collection_id,
-    site_id: data.site_id,
-    fields_changed: data.fields_changed,
-    created_by: data.created_by,
-    modified_by: data.modified_by,
-    modified_date: data.modified_date,
-    // lead_owner: data.lead_owner,
-    phone_2: data.phone_2,
-    email_2: data.email_2,
+    collection_id: data?.collection_id,
+    site_id: data?.site_id,
+    fields_changed: data?.fields_changed,
+    created_by: data?.created_by,
+    modified_by: data?.modified_by,
+    modified_date: data?.modified_date,
+    // lead_owner: data?.lead_owner,
+    phone_2: data?.phone_2,
+    email_2: data?.email_2,
     address_1: data?.address_1,
-    address_2: data.address_2,
-    city: data.city,
-    state: data.state,
-    zip: data.zip,
-    spouse__partner: data.spouse__partner,
-    // referral: data.referral,
-    msa_sent_: data.msa_sent_,
-    msa_received0: data.msa_received0,
-    lpa_sent: data.lpa_sent,
-    lpa_received: data.lpa_received,
+    address_2: data?.address_2,
+    city: data?.city,
+    state: data?.state,
+    zip: data?.zip,
+    spouse__partner: data?.spouse__partner,
+    // referral: data?.referral,
+    msa_sent_: data?.msa_sent_,
+    msa_received0: data?.msa_received0,
+    lpa_sent: data?.lpa_sent,
+    lpa_received: data?.lpa_received,
 
-    // idr_app_submitted_date: data.idr_app_submitted_date,
-    // days_since_app_sub: data.days_since_app_sub,
-    error_with_payments: data.error_with_payments,
-    date_of_birth: data.date_of_birth,
+    // idr_app_submitted_date: data?.idr_app_submitted_date,
+    // days_since_app_sub: data?.days_since_app_sub,
+    error_with_payments: data?.error_with_payments,
+    date_of_birth: data?.date_of_birth,
     phone_1: data?.primary_phone0,
-    primary_phone_type: data.primary_phone_type,
-    secondary_phone: data.secondary_phone,
-    secondary_phone_type: data.secondary_phone_type,
-    studentaidgov_user_not_0: data.studentaidgov_user_not_0,
-    studentaidgov_pass_not_0: data.studentaidgov_pass_not_0,
-    employerbusiness_name: data.employerbusiness_name,
-    employer_address: data.employer_address,
-    employers_city: data.employers_city,
-    employers_state: data.employers_state,
+    primary_phone_type: data?.primary_phone_type,
+    secondary_phone: data?.secondary_phone,
+    secondary_phone_type: data?.secondary_phone_type,
+    studentaidgov_user_not_0: data?.studentaidgov_user_not_0,
+    studentaidgov_pass_not_0: data?.studentaidgov_pass_not_0,
+    employerbusiness_name: data?.employerbusiness_name,
+    employer_address: data?.employer_address,
+    employers_city: data?.employers_city,
+    employers_state: data?.employers_state,
 
-    reference_1_name: data.reference_1_name,
-    reference_1_address: data.reference_1_address,
-    reference_1_city: data.reference_1_city,
-    reference_1_state: data.reference_1_state,
-    reference_1_zip_: data.reference_1_zip_,
-    reference_2_name: data.reference_2_name,
-    reference_2_address: data.reference_2_address,
-    reference_2_city: data.reference_2_city,
-    reference_2_state: data.reference_2_state,
-    reference_2_zip: data.reference_2_zip,
+    reference_1_name: data?.reference_1_name,
+    reference_1_address: data?.reference_1_address,
+    reference_1_city: data?.reference_1_city,
+    reference_1_state: data?.reference_1_state,
+    reference_1_zip_: data?.reference_1_zip_,
+    reference_2_name: data?.reference_2_name,
+    reference_2_address: data?.reference_2_address,
+    reference_2_city: data?.reference_2_city,
+    reference_2_state: data?.reference_2_state,
+    reference_2_zip: data?.reference_2_zip,
 
-    spouse__full_name_: data.spouse__full_name_,
-    spouse__date_of_birth: data.spouse__date_of_birth,
-    maidenformer_name: data.maidenformer_name,
-    spouse__ssn: data.spouse__ssn,
-    spouse__email: data.spouse__email,
-    spouse__phone: data.spouse__phone,
-    spouse__loan_amount: data.spouse__loan_amount,
+    spouse__full_name_: data?.spouse__full_name_,
+    spouse__date_of_birth: data?.spouse__date_of_birth,
+    maidenformer_name: data?.maidenformer_name,
+    spouse__ssn: data?.spouse__ssn,
+    spouse__email: data?.spouse__email,
+    spouse__phone: data?.spouse__phone,
+    spouse__loan_amount: data?.spouse__loan_amount,
 
-    employer_info_: data.employer_info_,
-    personal_reference: data.personal_reference,
-    spouse_info: data.spouse_info,
+    employer_info_: data?.employer_info_,
+    personal_reference: data?.personal_reference,
+    spouse_info: data?.spouse_info,
 
-    q26_spouse_income_changed0: data.q26_spouse_income_changed0,
-    desired_servicer_s: data.desired_servicer_s,
-    borrower_actual_agi_0: data.borrower_actual_agi_0,
-    state_s: data.state_s,
-    actual_combined_agi_s: data.actual_combined_agi_s,
-    spouse_actual_agi_s: data.spouse_actual_agi_s,
-    desired_repay_plan_s: data.desired_repay_plan_s,
-    q1_balance_based_type_s: data.q1_balance_based_type_s,
-    q1_and_q2_desired_repay_p0: data.q1_and_q2_desired_repay_p0,
-    q5_dependent_children_s: data.q5_dependent_children_s,
-    q6_other_dependents_s: data.q6_other_dependents_s,
-    q7_marital_status_s: data.q7_marital_status_s,
-    q10_employment_type_s: data.q10_employment_type_s,
-    q20_filed_taxes_last_2_yr0: data.q20_filed_taxes_last_2_yr0,
-    q23_separated_from_spouse0: data.q23_separated_from_spouse0,
-    q24_sp_income_access_s: data.q24_sp_income_access_s,
-    q8_filed_taxes_last_2_yrs: data.q8_filed_taxes_last_2_yrs,
-    filed_taxes_last_2_yrs0: data.filed_taxes_last_2_yrs0,
-    q25_spouse_filed_taxes_s: data.q25_spouse_filed_taxes_s,
-    q15_you_and_spouse_filed_0: data.q15_you_and_spouse_filed_0,
-    q21_income_change_since_l0: data.q21_income_change_since_l0,
-    q22_taxable_income_s: data.q22_taxable_income_s,
+    q26_spouse_income_changed0: data?.q26_spouse_income_changed0,
+    desired_servicer_s: data?.desired_servicer_s,
+    borrower_actual_agi_0: data?.borrower_actual_agi_0,
+    state_s: data?.state_s,
+    actual_combined_agi_s: data?.actual_combined_agi_s,
+    spouse_actual_agi_s: data?.spouse_actual_agi_s,
+    desired_repay_plan_s: data?.desired_repay_plan_s,
+    q1_balance_based_type_s: data?.q1_balance_based_type_s,
+    q1_and_q2_desired_repay_p0: data?.q1_and_q2_desired_repay_p0,
+    q5_dependent_children_s: data?.q5_dependent_children_s,
+    q6_other_dependents_s: data?.q6_other_dependents_s,
+    q7_marital_status_s: data?.q7_marital_status_s,
+    q10_employment_type_s: data?.q10_employment_type_s,
+    q20_filed_taxes_last_2_yr0: data?.q20_filed_taxes_last_2_yr0,
+    q23_separated_from_spouse0: data?.q23_separated_from_spouse0,
+    q24_sp_income_access_s: data?.q24_sp_income_access_s,
+    q8_filed_taxes_last_2_yrs: data?.q8_filed_taxes_last_2_yrs,
+    filed_taxes_last_2_yrs0: data?.filed_taxes_last_2_yrs0,
+    q25_spouse_filed_taxes_s: data?.q25_spouse_filed_taxes_s,
+    q15_you_and_spouse_filed_0: data?.q15_you_and_spouse_filed_0,
+    q21_income_change_since_l0: data?.q21_income_change_since_l0,
+    q22_taxable_income_s: data?.q22_taxable_income_s,
 
-    reference_1_phone: data.reference_1_phone,
-    reference_1_relationship: data.reference_1_relationship,
-    reference_2_phone: data.reference_2_phone,
-    reference_2_relationship: data.reference_2_relationship,
-    employers_zip: data.employers_zip,
-    roa_sent_to_servicer: data.roa_sent_to_servicer,
-    time_zone0: data.time_zone0,
-    // client_current_plan_idr_history: data.client_current_planidr_h,
+    reference_1_phone: data?.reference_1_phone,
+    reference_1_relationship: data?.reference_1_relationship,
+    reference_2_phone: data?.reference_2_phone,
+    reference_2_relationship: data?.reference_2_relationship,
+    employers_zip: data?.employers_zip,
+    roa_sent_to_servicer: data?.roa_sent_to_servicer,
+    time_zone0: data?.time_zone0,
+    // client_current_plan_idr_history: data?.client_current_planidr_h,
     // primary_phone0: data?.primary_phone,
     desired_servicer_s: data?.servicer_account_,
     // days_to_recert: data?.days_to_recert,
@@ -2385,15 +2385,15 @@ function buildHubSpotClientPayload(data = {}) {
     // special_calculation_notes: data?.special_calculation_notes,
     email_address: data?.email_address,
 
-    first_name: data.first_name,
-    last_name: data.last_name,
+    first_name: data?.first_name,
+    last_name: data?.last_name,
     n2nd_contact___first_name: data?.first_name,
     n2nd_contact___last_name: data?.last_name,
     n2nd_contact___email: data?.email_1,
     n2nd_contact___phone: data?.primary_phone,
     client_name: data?.client_name,
 
-    email_1: data.email_1,
+    email_1: data?.email_1,
     // phone_1_type_ivinex: data?.phone_1_type, //
     // phone_2_type_ivinex: data?.phone_2_type, //
     spouse_has_loans_ivinex: data?.spouse_has_loans, //
@@ -2401,7 +2401,7 @@ function buildHubSpotClientPayload(data = {}) {
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
 
     // Error fields for Clients ---------------------------------------------------------------------------
-    // slt_referring_rep_nfm: data.slt_referring_rep_nfm,//todo data mismatch
+    // slt_referring_rep_nfm: data?.slt_referring_rep_nfm,//todo data mismatch
     // tutor_name:data?.tutor_name,
     // processor_name: data?.processor_name,
     // "status1": "13385",
@@ -2606,7 +2606,7 @@ function buildHubSpotClientPayload(data = {}) {
 
 // employment_type Mapping fields
 const employmentTypeMapping = {
-  15056: "(please select)",
+  // 15056: "(please select)",
   15053: "Self Employed - Business Owner",
   15054: "Self Employed - No Entity Set Up Yet",
   15067: "Self Employed - 1099",
@@ -2618,7 +2618,7 @@ const employmentTypeMapping = {
 
 // income_doc_type Mapping fields
 const incomeDocTypeMapping = {
-  11929: "(please select)",
+  // 11929: "(please select)",
   12037: "Multiple Sources",
   11932: "Payroll / Pay Stub",
   11933: "SCDI / Income Letter",
@@ -2632,7 +2632,7 @@ const incomeDocTypeMapping = {
 // marital_status Mapping fields
 
 const maritalStatusMappingOrder = {
-  11911: "(please select)",
+  // 11911: "(please select)",
   11913: "Single",
   11915: "Engaged",
   11912: "Married",
@@ -2641,7 +2641,7 @@ const maritalStatusMappingOrder = {
 };
 // most_recent_tax_filing_st Mapping fields
 const mostRecentTaxFilingStatusMapping = {
-  11917: "(please select)",
+  // 11917: "(please select)",
   11918: "Single",
   11919: "Married Filing Jointly - With Access",
   11955: "Married Filing Jointly - No Access",
@@ -2651,7 +2651,7 @@ const mostRecentTaxFilingStatusMapping = {
 };
 // tax_saving_status_apc Mapping fields
 const taxSavingStatusApcMapping = {
-  14762: "(please select)",
+  // 14762: "(please select)",
   14764: "Financial Advisor Intro Set",
   14763: "APC Set",
   15075: "Booking Link Sent",
@@ -2666,25 +2666,42 @@ const taxSavingStatusApcMapping = {
 };
 // type0 Mapping fields
 const type0Mapping = {
-  15018: "(please select)",
+  // 15018: "(please select)",
   15017: "Current Client",
   15016: "New Client",
 };
 
 // work_needed Mapping fields
 const workNeededMapping = {
-  11951: "(please select)",
-  11890: "Recert AAR",
-  15019: "Consol",
-  15287: "PSLF - Enter into IDR from Balanced Based",
-  15020: "No Consol - Enter into IDR from Balance Based",
-  12871: "No Consol - Plan Change",
-  11889: "No Consol - Recalc",
-  11907: "New Client Recert - No Consol",
-  14989: "Double Consolidation - Parent Plus",
-  11954: "Fresh Start",
-  12758: "Default/Consol",
+  11890: "Annual Recertification of IDR",
+  11907: "Annual Recertification of IDR",
+
+  11889: "Recalculation of Current IDR",
+  12871: "Change to Different IDR",
+
+  15287: "Enter into IDR Plan from Balanced Based",
+  15020: "Enter into IDR Plan from Balanced Based",
+
+  12758: "Consolidation Out of Default",
+
+  // Confirm with business:
+  15019: "Full Consolidation", 
+  14989: "Full Consolidation",
+  11954: "Consolidation Out of Default"
 };
+// const workNeededMapping = {
+//   // 11951: "(please select)",
+//   11890: "Recert AAR",
+//   15019: "Consol",
+//   15287: "PSLF - Enter into IDR from Balanced Based",
+//   15020: "No Consol - Enter into IDR from Balance Based",
+//   12871: "No Consol - Plan Change",
+//   11889: "No Consol - Recalc",
+//   11907: "New Client Recert - No Consol",
+//   14989: "Double Consolidation - Parent Plus",
+//   11954: "Fresh Start",
+//   12758: "Default/Consol",
+// };
 // pslf mapping fields
 const pslfMapping = {
   12725: "Yes - Not Yet Enrolled",
@@ -2693,16 +2710,22 @@ const pslfMapping = {
   11947: "In Process",
 };
 //forbearance_needed mapping fields
+
 const forbearanceNeededMapping = {
-  12705: "No",
-  12706: "Yes",
-  15022: "Yes - Past Due",
-  12707: "In Forbearance",
+  12705: "no",
+  12706: "yes",
+  15022: "yes_past__due",
 };
+// const forbearanceNeededMapping = {
+//   12705: "No",
+//   12706: "Yes",
+//   15022: "Yes - Past Due",
+//   12707: "In Forbearance",
+// };
 
 //hh_size__income_threshol mapping fields
 const hhSizeIncomeThresholdMapping = {
-  15225: "(please select)",
+  // 15225: "(please select)",
   12966: "HH1 - $32805",
   12967: "HH2 - $44370",
   12968: "HH3 - $55935",
@@ -2722,7 +2745,7 @@ const hhSizeIncomeThresholdMapping = {
 };
 //field_2025_ibrpaye__15 mapping fields
 const field2025Ibrpaye15Mapping = {
-  15226: "(please select)",
+  // 15226: "(please select)",
   15218: "HH1 - $23475",
   15219: "HH2 - $31725",
   15220: "HH3 - $39975",
@@ -2736,7 +2759,7 @@ const field2025Ibrpaye15Mapping = {
 };
 //field_2025_icr__20 mapping fields
 const field2025Icr20Mapping = {
-  15227: "(please select)",
+  // 15227: "(please select)",
   15228: "HH1 - $15650",
   15229: "HH2 - $21150",
   15230: "HH3 - $26650",
@@ -2761,10 +2784,10 @@ function buildHubspotOrderPayload(data = {}) {
     tax_saving_status_apc:
       taxSavingStatusApcMapping[data?.tax_saving_status_apc] || null, // hubspot single-text-line
     type0: type0Mapping[data?.type0] || null, // hubspot single-text line
-    // work_needed: workNeededMapping[data?.work_needed] || null,
+    work_needed: workNeededMapping[data?.work_needed] || null,
     pslf: pslfMapping[data?.pslf] || null,
-    // forbearance_needed:
-    // forbearanceNeededMapping[data?.forbearance_needed] || null,
+    forbearance_needed:
+    forbearanceNeededMapping[data?.forbearance_needed] || null,
     hh_size__income_threshol:
       hhSizeIncomeThresholdMapping[data?.hh_size__income_threshol] || null, // hubspot single-text-line
     field_2025_ibrpaye__15:
@@ -2936,31 +2959,31 @@ function buildHubspotOrderPayload(data = {}) {
 function buildTextMessagePayload(data = {}) {
   const lines = [];
 
-  if (data.collection_id) lines.push(`Collection ID: ${data.collection_id}`);
-  if (data.site_id) lines.push(`Site ID: ${data.site_id}`);
-  if (data.fields_changed) lines.push(`Fields Changed: ${data.fields_changed}`);
+  if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
+  if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
+  if (data?.fields_changed) lines.push(`Fields Changed: ${data?.fields_changed}`);
 
-  if (data.created_by) lines.push(`Created By: ${data.created_by}`);
-  if (data.modified_by) lines.push(`Modified By: ${data.modified_by}`);
-  if (data.modified_date) lines.push(`Modified Date: ${data.modified_date}`);
-  if (data.created_date) lines.push(`Created Date: ${data.created_date}`);
+  if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
+  if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
+  if (data?.modified_date) lines.push(`Modified Date: ${data?.modified_date}`);
+  if (data?.created_date) lines.push(`Created Date: ${data?.created_date}`);
 
-  if (data.read_status) lines.push(`Read Status: ${data.read_status}`);
-  if (data.status) lines.push(`Status: ${data.status}`);
+  if (data?.read_status) lines.push(`Read Status: ${data?.read_status}`);
+  if (data?.status) lines.push(`Status: ${data?.status}`);
 
-  if (data.message) lines.push(`Message: ${data.message}`);
+  if (data?.message) lines.push(`Message: ${data?.message}`);
 
-  if (data.text_number) lines.push(`Text Number: ${data.text_number}`);
-  if (data.external_number)
-    lines.push(`External Number: ${data.external_number}`);
+  if (data?.text_number) lines.push(`Text Number: ${data?.text_number}`);
+  if (data?.external_number)
+    lines.push(`External Number: ${data?.external_number}`);
 
-  if (data.external_id) lines.push(`External ID: ${data.external_id}`);
+  if (data?.external_id) lines.push(`External ID: ${data?.external_id}`);
 
-  if (data.client) lines.push(`Client: ${data.client}`);
+  if (data?.client) lines.push(`Client: ${data?.client}`);
 
-  if (data.group_text) lines.push(`Group Text: ${data.group_text}`);
-  if (data.group_text_parent)
-    lines.push(`Group Text Parent: ${data.group_text_parent}`);
+  if (data?.group_text) lines.push(`Group Text: ${data?.group_text}`);
+  if (data?.group_text_parent)
+    lines.push(`Group Text Parent: ${data?.group_text_parent}`);
 
   if (lines.length === 0) {
     throw new Error("❌ Text message payload is empty");
@@ -3100,44 +3123,44 @@ function buildEmailPayload(data = {}) {
 function buildHubSpotActivityPayload(data = {}) {
   const lines = [];
 
-  if (data.collection_id) lines.push(`Collection ID: ${data.collection_id}`);
-  if (data.site_id) lines.push(`Site ID: ${data.site_id}`);
-  if (data.fields_changed) lines.push(`Fields Changed: ${data.fields_changed}`);
+  if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
+  if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
+  if (data?.fields_changed) lines.push(`Fields Changed: ${data?.fields_changed}`);
 
-  if (data.location) lines.push(`Location: ${data.location}`);
-  if (data.date_email_opened)
-    lines.push(`Email Opened: ${data.date_email_opened}`);
+  if (data?.location) lines.push(`Location: ${data?.location}`);
+  if (data?.date_email_opened)
+    lines.push(`Email Opened: ${data?.date_email_opened}`);
 
-  if (data.email_id) lines.push(`Email ID: ${data.email_id}`);
-  if (data.subject) lines.push(`Subject: ${data.subject}`);
+  if (data?.email_id) lines.push(`Email ID: ${data?.email_id}`);
+  if (data?.subject) lines.push(`Subject: ${data?.subject}`);
 
-  if (data.field_from) lines.push(`From: ${data.field_from}`);
-  if (data.email_to) lines.push(`To: ${data.email_to}`);
-  if (data.cc) lines.push(`CC: ${data.cc}`);
-  if (data.bcc) lines.push(`BCC: ${data.bcc}`);
+  if (data?.field_from) lines.push(`From: ${data?.field_from}`);
+  if (data?.email_to) lines.push(`To: ${data?.email_to}`);
+  if (data?.cc) lines.push(`CC: ${data?.cc}`);
+  if (data?.bcc) lines.push(`BCC: ${data?.bcc}`);
 
-  if (data.recurrence) lines.push(`Recurrence: ${data.recurrence}`);
-  if (data.all_day_event !== undefined)
-    lines.push(`All Day Event: ${data.all_day_event}`);
+  if (data?.recurrence) lines.push(`Recurrence: ${data?.recurrence}`);
+  if (data?.all_day_event !== undefined)
+    lines.push(`All Day Event: ${data?.all_day_event}`);
 
-  if (data.start_time) lines.push(`Start Time: ${data.start_time}`);
-  if (data.end_time) lines.push(`End Time: ${data.end_time}`);
+  if (data?.start_time) lines.push(`Start Time: ${data?.start_time}`);
+  if (data?.end_time) lines.push(`End Time: ${data?.end_time}`);
 
-  if (data.priority) lines.push(`Priority: ${data.priority}`);
-  if (data.status) lines.push(`Status: ${data.status}`);
+  if (data?.priority) lines.push(`Priority: ${data?.priority}`);
+  if (data?.status) lines.push(`Status: ${data?.status}`);
 
-  if (data.activity) lines.push(`Activity: ${data.activity}`);
-  if (data.description) lines.push(`Description: ${data.description}`);
+  if (data?.activity) lines.push(`Activity: ${data?.activity}`);
+  if (data?.description) lines.push(`Description: ${data?.description}`);
 
-  if (data.assigned) lines.push(`Assigned: ${data.assigned}`);
+  if (data?.assigned) lines.push(`Assigned: ${data?.assigned}`);
 
-  if (data.created_date) lines.push(`Created Date: ${data.created_date}`);
-  if (data.created_by) lines.push(`Created By: ${data.created_by}`);
+  if (data?.created_date) lines.push(`Created Date: ${data?.created_date}`);
+  if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
 
-  if (data.modified_date) lines.push(`Modified Date: ${data.modified_date}`);
-  if (data.modified_by) lines.push(`Modified By: ${data.modified_by}`);
+  if (data?.modified_date) lines.push(`Modified Date: ${data?.modified_date}`);
+  if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
 
-  if (data.date) lines.push(`Date: ${data.date}`);
+  if (data?.date) lines.push(`Date: ${data?.date}`);
 
   return {
     properties: {

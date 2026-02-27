@@ -92,7 +92,7 @@ async function syncOrders() {
           order_record_id = created?.id;
           logger.info(`✅ Order created: ${created.id}`);
         }
-        return;
+        // return; // todo remove after testing
         // Associate client and order
         const hs_client = getHubspotClient();
         const client = await searchCustomObjectInHubSpot(
@@ -133,7 +133,6 @@ async function syncOrders() {
         }
 
        
-        // break; // todo remove after testing
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
