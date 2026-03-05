@@ -22,4 +22,4 @@ app.listen(PORT, () => {
   // syncTextMessages();
 });
 
-processOrder();
+processClient();
