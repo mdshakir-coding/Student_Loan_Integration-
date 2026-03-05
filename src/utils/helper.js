@@ -2870,7 +2870,7 @@ function buildHubspotOrderPayload(data = {}) {
     refusal_details0: data?.refusal_details0,
     stop_dont_use: data?.stop_dont_use,
     copy_order: data?.copy_order,
-    type0: data?.type0,
+    // type0: data?.type0,
     months_of_pslf: data?.months_of_pslf,
     due_remove_auto_pay: data?.due_remove_auto_pay,
     servicerwebsite: data?.servicerwebsite,
