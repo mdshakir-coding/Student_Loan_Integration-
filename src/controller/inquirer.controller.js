@@ -99,7 +99,9 @@ async function syncInquirer() {
       try {
         const record = records[i];
 
+
         await processnquirer(record);
+
 
         // Save progress after success
         // saveProgress(i + 1);
@@ -120,11 +122,15 @@ async function syncInquirer() {
   }
 }
 
+
 async function processnquirer(record = {}) {
+
   try {
     // Build HubSpot payload
     const payload = buildHubSpotInquirerPayload(record);
 
+    logger.info(`Inquirer Record: ${JSON.stringify(record, null, 2)}`);
+    logger.info(`Inquirer Payload: ${JSON.stringify(payload, null, 2)}`);
     logger.info(`Inquirer Record: ${JSON.stringify(record)}`);
     logger.info(`Inquirer Payload: ${JSON.stringify(payload)}`);
 
@@ -197,6 +203,7 @@ async function processnquirer(record = {}) {
       );
     }
     if (affiliate[0]?.id && inquirer_record_id) {
+
       const associate = await hs_client.associations.associate(
         inquirerObject,
         inquirer_record_id,
@@ -236,7 +243,9 @@ async function processnquirer(record = {}) {
       );
     }
   } catch (error) {
+
     logger.error("Error processing record index", error);
   }
 }
+
 export { syncInquirer, processnquirer };
