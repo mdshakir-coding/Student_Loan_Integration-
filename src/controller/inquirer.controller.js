@@ -99,136 +99,6 @@ async function syncInquirer() {
       try {
         const record = records[i];
 
-        // Build HubSpot payload
-        const payload = buildHubSpotInquirerPayload(record);
-
-        logger.info(`Inquirer Record: ${JSON.stringify(record, null, 2)}`);
-        logger.info(`Inquirer Payload: ${JSON.stringify(payload, null, 2)}`);
-
-        // 🔍 Search existing inquirer (example: by collection_id or name)
-        let inquirer_record_id = null;
-        let searchResults = null;
-        searchResults = await searchInquirerInHubSpot(record.collection_id);
-        inquirer_record_id = searchResults[0].id;
-
-        if (searchResults && searchResults.length > 0) {
-          // Inquirer exists → update
-          let existingInquirerId = null;
-          existingInquirerId = searchResults[0].id;
-          logger.info(
-            `Inquirer exists with id ${existingInquirerId}, updating...`
-          );
-          let updated = null;
-          updated = await updateInquirerInHubSpot(existingInquirerId, payload);
-          logger.info(`✅ Inquirer updated: ${updated.id}`);
-        } else {
-          // Inquirer does not exist → create
-          let created = null;
-          created = await createInquirerInHubSpot(payload);
-          inquirer_record_id = created.id;
-
-          logger.info(`✅ Inquirer created: ${created.id}`);
-        }
-        // return;
-        // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
-        const hs_client = getHubspotClient();
-
-        const client = await searchCustomObjectInHubSpot(
-          "2-171843307",
-          record.client_referral
-        );
-        logger.info(`Client: ${JSON.stringify(client[0], null, 2)}`);
-        const affiliate = await searchCustomObjectInHubSpot(
-          affiliateObject,
-          record?.affiliate_referral
-        );
-        logger.info(`affiliate: ${JSON.stringify(affiliate[0], null, 2)}`);
-
-        const inquirer = await searchCustomObjectInHubSpot(
-          record.inquirer_referral0
-        );
-        logger.info(`inquirer: ${JSON.stringify(inquirer[0], null, 2)}`);
-
-        if (client[0]?.id && inquirer_record_id) {
-          logger.info(
-            `Client: ${client[0]?.id} : Inquirer: ${inquirer_record_id}`
-          );
-       
-          // ➡️ associate here
-          // const associate = await associateObjects({
-          //   fromObjectType: "2-171843307", // Inquirer
-          //   fromObjectId: client[0].id,
-          //   toObjectType: "0-1", // Contact
-          //   toObjectId: inquirer_record_id,
-          //   associationLabel: "inquirers_to_clients",
-          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          // });
-          const associate = await hs_client.associations.associate(
-            inquirerObject,
-            inquirer_record_id,
-            clientObject,
-            client[0].id,
-            115,
-            "USER_DEFINED"
-          );
-          logger.info(
-            `✅ Inquirer ${inquirer_record_id} associated with Client ${
-              client[0]?.id
-            }: Association ${JSON.stringify(associate)}`
-          );
-        }
-        if (affiliate[0]?.id && inquirer_record_id) {
-          logger.info(
-            `Affiliate: ${affiliate[0]?.id} : Inquirer: ${inquirer_record_id}`
-          );
-          // ➡️ associate here
-          // const associate = await associateObjects({
-          //   fromObjectType: "2-171942530",
-          //   fromObjectId: affiliate[0]?.id,
-          //   toObjectType: "0-1",
-          //   toObjectId: inquirer_record_id,
-          //   associationTypeId: 71,
-          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          // });
-          const associate = await hs_client.associations.associate(
-            inquirerObject,
-            inquirer_record_id,
-            affiliateObject,
-            affiliate[0]?.id,
-            72,
-            "USER_DEFINED"
-          );
-          logger.info(
-            `✅ Inquirer ${inquirer_record_id} associated with affiliate ${
-              affiliate[0]?.id
-            }: Association ${JSON.stringify(associate.results[0], null, 2)}`
-          );
-        }
-        if (inquirer[0]?.id && inquirer_record_id) {
-          // ➡️ associate here
-          // const associate = await associateObjects({
-          //   fromObjectType: "0-1",
-          //   fromObjectId: inquirer[0]?.id,
-          //   toObjectType: "0-1",
-          //   toObjectId: inquirer_record_id,
-          //   associationTypeId: 449,
-          //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-          // });
-          const associate = await hs_client.associations.associate(
-            inquirerObject,
-            inquirer_record_id,
-            inquirerObject,
-            inquirer[0]?.id,
-            449
-          );
-
-          logger.info(
-            `✅ Inquirer ${inquirer_record_id} associated with inquirer ${
-              inquirer[0]?.id
-            }: Association ${JSON.stringify(associate)}`
-          );
-        }
-
         // Assocaited Client and Inquirer in hubspot
 
         // Save progress after success
@@ -250,4 +120,135 @@ async function syncInquirer() {
   }
 }
 
-export { syncInquirer };
+async function processInquirer(record = {}) {
+  try {
+    // Build HubSpot payload
+    const payload = buildHubSpotInquirerPayload(record);
+
+    logger.info(`Inquirer Record: ${JSON.stringify(record, null, 2)}`);
+    logger.info(`Inquirer Payload: ${JSON.stringify(payload, null, 2)}`);
+
+    // 🔍 Search existing inquirer (example: by collection_id or name)
+    let inquirer_record_id = null;
+    let searchResults = null;
+    searchResults = await searchInquirerInHubSpot(record.collection_id);
+    inquirer_record_id = searchResults[0].id;
+
+    if (searchResults && searchResults.length > 0) {
+      // Inquirer exists → update
+      let existingInquirerId = null;
+      existingInquirerId = searchResults[0].id;
+      logger.info(`Inquirer exists with id ${existingInquirerId}, updating...`);
+      let updated = null;
+      updated = await updateInquirerInHubSpot(existingInquirerId, payload);
+      logger.info(`✅ Inquirer updated: ${updated.id}`);
+    } else {
+      // Inquirer does not exist → create
+      let created = null;
+      created = await createInquirerInHubSpot(payload);
+      inquirer_record_id = created.id;
+
+      logger.info(`✅ Inquirer created: ${created.id}`);
+    }
+    // return;
+    // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
+    const hs_client = getHubspotClient();
+
+    const client = await searchCustomObjectInHubSpot(
+      "2-171843307",
+      record.client_referral
+    );
+    logger.info(`Client: ${JSON.stringify(client[0], null, 2)}`);
+    const affiliate = await searchCustomObjectInHubSpot(
+      affiliateObject,
+      record?.affiliate_referral
+    );
+    logger.info(`affiliate: ${JSON.stringify(affiliate[0], null, 2)}`);
+
+    const inquirer = await searchCustomObjectInHubSpot(
+      record.inquirer_referral0
+    );
+    logger.info(`inquirer: ${JSON.stringify(inquirer[0], null, 2)}`);
+
+    if (client[0]?.id && inquirer_record_id) {
+      logger.info(`Client: ${client[0]?.id} : Inquirer: ${inquirer_record_id}`);
+
+      // ➡️ associate here
+      // const associate = await associateObjects({
+      //   fromObjectType: "2-171843307", // Inquirer
+      //   fromObjectId: client[0].id,
+      //   toObjectType: "0-1", // Contact
+      //   toObjectId: inquirer_record_id,
+      //   associationLabel: "inquirers_to_clients",
+      //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+      // });
+      const associate = await hs_client.associations.associate(
+        inquirerObject,
+        inquirer_record_id,
+        clientObject,
+        client[0].id,
+        115,
+        "USER_DEFINED"
+      );
+      logger.info(
+        `✅ Inquirer ${inquirer_record_id} associated with Client ${
+          client[0]?.id
+        }: Association ${JSON.stringify(associate)}`
+      );
+    }
+    if (affiliate[0]?.id && inquirer_record_id) {
+      logger.info(
+        `Affiliate: ${affiliate[0]?.id} : Inquirer: ${inquirer_record_id}`
+      );
+      // ➡️ associate here
+      // const associate = await associateObjects({
+      //   fromObjectType: "2-171942530",
+      //   fromObjectId: affiliate[0]?.id,
+      //   toObjectType: "0-1",
+      //   toObjectId: inquirer_record_id,
+      //   associationTypeId: 71,
+      //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+      // });
+      const associate = await hs_client.associations.associate(
+        inquirerObject,
+        inquirer_record_id,
+        affiliateObject,
+        affiliate[0]?.id,
+        72,
+        "USER_DEFINED"
+      );
+      logger.info(
+        `✅ Inquirer ${inquirer_record_id} associated with affiliate ${
+          affiliate[0]?.id
+        }: Association ${JSON.stringify(associate.results[0], null, 2)}`
+      );
+    }
+    if (inquirer[0]?.id && inquirer_record_id) {
+      // ➡️ associate here
+      // const associate = await associateObjects({
+      //   fromObjectType: "0-1",
+      //   fromObjectId: inquirer[0]?.id,
+      //   toObjectType: "0-1",
+      //   toObjectId: inquirer_record_id,
+      //   associationTypeId: 449,
+      //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
+      // });
+      const associate = await hs_client.associations.associate(
+        inquirerObject,
+        inquirer_record_id,
+        inquirerObject,
+        inquirer[0]?.id,
+        449
+      );
+
+      logger.info(
+        `✅ Inquirer ${inquirer_record_id} associated with inquirer ${
+          inquirer[0]?.id
+        }: Association ${JSON.stringify(associate)}`
+      );
+    }
+  } catch (error) {
+    logger.error("Error processing inquirer record", error);
+  }
+}
+export { syncInquirer, processInquirer };
