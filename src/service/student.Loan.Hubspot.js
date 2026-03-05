@@ -28,12 +28,12 @@ import { logger } from "../index.js";
 // Add pagenation logic
 
 async function fetchInquirerRecords(perPage = 100) {
-  let page = 1;
+  let page = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10103&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10103&Offset=${page}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -54,7 +54,7 @@ async function fetchInquirerRecords(perPage = 100) {
         break;
       }
 
-      page++;
+      page += perPage; // Increment offset for next page
     }
 
     console.log(`Total inquirer records fetched: ${allRecords.length}`);
