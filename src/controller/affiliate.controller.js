@@ -97,8 +97,8 @@ async function syncAffiliate() {
         // Build payload
         const Payloads = buildHubSpotAffiliatePayload(record);
 
-        logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
-        logger.info(`Affiliate Payload: ${JSON.stringify(Payloads,  null, 2)}`);
+        // logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
+        // logger.info(`Affiliate Payload: ${JSON.stringify(Payloads,  null, 2)}`);
 
         // First, search existing affiliate by collection_id
         const searchResults = await searchAffiliateByInHubspot(
@@ -123,7 +123,7 @@ async function syncAffiliate() {
           const created = await createAffiliateInHubSpot(Payloads);
           logger.info(`Affiliate created: ${JSON.stringify(created)}`);
         }
-        return; 
+        // return; // todo remove after testing
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {

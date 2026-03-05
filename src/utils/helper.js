@@ -1637,18 +1637,18 @@ function buildHubSpotAffiliatePayload(data = {}) {
     click_on_convert_2: data?.click_on_convert_2,
     click_on_convert_1: data?.click_on_convert_1,
     primary_zip_code: data?.primary_zip_code,
-    first_name: data?.first_name,
-    last_name: data?.last_name,
+    first_name: data?.first_name || null,
+    last_name: data?.last_name || null,
     primary_phone: data?.primary_phone,
     email__business_type: data?.email__business_type,
     firm_name: data?.firm_name,
     primary_state: data?.primary_state,
     // time_zone0: data?.time_zone0,
-    affiliate_status_ivinex: data?.affiliate_status,
-    lead_source_ivinex: data?.lead_source,
+    // affiliate_status_ivinex: data?.affiliate_status,
+    // lead_source_ivinex: data?.lead_source,
     of_registered_states: data?._of_registered_states,
-    industry_ivinex: data?.industry,
-    conference_ivinex: data?.conference,
+    // industry_ivinex: data?.industry,
+    // conference_ivinex: data?.conference,
 
     // New error Fields ------------------------------------------------------------------
 
@@ -1665,9 +1665,9 @@ function buildHubSpotAffiliatePayload(data = {}) {
   const cleanedProperties = cleanProps(properties);
 
   // 🔥 Critical safety check
-  if (!Object.keys(cleanedProperties).length) {
-    throw new Error("Affiliate payload has no valid properties");
-  }
+  // if (!Object.keys(cleanedProperties).length) {
+    
+  // }
 
   return {
     properties: cleanedProperties,
