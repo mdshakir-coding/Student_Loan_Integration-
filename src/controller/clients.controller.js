@@ -36,43 +36,8 @@ function loadProgress() {
   return 0;
 }
 
-// async function syncClients() {
-//   try {
-//     const records = await fetchClientsRecords(); // call the function
-//     console.log("Clients records", records.length);
 
-//     let startIndex = loadProgress();
-
-//     for (let i = startIndex; i < records.length; i++) {
-//       try {
-//         const record = records[i];
-
-//         let clientsId = null;
-
-//         const Payloads = buildHubSpotClientPayload(record); // call the function
-
-//         console.log(" Records", record);
-//         console.log("Payloads", Payloads);
-//         return; // todo remove after testing
-//         // await createInquirerInHubSpot(Payloads);
-
-//         // Save progress after successful processing
-//         // saveProgress(i + 1);
-//       } catch (error) {
-//         console.error(error);
-//         // saveProgress(i);
-//         // break; // todo remove after testing
-//       }
-//     }
-
-//     console.log("🎄 All Clients Processed");
-//   } catch (error) {
-//     console.error("Error feching records", error);
-//     return;
-//   }
-// }
-
-// New code Client Function
+// code Client Function
 
 async function syncClients() {
   try {
@@ -129,5 +94,7 @@ async function syncClients() {
     return;
   }
 }
+
+
 
 export { syncClients };

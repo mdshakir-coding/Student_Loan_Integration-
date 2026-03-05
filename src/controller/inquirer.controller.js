@@ -234,14 +234,14 @@ async function syncInquirer() {
         // Save progress after success
         // saveProgress(i + 1);
 
-        return; // ❗ remove after testing
+        // return; // ❗ remove after testing
       } catch (error) {
         logger.error("Error processing record index", error);
 
         // Save progress to resume later
         // saveProgress(i);
 
-        return; // ❗ remove after testing
+        // return; // ❗ remove after testing
       }
     }
   } catch (error) {

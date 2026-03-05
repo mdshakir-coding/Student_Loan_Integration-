@@ -160,7 +160,7 @@ async function syncActivity() {
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
-          return;
+          // return; //todo remove after testing
         }
 
         // Save progress after success
@@ -169,7 +169,7 @@ async function syncActivity() {
         logger.error("Error processing activity ", error);
         // Save progress to resume later
         // saveProgress(i);
-        break; // ❗ remove after testing
+        // break;  //todo remove after testing
       }
     }
   } catch (error) {

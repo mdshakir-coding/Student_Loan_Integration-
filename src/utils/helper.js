@@ -2058,7 +2058,8 @@ const currentServicerMapping = {
   15239: "Servicing.Mohela.com",
   15071: "Mohela.studentaid.gov",
   14202: "AidVantage.studentaid.gov",
-  13044: "EdFinancial.studentaid.gov",
+  // 13044: "EdFinancial.studentaid.gov",
+   13044: "Edfinancial.studentaid.gov", // ✅ fixed
   15168: "CRI.studentaid.gov",
   15051: "Sloanservicing.com (FFEL)",
   13041: "A.E.S. (FFEL)",
@@ -2236,10 +2237,6 @@ function buildHubSpotClientPayload(data = {}) {
     slt_referring_rep_nfm:
       buildOwnerMapping(sltReferringRepNfm[data?.slt_referring_rep_nfm]) ||
       null, // hubspot user
-    // slt_referring_rep_nfm:
-    //   buildOwnerMapping(
-    //     sltReferringRepNfmMapping[data?.slt_referring_rep_nfm]
-    //   ) || null, // hubspot user
     calculation_performed_by:
       buildOwnerMapping(
         calculationPerformedByMapping[data?.calculation_performed_by]
@@ -2265,8 +2262,8 @@ function buildHubSpotClientPayload(data = {}) {
     // fulfillment_company: fulfillmentCompanyMapping[data?.fulfillment_company] || null, // hubspot missing fields
 
     // client_consolidation___loan_type_description:
-    //   data?.client_consolidation__lo,
-    // client_avg__interest_rate: data?.client_avg_interest_rate,
+    //   data?.client_consolidation__lo ||null,
+    // client_avg__interest_rate: data?.client_avg_interest_rate || null,
     hs_object_id: data?.hs_object_id,
     servicer___username: data?.servicer__username,
     servicer___password: data?.servicer__password,
@@ -2360,9 +2357,12 @@ function buildHubSpotClientPayload(data = {}) {
     reference_1_relationship: data?.reference_1_relationship,
     reference_2_phone: data?.reference_2_phone,
     reference_2_relationship: data?.reference_2_relationship,
-    employers_zip: data?.employers_zip,
+    // employers_zip: data?.employers_zip,
+    employers_zip: data?.employers_zip && !isNaN(Number(data.employers_zip))
+  ? Number(data.employers_zip)
+  : null,
     roa_sent_to_servicer: data?.roa_sent_to_servicer,
-    time_zone0: data?.time_zone0,
+    // time_zone0: data?.time_zone0,
     // client_current_plan_idr_history: data?.client_current_planidr_h,
     // primary_phone0: data?.primary_phone,
     desired_servicer_s: data?.servicer_account_,
@@ -2389,11 +2389,11 @@ function buildHubSpotClientPayload(data = {}) {
     last_name: data?.last_name,
     n2nd_contact___first_name: data?.first_name,
     n2nd_contact___last_name: data?.last_name,
-    n2nd_contact___email: data?.email_1,
+    n2nd_contact___email: data?.email_1 || null,
     n2nd_contact___phone: data?.primary_phone,
     client_name: data?.client_name,
 
-    email_1: data?.email_1,
+    email_1: data?.email_1 || null,
     // phone_1_type_ivinex: data?.phone_1_type, //
     // phone_2_type_ivinex: data?.phone_2_type, //
     spouse_has_loans_ivinex: data?.spouse_has_loans, //

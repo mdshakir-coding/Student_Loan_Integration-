@@ -15,9 +15,9 @@ import { syncEmails } from "./controller/emails.controller.js";
 const PORT = process.env.PORT || 3400;
 
 app.listen(PORT, () => {
-  syncInquirer(); //done
+  // syncInquirer(); //done
   // syncAffiliate(); //done
-  // syncActivity(); // done
+  syncActivity(); // done
   // syncInvoices();    //done
   // syncClients(); //done
   // syncOrders(); //done

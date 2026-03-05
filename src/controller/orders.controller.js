@@ -129,7 +129,7 @@ async function syncOrders() {
               client[0]?.id
             }: Association ${JSON.stringify(associate)}`
           );
-          return; // todo remove after testing
+          // return; // todo remove after testing
         }
 
        
