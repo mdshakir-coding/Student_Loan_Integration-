@@ -99,12 +99,16 @@ async function syncInquirer() {
       try {
         const record = records[i];
 
+<<<<<<< HEAD
         // Assocaited Client and Inquirer in hubspot
+=======
+        await processnquirer(record);
+>>>>>>> dev
 
         // Save progress after success
         // saveProgress(i + 1);
 
-        // return; // ❗ remove after testing
+        return; // ❗ remove after testing
       } catch (error) {
         logger.error("Error processing record index", error);
 
@@ -120,13 +124,22 @@ async function syncInquirer() {
   }
 }
 
+<<<<<<< HEAD
 async function processInquirer(record = {}) {
+=======
+async function processnquirer(record = {}) {
+>>>>>>> dev
   try {
     // Build HubSpot payload
     const payload = buildHubSpotInquirerPayload(record);
 
+<<<<<<< HEAD
     logger.info(`Inquirer Record: ${JSON.stringify(record, null, 2)}`);
     logger.info(`Inquirer Payload: ${JSON.stringify(payload, null, 2)}`);
+=======
+    logger.info(`Inquirer Record: ${JSON.stringify(record)}`);
+    logger.info(`Inquirer Payload: ${JSON.stringify(payload)}`);
+>>>>>>> dev
 
     // 🔍 Search existing inquirer (example: by collection_id or name)
     let inquirer_record_id = null;
@@ -197,18 +210,7 @@ async function processInquirer(record = {}) {
       );
     }
     if (affiliate[0]?.id && inquirer_record_id) {
-      logger.info(
-        `Affiliate: ${affiliate[0]?.id} : Inquirer: ${inquirer_record_id}`
-      );
-      // ➡️ associate here
-      // const associate = await associateObjects({
-      //   fromObjectType: "2-171942530",
-      //   fromObjectId: affiliate[0]?.id,
-      //   toObjectType: "0-1",
-      //   toObjectId: inquirer_record_id,
-      //   associationTypeId: 71,
-      //   accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
-      // });
+
       const associate = await hs_client.associations.associate(
         inquirerObject,
         inquirer_record_id,
@@ -248,7 +250,8 @@ async function processInquirer(record = {}) {
       );
     }
   } catch (error) {
-    logger.error("Error processing inquirer record", error);
+
+    logger.error("Error processing record index", error);
   }
 }
-export { syncInquirer, processInquirer };
+export { syncInquirer, processnquirer };

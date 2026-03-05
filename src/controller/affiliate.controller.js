@@ -94,36 +94,9 @@ async function syncAffiliate() {
       try {
         const record = records[i];
 
-        // Build payload
-        const Payloads = buildHubSpotAffiliatePayload(record);
+        await processAffiliate(record);
 
-        // logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
-        // logger.info(`Affiliate Payload: ${JSON.stringify(Payloads,  null, 2)}`);
-
-        // First, search existing affiliate by collection_id
-        const searchResults = await searchAffiliateByInHubspot(
-          record.collection_id
-        );
-
-        if (searchResults && searchResults.length > 0) {
-          // Affiliate exists, update it
-          const existingAffiliateId = searchResults[0].id;
-          console.log(
-            `Affiliate exists with id ${existingAffiliateId}, updating...`
-          );
-
-          const updated = await updateAffiliateInHubSpot(
-            existingAffiliateId,
-            Payloads
-          );
-      
-          logger.info(`Affiliate updated: ${JSON.stringify(updated)}`);
-        } else {
-          // Affiliate does not exist, create new
-          const created = await createAffiliateInHubSpot(Payloads);
-          logger.info(`Affiliate created: ${JSON.stringify(created)}`);
-        }
-        // return; // todo remove after testing
+        return;
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
@@ -137,6 +110,47 @@ async function syncAffiliate() {
   } catch (error) {
     console.error("Error fetching affiliate records", error);
     return;
+  }
+}
+
+async function processAffiliate(record) {
+  try {
+    // Build payload
+    const Payloads = buildHubSpotAffiliatePayload(record);
+
+    // logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
+    // logger.info(`Affiliate Payload: ${JSON.stringify(Payloads,  null, 2)}`);
+
+    // First, search existing affiliate by collection_id
+    const searchResults = await searchAffiliateByInHubspot(
+      record.collection_id
+    );
+
+    if (searchResults && searchResults.length > 0) {
+      // Affiliate exists, update it
+      const existingAffiliateId = searchResults[0].id;
+      console.log(
+        `Affiliate exists with id ${existingAffiliateId}, updating...`
+      );
+
+      const updated = await updateAffiliateInHubSpot(
+        existingAffiliateId,
+        Payloads
+      );
+
+      logger.info(`Affiliate updated: ${JSON.stringify(updated)}`);
+    } else {
+      // Affiliate does not exist, create new
+      const created = await createAffiliateInHubSpot(Payloads);
+      logger.info(`Affiliate created: ${JSON.stringify(created)}`);
+    }
+    return;
+    // Save progress after successful processing
+    // saveProgress(i + 1);
+  } catch (error) {
+    console.error("Error processing record index", i, error);
+    // Save progress here to resume later if needed
+    // saveProgress(i);
   }
 }
 
