@@ -2310,10 +2310,14 @@ function buildHubSpotClientPayload(data = {}) {
     // client_consolidation___loan_type_description:
     //   data?.client_consolidation__lo ||null,
     // client_avg__interest_rate: data?.client_avg_interest_rate || null,
-    spouse_name: data?.spouse_name || null,
-    spouse_dob: data?.spouse_dob || null,
-    spouse_email: data?.spouse_email || null,
-    spouse_phone: data?.spouse_phone || null,
+
+    spouse___ssn: data?.spouse__ssn || null,
+    spouse___phone:data?.spouse__phone || null,
+    pslf_employment_date_range_1: data?.pslf_employment_date_rang1 ||null,
+    pslf_employment_date_range_2:data?.pslf_employment_date_rang2 ||null,
+    pslf_employment_date_range_3:data?.pslf_employment_date_rang|| null,
+    pslf_employment_date_range_4:data?.pslf_employment_date_rang0 ||null,
+   
 
     hs_object_id: data?.hs_object_id || null,
     servicer___username: data?.servicer__username || null,
@@ -2373,9 +2377,8 @@ function buildHubSpotClientPayload(data = {}) {
     spouse__date_of_birth: data?.spouse__date_of_birth || null,
     maidenformer_name: data?.maidenformer_name || null,
     spouse__ssn: data?.spouse__ssn || null,
-    spouse__email: data?.spouse__email || null,
-    spouse__phone: data?.spouse__phone || null,
-    spouse__loan_amount: data?.spouse__loan_amount || null,
+    spouse___email: data?.spouse__email || null,
+    spouse_loan_amount: data?.spouse__loan_amount || null,
 
     employer_info_: data?.employer_info_ || null, //
     personal_reference: data?.personal_reference || null,
