@@ -2366,7 +2366,7 @@ function buildHubSpotClientPayload(data = {}) {
     reference_1_address: data?.reference_1_address || null,
     reference_1_city: data?.reference_1_city || null,
     reference_1_state: data?.reference_1_state || null,
-    reference_1_zip_: data?.reference_1_zip_ || null,
+    reference_1_zip: data?.reference_1_zip_ || null,
     reference_2_name: data?.reference_2_name || null,
     reference_2_address: data?.reference_2_address || null,
     reference_2_city: data?.reference_2_city || null,
