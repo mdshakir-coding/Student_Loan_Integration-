@@ -3,27 +3,6 @@ import { cleanProps } from "../utils/helper.js";
 import { logger } from "../index.js";
 
 // fetch Inquirer Records
-// async function fetchInquirerRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10103";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response (Records)
-//   } catch (error) {
-//     console.error(
-//       "Error fetching student loan records:",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
 
 // Add pagenation logic
 
@@ -70,37 +49,15 @@ async function fetchInquirerRecords(perPage = 100) {
 
 // fetch Affiliated Rescords
 
-// async function fetchAffiliateRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10156";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (10156):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation logic
 
 async function fetchAffiliateRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10156&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10156&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -112,64 +69,42 @@ async function fetchAffiliateRecords(perPage = 100) {
       const records = response.data?.Records || [];
 
       console.log(
-        `Fetched page ${page}, affiliated records: ${records.length}`
+        `Fetched offset ${offset}, affiliate records: ${records.length}`
       );
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // stop when last page reached
+      // stop when last batch reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
-    console.log(`Total affiliated records fetched: ${allRecords.length}`);
+    console.log(`Total affiliate records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
     console.error(
       "Error fetching records (10156):",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
 // fetch Activity Records
 
-// async function fetchActivityReords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=50";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=50):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation logic here
 
 async function fetchActivityReords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=50&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=50&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -180,63 +115,42 @@ async function fetchActivityReords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, activity records: ${records.length}`);
+      console.log(`Fetched offset ${offset}, activity records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // ⛔ stop when last page is reached
+      // stop if last page
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage; // next batch
     }
 
     console.log(`Total activity records fetched: ${allRecords.length}`);
     return allRecords;
+
   } catch (error) {
     console.error(
       "Error fetching activity records:",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
 // Fetch Invoices Records
 
-// async function fetchInvoicesRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10151";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=10151):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation logic
 
 async function fetchInvoicesRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10151&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10151&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -247,17 +161,17 @@ async function fetchInvoicesRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, invoice records: ${records.length}`);
+      console.log(`Fetched offset ${offset}, invoice records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // ⛔ Stop when last page is reached
+      // Stop when last batch is reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
     console.log(`Total invoice records fetched: ${allRecords.length}`);
@@ -267,43 +181,21 @@ async function fetchInvoicesRecords(perPage = 100) {
       "Error fetching invoice records:",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
 // fetch Clients Records
 
-// async function fetchClientsRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10116";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=10116):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation logic here
 
 async function fetchClientsRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10116&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10116&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -314,17 +206,17 @@ async function fetchClientsRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, client records: ${records.length}`);
+      console.log(`Fetched offset ${offset}, client records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // ⛔ stop when last page is reached
+      // stop when last batch reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
     console.log(`Total client records fetched: ${allRecords.length}`);
@@ -334,43 +226,21 @@ async function fetchClientsRecords(perPage = 100) {
       "Error fetching client records:",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
 // fetch Orders Records
 
-// async function fetchOrdersRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10130";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=10130):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation logic
 
 async function fetchOrdersRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10130&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10130&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -381,17 +251,17 @@ async function fetchOrdersRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, order records: ${records.length}`);
+      console.log(`Fetched offset ${offset}, order records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // stop when last page reached
+      // stop when last batch reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
     console.log(`Total order records fetched: ${allRecords.length}`);
@@ -407,37 +277,14 @@ async function fetchOrdersRecords(perPage = 100) {
 
 // fetch Text Messages Records
 
-// async function fetchTextMessagesRecrds() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10129";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=10129):",
-//       error.response?.data || error.message
-//     );
-//     return{};
-//   }
-// }
-
 // Add pagenation logic
-
 async function fetchTextMessagesRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10129&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10129&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -449,18 +296,18 @@ async function fetchTextMessagesRecords(perPage = 100) {
       const records = response.data?.Records || [];
 
       console.log(
-        `Fetched page ${page}, text message records: ${records.length}`
+        `Fetched offset ${offset}, text message records: ${records.length}`
       );
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // ⛔ stop when last page is reached (same logic)
+      // stop when last batch is reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
     console.log(`Total text message records fetched: ${allRecords.length}`);
@@ -470,43 +317,21 @@ async function fetchTextMessagesRecords(perPage = 100) {
       "Error fetching text message records:",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
 // fetch Emails Records
 
-// async function fetchEmailsRecords() {
-//   const url =
-//     "https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10141";
-
-//   try {
-//     const response = await axios.get(url, {
-//       headers: {
-//         Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-//         Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
-//       },
-//     });
-
-//     return response.data.Records; // JSON response
-//   } catch (error) {
-//     console.error(
-//       "Error fetching records (CollectionTypeID=10141):",
-//       error.response?.data || error.message
-//     );
-//     return {};
-//   }
-// }
-
 // Add pagenation Logic here
 
 async function fetchEmailsRecords(perPage = 100) {
-  let page = 1;
+  let offset = 0;
   let allRecords = [];
 
   try {
     while (true) {
-      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10141&Page=${page}&Limit=${perPage}`;
+      const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10141&Offset=${offset}&Limit=${perPage}`;
 
       const response = await axios.get(url, {
         headers: {
@@ -517,17 +342,17 @@ async function fetchEmailsRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, email records: ${records.length}`);
+      console.log(`Fetched offset ${offset}, email records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
 
-      // ⛔ stop when last page is reached
+      // stop when last batch is reached
       if (records.length < perPage) {
         break;
       }
 
-      page++;
+      offset += perPage;
     }
 
     console.log(`Total email records fetched: ${allRecords.length}`);
@@ -537,10 +362,13 @@ async function fetchEmailsRecords(perPage = 100) {
       "Error fetching email records:",
       error.response?.data || error.message
     );
-    return allRecords; // return what was fetched before error
+    return allRecords;
   }
 }
 
+// fetch Notes Records
+
+// Add pagenation Logic here
 async function fetchClientById(clientId, properties = []) {
   if (!clientId) {
     throw new Error("clientId is required");
@@ -566,6 +394,7 @@ async function fetchClientById(clientId, properties = []) {
     throw error;
   }
 }
+// fetch InQuirer by Id
 async function fetchInquirerById(inquirerId, properties = []) {
   if (!inquirerId) {
     throw new Error("inquirerId is required");
@@ -591,6 +420,8 @@ async function fetchInquirerById(inquirerId, properties = []) {
     throw error;
   }
 }
+
+// fetch Invoice by Id
 async function fetchInvoiceById(invoiceId, properties = []) {
   if (!invoiceId) {
     throw new Error("invoiceId is required");
@@ -616,6 +447,7 @@ async function fetchInvoiceById(invoiceId, properties = []) {
     throw error;
   }
 }
+// fetch Affiliate by Id
 async function fetchAffiliateById(affiliateId, properties = []) {
   if (!affiliateId) {
     throw new Error("affiliateId is required");

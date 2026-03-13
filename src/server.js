@@ -21,7 +21,9 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   // syncTextMessages();
   // processClient();
-  processAffiliate();
+  // processAffiliate();
+  syncActivity();
+
 
 });
 

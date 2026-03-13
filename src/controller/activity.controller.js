@@ -87,7 +87,7 @@ async function syncActivity() {
   try {
     const records = await fetchActivityReords(); // fetch activity records
     logger.info(`Activity records:${records.length}`);
-    // return;
+    // return; // todo remove after testing
 
     let startIndex = loadProgress();
 
