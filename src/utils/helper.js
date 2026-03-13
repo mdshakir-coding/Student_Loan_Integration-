@@ -2137,7 +2137,7 @@ const sltReferringRepNfmMapping = {
 
 //ia_inquirer_status Mapping fields
 const iaInquirerStatusMapping = {
-  13380: "DON'T BOOK APC! (Send Dani Request to Connect with FA)",
+  13380: "DON'T BOOK APC!",
   13238: "Missed Apt.",
   13394: "Priority Case (likely)",
   13032: "Following Up",
@@ -2153,7 +2153,7 @@ const iaInquirerStatusMapping = {
   13318: "No Sale - No $",
   15097: "Lost Opp (MIA)",
   15098: "Lost Opp (Health)",
-  15099: "Lost Opp (Competitor))",
+  15099: "Lost Opp (Competitor)",
   15100: "Lost Opp (Misc.)",
   13246: "Advisor Final F/U Needed",
   14914: "Please book at AAR",
@@ -2249,7 +2249,7 @@ function buildHubSpotClientPayload(data = {}) {
     phone_1_type: phone1TypeMappingClient[data?.phone_1_type] || null,
     phone_2_type: phone2TypeMappingClient[data?.phone_2_type] || null,
     time_zone: timeZoneMapping[data?.time_zone0] || null, // hubspot single test-line
-    status: statusMapping[data?.fields_changed] || null,
+    status: statusMapping[data?.status1] || null,
     // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
     current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null, //
     type_of_idr_app_submitted:
@@ -2259,7 +2259,7 @@ function buildHubSpotClientPayload(data = {}) {
     current_servicer: currentServicerMapping[data?.current_servicer0] || null,
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
-    // ia_inquirer_status: iaInquirerStatusMapping[data?.ia_inquirer_status] ||null,
+    ia_inquirer_status: iaInquirerStatusMapping[data?.ia_inquirer_status] ||null,
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
     // ia_insurance_status: iaInsuranceStatusMapping[data?.ia_insurance_status] ||null, // hubspot missing fields
     // ia_securities_status: iaSecuritiesStatusMapping[data?.ia_securities_status] ||null, // hubspot missing fields
@@ -2276,6 +2276,8 @@ function buildHubSpotClientPayload(data = {}) {
     collection_notes: data?.collection_notes || null,
     date_calculation_ran: data?.date_calculation_ran || null,
     spouse___ssn: data?.spouse__ssn || null,
+    work_order_notes:data?.work_order_notes || null,
+    
     
       spouse___date_of_birth: convertToHubspotDate(data?.spouse__date_of_birth) || null,
       multiple__which_servicers_:data?.multiple__which_servicer || null,
@@ -2307,6 +2309,9 @@ function buildHubSpotClientPayload(data = {}) {
     msa_received0: data?.msa_received0 ||null,
     lpa_sent: data?.lpa_sent ||null,
     lpa_received: data?.lpa_received ||null,
+    client_household_size_notes:data?.client_household_size_not ||null,
+    client_income_doc_notes:data?.client_income_doc_notes || null,
+   
 
     // idr_app_submitted_date: data?.idr_app_submitted_date,
     // days_since_app_sub: data?.days_since_app_sub,
