@@ -2276,8 +2276,12 @@ function buildHubSpotClientPayload(data = {}) {
     collection_notes: data?.collection_notes || null,
     date_calculation_ran: data?.date_calculation_ran || null,
     spouse___ssn: data?.spouse__ssn || null,
-    // spouse___date_of_birth: data?.spouse__date_of_birth,
+    
       spouse___date_of_birth: convertToHubspotDate(data?.spouse__date_of_birth) || null,
+      multiple__which_servicers_:data?.multiple__which_servicer || null,
+      self_employed____ein:data?.self_employed__ein0 ||null,
+
+
     collection_id: data?.collection_id || null,
     site_id: data?.site_id || null,
     fields_changed: data?.fields_changed || null,
