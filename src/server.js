@@ -22,7 +22,8 @@ app.listen(PORT, () => {
   // syncTextMessages();
   // processClient();
   // processAffiliate();
-  syncActivity();
+  processOrder();
+
 
 
 });

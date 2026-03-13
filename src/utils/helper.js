@@ -1496,82 +1496,7 @@ const timeZoneMappingAffilate = {
 //  code for Affiliate Payload
 
 function buildHubSpotAffiliatePayload(data = {}) {
-  const properties = {
-    // presenting_rep: data?.presenting_rep,
-    // old Mapping Fileds..
-
-    // collection_id: data?.collection_id,
-    // site_id: data?.site_id,
-    // fields_changed: data?.fields_changed,
-    // date_setter_spoke_w_affi: data?.date_setter_spoke_w_affi,
-    // created_by: data?.created_by,
-    // employment_type_s: data?.employment_type_s,
-    // field_30_day_income_s: data?.field_30_day_income_s,
-    // tome_zone_intake: data?.tome_zone_intake,
-    // lead_description__specia0: data?.lead_description__specia0,
-    // date_of_last_contact: data?.date_of_last_contact,
-    // bd_andor_ria_rep: data?.bd_andor_ria_rep,
-    // date_of_birth__year: data?.date_of_birth__year,
-    // receives_texts: data?.receives_texts,
-    // name_stated_on_vm: data?.name_stated_on_vm,
-    // date_of_fa_presentation: data?.date_of_fa_presentation,
-    // title: data?.title,
-    // marital_status_s: data?.marital_status_s,
-    // vip_affiliate: data?.vip_affiliate,
-    // of_registered_states: data?._of_registered_states,
-    // of_years_an_agent_new: data?._of_years_an_agent_new,
-    // of_years_an_agent_old: data?.of_years_an_agent_old,
-    // email__personal_type: data?.email__personal_type,
-    // linkedin: data?.linkedin,
-    // has_referrals_in_mind_asa: data?.has_referrals_in_mind_asa,
-    // date_of_first_client_refe: data?.date_of_first_client_refe,
-    // affiliate_nurturing_call: data?.affiliate_nurturing_call,
-    // revenue_share: data?.revenue_share,
-    // fa_draw: data?.fa_draw,
-    // field_1st: data?.field_1st,
-    // field_2nd: data?.field_2nd,
-    // field_3rd: data?.field_3rd,
-    // primary_address_1: data?.primary_address_1,
-    // modified_by: data?.modified_by,
-    // modified_date: data?.modified_date,
-    // phone_2: data?.phone_2,
-    // email__business2_type: data?.email__business2_type,
-    // time_zone0: data?.time_zone0,
-    // spouse_has_loans_s: data?.spouse_has_loans_s,
-    // primary_address_2: data?.primary_address_2,
-    // primary_city: data?.primary_city,
-    // no_sale_reason: data?.no_sale_reason,
-    // type_of_repayment_s: data?.type_of_repayment_s,
-    // fed_loan_payment_s: data?.fed_loan_payment_s,
-    // loan_status_s: data?.loan_status_s,
-    // actively_in_school_s: data?.actively_in_school_s,
-    // fed_loan_amount_s: data?.fed_loan_amount_s,
-    // click_on_convert_2: data?.click_on_convert_2,
-    // click_on_convert_1: data?.click_on_convert_1,
-    // primary_zip_code: data?.primary_zip_code,
-    // first_name: data?.first_name,
-    // last_name: data?.last_name,
-    // primary_phone: data?.primary_phone,
-    // email__business_type: data?.email__business_type,
-    // firm_name: data?.firm_name,
-    // primary_state: data?.primary_state,
-
-    // Error fields----------------------------------------------------------------------
-    // "industry": "14738",
-    // "presenting_rep": "0",
-    // "comp_super_affiliate": "0",
-    // "conference": "0",
-    // "created_date": "2022-06-06 16:02:50",
-    // "time_zone": "0",
-    // "primary_phone_line_type": "14264",
-    // "phone_2_type": "14268",
-    // "profession": "14384",
-    // "lead_owner": "14",
-    // "affiliate_status": "14283",
-    // "lead_source": "14750",
-    //------------------------------------------------------------------------------------
-
-    // New Affilate Maaping Payload
+  const properties  = {
 
     //Picklist Mapping here
 
@@ -1589,6 +1514,8 @@ function buildHubSpotAffiliatePayload(data = {}) {
       compSuperAffiliateMapping[data?.comp_super_affiliate] || null,
     conference: conferenceMapping[data?.conference] || null,
     time_zone0: timeZoneMappingAffilate[data?.time_zone0] || null,
+    
+    
 
     collection_id: data?.collection_id,
     site_id: data?.site_id,
@@ -1655,7 +1582,6 @@ function buildHubSpotAffiliatePayload(data = {}) {
     // phone_2_type: data?.phone_2_type,
     // profession: data?.profession,
     // lead_owner: data?.lead_owner,
-    // presenting_rep: data?.presenting_rep,
     // _of_years_an_agent_old: data?._of_years_an_agent_old,
     // created_date: data?.created_date,
     // time_zone: data?.time_zone,
@@ -2421,197 +2347,6 @@ function buildHubSpotClientPayload(data = {}) {
     // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
 
-    // Error fields for Clients ---------------------------------------------------------------------------
-    // slt_referring_rep_nfm: data?.slt_referring_rep_nfm,//todo data mismatch
-    // tutor_name:data?.tutor_name,
-    // processor_name: data?.processor_name,
-    // "status1": "13385",
-    // "days_since_client_cont": "488"
-    // client_date:data?.created_date,
-    // client_action_taken:data?.client_action_taken,
-    // recert_date:data?.recert_date,
-    // social_security_number:data?.social_security_number,
-    // "available_advisors": "0",
-    // "lpamsa__sent_from": "0",
-    // "no_apc__fa_referral": "false",
-    // "current_idr_plan": "0",
-    // "type_of_idr_app_submitted": "0",
-    // "client_contact_info": "1",
-    // aar_automation_date: data?.aar_automation_date,
-    // "if_idr_plan_date_is_diffe": "1",
-    // "advisor_action_needed": "false",
-    // "testimonial_complete": "false",
-    // "ni_in_testimonial": "false",
-    // "ia_securities_status": "0",
-    // "new_client_or_aar0": "0",
-    // "does_client_have_a_financ": "0",
-    // "apc_booking_status_no_lo": "15076",
-    // "avs_only__no_lpa__charg": "0",
-    // "charge_percentage__msa_f": "0",
-    // idr_recert_app_sub_deadline:data?.
-    // days_to_deadline:data?.idr_recert_app_sub_deadli,
-    // "fulfillment_company": "15025",
-    // "solic_agent": "15035",
-    // "ia_type_of_client": "14921",
-    // "backdoor_roth": "false",
-    // "nelnet_security_code_emai": "T.FrazierSLT2024@gmail.com",
-    // "nelnet_security_code_emai0": "StudentLoans28!",
-    // "client_ssn_last_4": "4321",
-    // "client_ssn_full": "123-45-4321",
-    // "studentloanrecordid": "1",
-    // "tsr_client_no_longer_use": "false",
-    // "apc_status0": "1",
-    // "client_int_in_slt_nonpr0": "false",
-    // "date_marked_inactive": "2024-08-29",
-    // "referring_affiliate": "0",
-    // "escrow_protocol": "false",
-    // "est_forgiveness_date0": "2042-01-25",
-    // "years_until_forgiveness": "-192",
-    // "apc_status": "1",
-    // "referrals": "1",
-    // "inactive_specifics": "14184",
-    // "do_not_complete_work_unti": "0.00",
-    // "slt_rep_referred_by_no_l": "55",
-    // "calculation_performed_by": "14",
-    // "ia_insurance_status": "13282",
-    // "state_license_needed": "UT",
-    // "term_only0": "false",
-    // "na_interested_in_securit": "false",
-    // "monthly_premium0": "0.00",
-    // "fyc_est": "0.00",
-    // "q1_income_driven_type_s": "1",
-    // "q18_employment_type_0": "1",
-    // "q13_if_icr_repay_jointly_": "1",
-    // "q16_income_changed_s": "1",
-    // "q17_spouse_income_changed0": "1",
-    // "client_created_date": "2016-08-10 13:03:00",
-    //  aar_fee:data?.aar_fee,
-    // "q12_provide_info": "1",
-    // "q4_in_forbearance": "1",
-    // "client_name_fulf": "1",
-    // "client_name_fulc": "1",
-    // "recerts": "1",
-    // "middle_initialname": "Delane",
-    // "customer_info": "1",
-    // "current_servicer0": "11965",
-    // "status0": "1",
-    // "profession0": "12735",
-    // "client_is_pslf0": "13001",
-    // "ia_inquirer_status": "13289",
-    // "meeting_notes": "@sara Troy Frazier. Didn't have loan data or myaid data on file (please try to have that for future APC's). They are in too much debt and recovering from surgery and no cashflow so not in a good spot to start saving. In a year please ask them if they have excess in their business again and if it would be a good time for michael to help them get setup with a whole life policy. ",
-    //------------------------------------------------------------------------------------------------------
-
-    // New Mapping Client value:-
-
-    // collection_id: data?.collection_id,
-    // site_id: data?.site_id,
-    // fields_changed: data?.fields_changed,
-    // created_by: data?.created_by,
-    // modified_by: data?.modified_by,
-    // modified_date: data?.modified_date,
-    // lead_owner: data?.lead_owner,
-
-    // phone_2: data?.phone_2,
-    // email_2: data?.email_2,
-
-    // time_zone0: data?.time_zone0,
-    // address_1: data?.address_1,
-    // address_2: data?.address_2,
-    // city: data?.city,
-    // state: data?.state,
-    // zip: data?.zip,
-
-    // spouse__partner: data?.spouse__partner,
-    // referral: data?.referral,
-
-    // msa_sent_: data?.msa_sent_,
-    // msa_received0: data?.msa_received0,
-    // lpa_sent: data?.lpa_sent,
-    // lpa_received: data?.lpa_received,
-
-    // idr_app_submitted_date: data?.idr_app_submitted_date,
-    // days_since_app_sub: data?.days_since_app_sub,
-    // error_with_payments: data?.error_with_payments,
-
-    // date_of_birth: data?.date_of_birth,
-
-    // primary_phone0: data?.primary_phone0,
-    // primary_phone_type: data?.primary_phone_type,
-    // secondary_phone: data?.secondary_phone,
-    // secondary_phone_type: data?.secondary_phone_type,
-
-    // studentaidgov_user_not_0: data?.studentaidgov_user_not_0,
-    // studentaidgov_pass_not_0: data?.studentaidgov_pass_not_0,
-
-    // employerbusiness_name: data?.employerbusiness_name,
-    // employer_address: data?.employer_address,
-    // employers_city: data?.employers_city,
-    // employers_state: data?.employers_state,
-
-    // reference_1_name: data?.reference_1_name,
-    // reference_1_address: data?.reference_1_address,
-    // reference_1_city: data?.reference_1_city,
-    // reference_1_state: data?.reference_1_state,
-    // reference_1_zip_: data?.reference_1_zip_,
-
-    // reference_2_name: data?.reference_2_name,
-    // reference_2_address: data?.reference_2_address,
-    // reference_2_city: data?.reference_2_city,
-    // reference_2_state: data?.reference_2_state,
-    // reference_2_zip: data?.reference_2_zip,
-
-    // spouse__full_name_: data?.spouse__full_name_,
-    // spouse__date_of_birth: data?.spouse__date_of_birth,
-    // maidenformer_name: data?.maidenformer_name,
-    // spouse__ssn: data?.spouse__ssn,
-    // spouse__email: data?.spouse__email,
-    // spouse__phone: data?.spouse__phone,
-
-    // spouse__loan_amount: data?.spouse__loan_amount,
-
-    // employer_info_: data?.employer_info_,
-    // personal_reference: data?.personal_reference,
-    // spouse_info: data?.spouse_info,
-
-    // q26_spouse_income_changed0: data?.q26_spouse_income_changed0,
-    // desired_servicer_s: data?.desired_servicer_s,
-
-    // borrower_actual_agi_0: data?.borrower_actual_agi_0,
-    // state_s: data?.state_s,
-    // actual_combined_agi_s: data?.actual_combined_agi_s,
-    // spouse_actual_agi_s: data?.spouse_actual_agi_s,
-
-    // desired_repay_plan_s: data?.desired_repay_plan_s,
-    // q1_balance_based_type_s: data?.q1_balance_based_type_s,
-
-    // q1_and_q2_desired_repay_p0: data?.q1_and_q2_desired_repay_p0,
-
-    // q5_dependent_children_s: data?.q5_dependent_children_s,
-    // q6_other_dependents_s: data?.q6_other_dependents_s,
-    // q7_marital_status_s: data?.q7_marital_status_s,
-
-    // q10_employment_type_s: data?.q10_employment_type_s,
-
-    // q20_filed_taxes_last_2_yr0: data?.q20_filed_taxes_last_2_yr0,
-    // q23_separated_from_spouse0: data?.q23_separated_from_spouse0,
-    // q24_sp_income_access_s: data?.q24_sp_income_access_s,
-
-    // q8_filed_taxes_last_2_yrs: data?.q8_filed_taxes_last_2_yrs,
-    // filed_taxes_last_2_yrs0: data?.filed_taxes_last_2_yrs0,
-
-    // q25_spouse_filed_taxes_s: data?.q25_spouse_filed_taxes_s,
-    // q15_you_and_spouse_filed_0: data?.q15_you_and_spouse_filed_0,
-    // q21_income_change_since_l0: data?.q21_income_change_since_l0,
-    // q22_taxable_income_s: data?.q22_taxable_income_s,
-
-    // Error Fields-------------------------------------------------------------------------------
-    // created_date: data?.created_date,
-    // q1_income_driven_type_s: data?.q1_income_driven_type_s,
-    // q18_employment_type_0: data?.q18_employment_type_0,
-    // client_action_taken: data?.client_action_taken,
-    // recert_date: data?.recert_date,
-    // social_security_number: data?.social_security_number,
-    //----------------------------------------------------------------------------------------------------
   });
 
   // console.log("Cleaned properties:", properties);
@@ -2711,7 +2446,6 @@ const workNeededMapping = {
   11954: "Consolidation Out of Default"
 };
 // const workNeededMapping = {
-//   // 11951: "(please select)",
 //   11890: "Recert AAR",
 //   15019: "Consol",
 //   15287: "PSLF - Enter into IDR from Balanced Based",
@@ -2798,7 +2532,7 @@ function buildHubspotOrderPayload(data = {}) {
   const payload = cleanProps({
     // picklist Mapping here
     employment_type: employmentTypeMapping[data?.employment_type] || null,
-    // income_doc_type: incomeDocTypeMapping[data?.income_doc_type] || null,
+    income_doc_type: incomeDocTypeMapping[data?.income_doc_type] || null,
     marital_status: maritalStatusMappingOrder[data?.marital_status] || null,
     most_recent_tax_filing_st:
       mostRecentTaxFilingStatusMapping[data?.most_recent_tax_filing_st] || null, // hubspot single-text-line
@@ -3022,124 +2756,69 @@ function buildTextMessagePayload(data = {}) {
 
 function buildEmailPayload(data = {}) {
   const payload = {
-    collection_id: data?.collection_id,
-    site_id: data?.site_id,
-    fields_changed: data?.fields_changed,
+    collection_id: data?.collection_id ||null,
+    site_id: data?.site_id || null,
+    fields_changed: data?.fields_changed || null,
 
-    linked_record: data?.linked_record,
-    linked_module: data?.linked_module,
+    linked_record: data?.linked_record || null,
+    linked_module: data?.linked_module || null,
 
-    folder_id: data?.folder_id,
-    retry_count: data?.retry_count,
+    folder_id: data?.folder_id || null,
+    retry_count: data?.retry_count || null,
 
-    notify_options: data?.notify_options,
-    external_options: data?.external_options,
+    notify_options: data?.notify_options || null,
+    external_options: data?.external_options || null,
 
-    message_uid: data?.message_uid,
-    message_id: data?.message_id,
-    result: data?.result,
+    message_uid: data?.message_uid || null,
+    message_id: data?.message_id || null,
+    result: data?.result || null,
 
-    open_date: data?.open_date,
-    events: data?.events,
+    open_date: data?.open_date || null,
+    events: data?.events || null,
 
-    email_attachments: data?.email_attachments,
-    ivinex_attachments: data?.ivinex_attachments,
-    file_upload_status: data?.file_upload_status,
+    email_attachments: data?.email_attachments || null,
+    ivinex_attachments: data?.ivinex_attachments || null,
+    file_upload_status: data?.file_upload_status || null,
 
-    template_processed: data?.template_processed,
-    email_template: data?.email_template,
+    template_processed: data?.template_processed ||null,
+    email_template: data?.email_template ||null,
 
-    replied_from: data?.replied_from,
-    forwarded_from: data?.forwarded_from,
+    replied_from: data?.replied_from ||null,
+    forwarded_from: data?.forwarded_from ||null,
 
-    reply: data?.reply,
-    reply_all: data?.reply_all,
-    forward: data?.forward,
+    reply: data?.reply ||null,
+    reply_all: data?.reply_all ||null,
+    forward: data?.forward ||null,
 
-    delay_send_date: data?.delay_send_date,
+    delay_send_date: data?.delay_send_date ||null,
 
-    created_date: data?.created_date,
-    modified_by: data?.modified_by,
-    modified_date: data?.modified_date,
-    created_by: data?.created_by,
+    created_date: data?.created_date || null,
+    modified_by: data?.modified_by || null,
+    modified_date: data?.modified_date || null,
+    created_by: data?.created_by || null,
 
-    email_from: data?.email_from,
-    email_from_name: data?.email_from_name,
+    email_from: data?.email_from || null,
+    email_from_name: data?.email_from_name || null,
 
-    email_to: data?.email_to,
-    cc: data?.cc,
-    bcc: data?.bcc,
+    email_to: data?.email_to || null,
+    cc: data?.cc || null,
+    bcc: data?.bcc || null,
 
-    subject: data?.subject,
-    body: data?.body,
-    body_plain: data?.body_plain,
+    subject: data?.subject || null,
+    body: data?.body || null,
+    body_plain: data?.body_plain || null,
 
-    email_date: data?.email_date,
-    email_status: data?.email_status,
-
-    email_account: data?.email_account,
-    user: data?.user,
+    email_date: data?.email_date || null,
+    email_status: data?.email_status || null,
+    email_account: data?.email_account ||null,
+    user: data?.user ||null,
   };
 
   return cleanProps(payload);
 }
 
-// Create Activity Payload
 
-// function buildHubSpotActivityPayload(data = {}) {
-//   const payload = cleanProps({
-
-//     collection_id: data?.collection_id,
-//     site_id: data?.site_id,
-//     fields_changed: data?.fields_changed,
-
-//     location: data?.location,
-//     date_email_opened: data?.date_email_opened,
-
-//     email_id: data?.email_id,
-//     subject: data?.subject,
-
-//     field_from: data?.field_from,
-//     email_to: data?.email_to,
-//     cc: data?.cc,
-//     bcc: data?.bcc,
-
-//     recurrence: data?.recurrence,
-//     all_day_event: data?.all_day_event,
-
-//     start_time: data?.start_time,
-//     end_time: data?.end_time,
-
-//     priority: data?.priority,
-//     status: data?.status,
-
-//     activity: data?.activity,
-//     description: data?.description,
-
-//     assigned: data?.assigned,
-
-//     created_date: data?.created_date,
-//     created_by: data?.created_by,
-
-//     modified_date: data?.modified_date,
-//     modified_by: data?.modified_by,
-
-//     date: data?.date,
-//   });
-
-//   if (!Object.keys(payload).length) {
-//     throw new Error("❌ Activity payload is empty");
-//   }
-
-//   return {
-//     payload: {
-//       hs_note_body: lines.join("\n"),
-//       hs_timestamp: new Date().toISOString(), // ✅ REQUIRED
-//     },
-//   };
-// }
-
-// new payload Activity
+//  payload Activity
 
 function buildHubSpotActivityPayload(data = {}) {
   const lines = [];
