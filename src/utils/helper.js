@@ -2281,6 +2281,11 @@ function buildHubSpotClientPayload(data = {}) {
       multiple__which_servicers_:data?.multiple__which_servicer || null,
       self_employed____ein:data?.self_employed__ein0 ||null,
 
+      pslf_employment_date_range_1:data?.pslf_employment_date_rang1 || null,
+      pslf_employment_date_range_2:data?.pslf_employment_date_rang2 || null,
+       pslf_employment_date_range_3 :data?.pslf_employment_date_rang ||null,
+       pslf_employment_date_range_4 :data?.pslf_employment_date_rang0 ||null,
+
 
     collection_id: data?.collection_id || null,
     site_id: data?.site_id || null,
