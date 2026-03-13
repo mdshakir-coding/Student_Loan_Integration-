@@ -2219,7 +2219,12 @@ const fulfillmentCompanyMapping = {
   15027: "Guardian",
   15028: "Other",
 };
+function convertToHubspotDate(dateString) {
+  if (!dateString) return null;
 
+  const date = new Date(dateString);
+  return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
 // Create Clients Payload
 
 function buildHubSpotClientPayload(data = {}) {
@@ -2270,6 +2275,9 @@ function buildHubSpotClientPayload(data = {}) {
     payment_problem_to_resolve: data?.payment_problem_to_resolve,
     collection_notes: data?.collection_notes,
     date_calculation_ran: data?.date_calculation_ran,
+    spouse___ssn: data?.spouse__ssn,
+    // spouse___date_of_birth: data?.spouse__date_of_birth,
+      spouse___date_of_birth: convertToHubspotDate(data?.spouse__date_of_birth),
 
     collection_id: data?.collection_id,
     site_id: data?.site_id,
@@ -2311,7 +2319,7 @@ function buildHubSpotClientPayload(data = {}) {
     reference_1_address: data?.reference_1_address,
     reference_1_city: data?.reference_1_city,
     reference_1_state: data?.reference_1_state,
-    reference_1_zip_: data?.reference_1_zip_,
+    reference_1_zip: data?.reference_1_zip_,
     reference_2_name: data?.reference_2_name,
     reference_2_address: data?.reference_2_address,
     reference_2_city: data?.reference_2_city,

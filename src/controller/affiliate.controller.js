@@ -113,7 +113,7 @@ async function syncAffiliate() {
   }
 }
 
-async function processAffiliate(record) {
+async function processAffiliate(record={}) {
   try {
     // Build payload
     const Payloads = buildHubSpotAffiliatePayload(record);
