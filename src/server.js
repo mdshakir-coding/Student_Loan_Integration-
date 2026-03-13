@@ -4,7 +4,7 @@ import app from "./app.js";
 
 // import these function
 import { syncInquirer } from "./controller/inquirer.controller.js";
-import { syncAffiliate } from "./controller/affiliate.controller.js";
+import { syncAffiliate,processAffiliate} from "./controller/affiliate.controller.js";
 import {
   syncActivity,
   processActivity,
@@ -20,7 +20,8 @@ const PORT = process.env.PORT || 3400;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   // syncTextMessages();
-  processClient();
-  
+  // processClient();
+  processAffiliate();
+
 });
 

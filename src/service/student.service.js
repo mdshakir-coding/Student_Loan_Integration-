@@ -5,11 +5,11 @@ import { logger } from "../index.js";
 
 // Create Affiliate in Hubspot
 
-async function createAffiliateInHubSpot(payload) {
+async function createAffiliateInHubSpot(Payloads) {
   const url = "https://api.hubapi.com/crm/v3/objects/2-171942530";
 
   try {
-    const response = await axios.post(url, payload, {
+    const response = await axios.post(url, Payloads, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -29,11 +29,11 @@ async function createAffiliateInHubSpot(payload) {
 
 // Update Function for Affiliate in hubspot
 
-async function updateAffiliateInHubSpot(affiliateId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/2-171942530/${affiliateId}`;
+async function updateAffiliateInHubSpot(existingAffiliateId, Payloads) {
+  const url = `https://api.hubapi.com/crm/v3/objects/2-171942530/${existingAffiliateId}`;
 
   try {
-    const response = await axios.patch(url, payload, {
+    const response = await axios.patch(url, Payloads, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -139,11 +139,11 @@ async function searchClientInHubSpot(collectionId) {
 
 // Create function in client
 
-async function createClientInHubSpot(payload) {
+async function createClientInHubSpot(Payloads) {
   const url = "https://api.hubapi.com/crm/v3/objects/2-171843307";
 
   try {
-    const response = await axios.post(url, payload, {
+    const response = await axios.post(url, Payloads, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -161,11 +161,11 @@ async function createClientInHubSpot(payload) {
 
 // Update client function
 
-async function updateClientInHubSpot(clientId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/2-171843307/${clientId}`;
+async function updateClientInHubSpot(existingClientId, Payloads) {
+  const url = `https://api.hubapi.com/crm/v3/objects/2-171843307/${existingClientId}`;
 
   try {
-    const response = await axios.patch(url, payload, {
+    const response = await axios.patch(url, Payloads, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -244,8 +244,8 @@ async function createInvoiceInHubSpot(payload) {
 }
 
 // Update Invoice function in hubspot
-async function updateInvoiceInHubSpot(invoiceId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/0-3/${invoiceId}`;
+async function updateInvoiceInHubSpot(existingInvoiceId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-3/${existingInvoiceId}`;
 
   try {
     const response = await axios.patch(url, payload, {
@@ -312,8 +312,8 @@ async function searchInquirerInHubSpot(collectionId) {
 }
 
 // Update Inquirer in Hubspot
-async function updateInquirerInHubSpot(inquirerId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/0-1/${inquirerId}`;
+async function updateInquirerInHubSpot(existingInquirerId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-1/${existingInquirerId}`;
 
   try {
     const response = await axios.patch(url, payload, {
@@ -432,11 +432,11 @@ async function searchOrderInHubSpot(collectionId) {
 
 // Update order in Hubspot
 
-async function updateOderInHubSpot(orderId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/0-5/${orderId}`;
+async function updateOderInHubSpot(existingOrderId, Payloads) {
+  const url = `https://api.hubapi.com/crm/v3/objects/0-5/${existingOrderId}`;
 
   try {
-    const response = await axios.patch(url, payload, {
+    const response = await axios.patch(url, Payloads, {
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -457,12 +457,12 @@ async function updateOderInHubSpot(orderId, payload) {
 
 // Create Order In hubspot
 
-async function createOrderInHubSpot(payload) {
+async function createOrderInHubSpot(Payloads) {
   const url = "https://api.hubapi.com/crm/v3/objects/0-5";
 
   try {
     
-    const response = await axios.post(url, payload, {
+    const response = await axios.post(url, Payloads, {
 
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
@@ -563,8 +563,8 @@ async function searchTextMessageInHubSpot(collectionId) {
 
 // Update Text Message In hubspot
 
-async function updateTextMessageInHubSpot(testMessageId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/notes/${testMessageId}`;
+async function updateTextMessageInHubSpot(existingMessageId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/notes/${existingMessageId}`;
 
   try {
     const response = await axios.patch(url, payload, {
@@ -656,8 +656,8 @@ async function searchEmailInHubSpot(collectionId) {
 }
 
 // update Email In hubspot
-async function updateEmailInHubSpot(inquirerId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/contacts/${inquirerId}`;
+async function updateEmailInHubSpot(existingEmailId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/contacts/${existingEmailId}`;
 
   try {
     const response = await axios.patch(url, payload, {
@@ -792,8 +792,8 @@ async function searchActivityInHubSpot(collectionId) {
 
 // update Activity In hubspot
 
-async function updateActivityInHubSpot(activityId, payload) {
-  const url = `https://api.hubapi.com/crm/v3/objects/notes/${activityId}`;
+async function updateActivityInHubSpot(existingActivityId, payload) {
+  const url = `https://api.hubapi.com/crm/v3/objects/notes/${existingActivityId}`;
 
   try {
     const response = await axios.patch(url, payload, {

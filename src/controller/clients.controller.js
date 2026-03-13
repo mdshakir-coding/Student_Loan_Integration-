@@ -425,7 +425,10 @@ async function processClient(
       const existingClientId = searchResults[0].id;
       logger.info(`Client exists with id ${existingClientId}, updating...`);
 
-      const updated = await updateClientInHubSpot(existingClientId, Payloads);
+      const updated = await updateClientInHubSpot(
+        existingClientId,
+         Payloads
+        );
 
       logger.info(`✅ Client updated:${updated.id}`);
     } else {

@@ -2287,6 +2287,7 @@ function buildHubSpotClientPayload(data = {}) {
       pslf_employment_date_range_2:data?.pslf_employment_date_rang2 || null,
        pslf_employment_date_range_3 :data?.pslf_employment_date_rang ||null,
        pslf_employment_date_range_4 :data?.pslf_employment_date_rang0 ||null,
+      //  affiliate_referral:data?.referring_affiliate ||null,
 
 
     collection_id: data?.collection_id || null,
@@ -2304,7 +2305,7 @@ function buildHubSpotClientPayload(data = {}) {
     state: data?.state ||null,
     zip: data?.zip ||null,
     spouse__partner: data?.spouse__partner || null,
-    // referral: data?.referral,
+    // referral: data?.referrals || null,
     msa_sent_: data?.msa_sent_ ||null,
     msa_received0: data?.msa_received0 ||null,
     lpa_sent: data?.lpa_sent ||null,
