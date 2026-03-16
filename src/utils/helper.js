@@ -51,6 +51,16 @@ function cleanProps(obj) {
   return cleaned;
 }
 
+function normalizeValue(value) {
+  if (value === undefined || value === null) return null;
+
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  return value;
+}
+
 // lead_owner Picklist value mapped for Inquirer
 
 const affiliateleadOwnerMapping = {
@@ -810,216 +820,21 @@ const leadOwnerMappingInquirer = {
   73: "Thatcher Norton",
   41: "Tony Ferra",
   83: "Victor Martell",
-  49: "Zack Geist"
+  49: "Zack Geist",
 };
-
 
 function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
-    // inquirer_loan_: loanMapping[data?.inquirer_loan_ ]|| null, // todo field does not exist in both
-    // employment_type: emloymenttypes[data?.employment_type_s] || null, // todo not exist in hubspot
-    // inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
-    // inquirer_profession: professionMapping[data?.inquirer_profession] || null,
-    // inquirer_loan_servicer:
-    // loanServicerMapping[data?.inquirer_loan_servicer] || null,
-    // inquirer_current_repaymen:
-    // inquirerCurrentMapping[data?.inquirer_current_repaymen] || null,
-    // household_size__income_t0:
-    // householdIncomeMapping[data?.household_size__income_t0] || null,
-    // eval__federal_loan_amoun: evalFederalMapping[data?.eval__federal_loan_amoun] || null,
-    // spouse_has_loans_s_ivinex: spounceHasMapping[data?.spouse_has_loans_s] || null, //
-    // eval_taxes_jointlysepa_ivinex:
-    // evalTaxesmapping[data?.eval__taxes_jointlysepa] || null, //
-    // du_slt_outreachaffiliate_ivinex: duSltOutereachMapping[data?.du_slt_outreachaffiliate] || null, //
-    // du_financial_planner_ivinex: duFinancialPlannerMapping[data?.du_financial_planner] || null, //
-    // contractor_referred_by_ivinex: contractorReferredmapping[data?.contractor_referred_by] || null, //
-    // affiliate_referral_ivinex: affiliateReferralMapping[data?.affiliate_referral] || null, //
-    // entered_info_for_nfm_ivinex: enteredInfoMapping[data?.entered_info_for_nfm] || null, //
-    // inquirer_loan_status_ivinex: loanStatusMapping[data?.inquirer_loan_status] || null, //
-
-    // Error fields----------------------------------------------------------------------
-    // "fields_changed": "0,0",
-    // "created_by": "14",
-    // "modified_date": "2019-05-21 11:38:19",
-    // "time_zone": "0",
-    // "phone_1_type": "10246",
-    // "phone_2_type": "10249",
-    // "lead_source_dont_use": "10270",
-    // "time_zone0": "10275",
-    // "inquirer_loan_status": "10296",
-    // "marital_status": "10303",
-    // "eval__spouse_has_loans": "10318",
-    // "inquirer_current_repaymen": "10321",
-    // "inquirer_employment_type": "10325",
-    // "inquirer__last_year__ag": "3966.00",
-    // "inquirer_current_monthly_": "596.08",
-    // "inquirer_profession": "10331",
-    // "marital_status_s": "1",
-    // "employment_type_s": "1",
-    // "spouse_fed_loan_amount0": "11888",
-    // "eval__pay_frequency": "11970",
-    // "slt_referring_rep": "0",
-    // "standby_list": "0",
-    // "tutor_name": "14",
-    // "inquirer_status": "10265",
-    // "pay_frequency_stream_2": "0",
-    // "pay_frequency_stream_3": "0",
-    // "household_size__income_t0": "0",
-    // "lead_type": "0",
-    // "date_became_client": "0000-00-00",
-    // "contractor_referred_by": "0",
-    // "inquirer_loan_servicer": "0",
-    // "podcast": "0",
-    // "du_financial_planner": "0",
-    // "affiliate_lead_owner": "0",
-    // "inquirer_profession_if_o": "",
-    // "podcast": "0",
-
-    // "affiliate_lead_owner": "0",
-    // inquirer_avg_interest_ra: data?.inquirer_avg_interest_ra,
-    // inquirer_years_towards_fo: data?.inquirer_years_towards_fo,
-    // already_enrolled_in_autop: data?.already_enrolled_in_autop,
-    // inquirer_outstanding_prin: data?.inquirer_outstanding_prin,
-    // counting_spouse_in_hh_siz: data?.counting_spouse_in_hh_siz,
-    // add_other_dependents: data?.add_other_dependents,
-    // add_child_dependents_in: data?.add_child_dependents_in,
-    // spouse_annual_documented_: data?.spouse_annual_documented_,
-    // total_streams_of_taxable_: data?.total_streams_of_taxable_,
-    // sps__of_sub_loans: data?.sps__of_sub_loans,
-    // sps_already_enrolled_in_: data?.sps_already_enrolled_in_,
-    // notes_on_pricing_quoted_e: data?.notes_on_pricing_quoted_e,
-    //------------------------------------------------------------------------------
-
-    // Old Mapping Fields--------------------------------------------------------------
-    // inquirer___last_year___agi: data?.inquirer__last_year__ag,
-    // eval___spouse_pay_frequency: data?.eval__pay_frequency,
-    // inquirer_profession_if_o: data?.inquirer_profession_if_o,
-
-    // collection_id: data?.collection_id,
-    // site_id: data?.site_id,
-    // phone_2: data?.phone_2,
-    // email_2: data?.email_2,
-    // address_1: data?.address_1,
-    // address_2: data?.address_2,
-    // city: data?.city,
-    // state: data?.state,
-    // fed_loan_amount_old: data?.fed_loan_amount_old,
-    // si_creation_date: data?.si_creation_date,
-    // zip: data?.zip,
-    // spouse: data?.spouse,
-    // client_referral: data?.client_referral,
-    // convert_to_client: data?.convert_to_client,
-    // go_converting_to_client__: data?.go_converting_to_client__,
-    // click_on_convert_1: data?.click_on_convert_1,
-    // click_on_convert_2: data?.click_on_convert_2,
-    // inquirer_no_sale_reason: data?.inquirer_no_sale_reason,
-    // fed_loan_amount_s: data?.fed_loan_amount_s,
-    // actively_in_school_s: data?.actively_in_school_s,
-    // loan_status_s: data?.loan_status_s,
-    // fed_loan_payment_s: data?.fed_loan_payment_s,
-    // type_of_repayment_s: data?.type_of_repayment_s,
-    // inquirer_middle_name: data?.inquirer_middle_name,
-    // field_30_day_income_s: data?.field_30_day_income_s,
-    // spouse_fed_loans_payment: data?.spouse_fed_loans_payment,
-    // orders: data?.orders,
-    // inquirer_total_balance: data?.inquirer_total_balance,
-    // of_subsidized_loans: data?.of_subsidized_loans,
-    // inquirer_consolidation__0: data?.inquirer_consolidation__0,
-    // inquirer_current_planidr: data?.inquirer_current_planidr,
-    // married: data?.married,
-    // sps_total_balance: data?.sps_total_balance,
-    // household_size_notes: data?.household_size_notes,
-    // annual_documented_income: data?.annual_documented_income,
-    // adj_gross_amount_stream_: data?.adj_gross_amount_stream_,
-    // pay_frequency_stream_1: data?.pay_frequency_stream_1,
-    // adj_gross_amount_stream_0: data?.adj_gross_amount_stream_0,
-    // adj_gross_amount_stream_1: data?.adj_gross_amount_stream_1,
-    // combined_annual_documente: data?.combined_annual_documente,
-    // income_documentation_note: data?.income_documentation_note,
-    // tax_filing_status: data?.tax_filing_status,
-    // spouse_loan_description: data?.spouse_loan_description,
-    // savings_summary: data?.savings_summary,
-    // balance_based_scenarios: data?.balance_based_scenarios,
-    // tutor_approx_value_of_sav: data?.tutor_approx_value_of_sav,
-    // loan_servicer_notes: data?.loan_servicer_notes,
-    // sps_outstanding_principal: data?.sps_outstanding_principal,
-    // sps_avg_interest_rate: data?.sps_avg_interest_rate,
-    // sps_years_towards_forgiv: data?.sps_years_towards_forgiv,
-    // sps_loan_types: data?.sps_loan_types,
-    // sps_loan_servicers: data?.sps_loan_servicers,
-    // inquirer_household_size_n: data?.inquirer_household_size_n,
-    // date_of_planning_call: data?.date_of_planning_call,
-    // date_marketing_reconciled: data?.date_marketing_reconciled,
-    // conferencesdani_pr_sourc: data?.conferencesdani_pr_sourc,
-    // kyle_affiliatefb_marketi0: data?.kyle_affiliatefb_marketi0,
-    // online_generic_dont_use: data?.online_generic_dont_use,
-    // inquiry_source_notes_esp0: data?.inquiry_source_notes_esp0,
-    // inquirer_date_of_last_con: data?.inquirer_date_of_last_con,
-    // referral_from_financial_a: data?.referral_from_financial_a,
-    // linked_client: data?.linked_client,
-    // copy_info: data?.copy_info,
-    // calculator_results: data?.calculator_results,
-    // inquirer_calculator_repor: data?.inquirer_calculator_repor,
-    // sps_calc_report_link: data?.sps_calc_report_link,
-    // eval_notes: data?.eval_notes,
-    // spouse__last_year__agi: data?.spouse__last_year__agi,
-    // eval__spouse_pay_frequen: data?.eval__spouse_pay_frequen,
-    // notes: data?.notes,
-    // under_admin_review__t_k: data?.under_admin_review__t_k,
-    // affiliate_presenting_tuto: data?.affiliate_presenting_tuto,
-    // spacer: data?.spacer,
-    // date_of_tutor_fu: data?.date_of_tutor_fu,
-    // date_eval_occured: data?.date_eval_occured,
-    // graduation_year: data?.graduation_year,
-    // eval__current_income: data?.eval__current_income,
-    // eval__spouse_current_inc: data?.eval__spouse_current_inc,
-    // good_timing_for_strategy_0: data?.good_timing_for_strategy_0,
-    // financial_experience: data?.financial_experience,
-    // assets__insurances: data?.assets__insurances,
-    // renting_or_owning_if_hom: data?.renting_or_owning_if_hom,
-    // liabilities: data?.liabilities,
-    // interested_in_values_base: data?.interested_in_values_base,
-    // current_year_pretax_annu: data?.current_year_pretax_annu,
-    // anything_else_we_should_k: data?.anything_else_we_should_k,
-    // inquirer_referral0: data?.inquirer_referral0,
-    // slt_rep_referred_by: data?.slt_rep_referred_by,
-    // date_of_initial_strategy_: data?.date_of_initial_strategy_,
-    // years_until_tax_imp_expe: data?.years_until_tax_imp_expe,
-    // tax_imp_goal: data?.tax_imp_goal,
-    // na_note_from_referring_r: data?.na_note_from_referring_r,
-    // student__date_of_graduat: data?.student__date_of_graduat,
-    // marketing_source: data?.marketing_source,
-    // dani_pr_source: data?.dani_pr_source,
-    // standby_notes__availabli: data?.standby_notes__availabli,
-    // pc_appointment_confirmati: data?.pc_appointment_confirmati,
-    // pc_follow_up_to_book: data?.pc_follow_up_to_book,
-    // coordinator_notes: data?.coordinator_notes,
-    // no_call_no_show_1: data?.no_call_no_show_1,
-    // no_call_no_show_2: data?.no_call_no_show_2,
-    // no_call_no_show_3: data?.no_call_no_show_3,
-    // rescheduled_date: data?.rescheduled_date,
-    // standby_marked_date: data?.standby_marked_date,
-    // est_tax_burden: data?.est_tax_burden,
-    // created_date: data?.created_date,
-    // lead_owner: data?.lead_owner,
-    // first_name: data?.first_name,
-    // modified_by: data?.modified_by,
-    // last_name: data?.last_name,
-    // primary_phone: data?.primary_phone,
-    // email_1: data?.email_1,
-    // tutor_needs_attention: data?.tutor_needs_attention,
-    // setter_needs_attention: data?.setter_needs_attention,
-    // under_admin_review__s_k: data?.under_admin_review__s_k,
-    //----------------------------------------------------------------------------
-
-    // New Inquirer Mapping fields:-
-
-    // New Picklist value Mapped here
+    // Inquirer Mapping fields:-
 
     affiliate_lead_owner:
-     buildOwnerMapping( affiliateleadOwnerMapping[data?.affiliate_lead_owner]) || null, // hubspot user 
-      slt_referring_rep: buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) || null, // hubspot user 
-      lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null, 
+      buildOwnerMapping(
+        affiliateleadOwnerMapping[data?.affiliate_lead_owner],
+      ) || null, // hubspot user
+    slt_referring_rep:
+      buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) ||
+      null, // hubspot user
+    lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null,
     phone_1_type: phone1TypeMapping[data?.phone_1_type] || null,
     phone_2_type: phone2TypeMapping[data?.phone_2_type] || null,
     inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
@@ -1030,7 +845,9 @@ function buildHubSpotInquirerPayload(data = {}) {
       null,
     lead_type: leadTypeMapping[data?.lead_type] || null,
     affiliate_presenting_tutor:
-      buildOwnerMapping(affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto]) || null,
+      buildOwnerMapping(
+        affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto],
+      ) || null,
     conferences_dani_pr_sources:
       conferencesDaniPrSourcesMapping[data?.conferencesdani_pr_sourc] || null,
     podcast: podcastMapping[data?.podcast] || null,
@@ -1237,29 +1054,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     date_of_tutor_fu: data?.date_of_tutor_fu,
     inquirer_loan_ivinex: data?.inquirer_loan || null,
 
-    // New Error fields------------------------------------------------------------
-    // du_financial_planner_ivinex: data?.du_financial_planner || null, // //todo doest not exist in hubspot
-    // employment_type: data?.employment_type_s || null,
-    // inquirer_status: data?.inquirer_status || null,
-    // inquirer_profession: data?.inquirer_profession || null,
-    // inquirer_loan_servicer:data?.inquirer_loan_servicer || null,
-    // household_size__income_t0:data?.household_size__income_t0 || null,
-    // marital_status:data?.marital_status || null, // dropdown
-    // eval___spouse_has_loans: data?.eval__spouse_has_loans || null, // dropdown
-
-    // hs_created_by_user_id: data?.created_by,
-    // modified_date: data?.modified_date,
-    // phone_2_type: data?.phone_2_type,
-    // lead_source_dont_use: data?.lead_source_dont_use,
-    // date_became_client: data?.date_became_client,
-    // inquirer_employment_type: data?.inquirer_employment_type,
-    // pay_frequency_stream_2: data?.pay_frequency_stream_2,
-    // pay_frequency_stream_3: data?.pay_frequency_stream_3,
-    // marital_status: data?.marital_status_s,
-    // employment_type: data?.employment_type_s,
-    // podcast: data?.podcast,
-    // affiliate_lead_owner: data?.affiliate_lead_owner,
-    //----------------------------------------------------------------------------
   });
 
   if (!Object.keys(properties).length) {
@@ -1496,8 +1290,7 @@ const timeZoneMappingAffilate = {
 //  code for Affiliate Payload
 
 function buildHubSpotAffiliatePayload(data = {}) {
-  const properties  = {
-
+  const properties = {
     //Picklist Mapping here
 
     lead_owner: buildOwnerMapping(STL_Owner_Mapping[data?.lead_owner]) || null, // hubspot user
@@ -1514,8 +1307,6 @@ function buildHubSpotAffiliatePayload(data = {}) {
       compSuperAffiliateMapping[data?.comp_super_affiliate] || null,
     conference: conferenceMapping[data?.conference] || null,
     time_zone0: timeZoneMappingAffilate[data?.time_zone0] || null,
-    
-    
 
     collection_id: data?.collection_id,
     site_id: data?.site_id,
@@ -1577,22 +1368,12 @@ function buildHubSpotAffiliatePayload(data = {}) {
     // industry_ivinex: data?.industry,
     // conference_ivinex: data?.conference,
 
-    // New error Fields ------------------------------------------------------------------
-
-    // phone_2_type: data?.phone_2_type,
-    // profession: data?.profession,
-    // lead_owner: data?.lead_owner,
-    // _of_years_an_agent_old: data?._of_years_an_agent_old,
-    // created_date: data?.created_date,
-    // time_zone: data?.time_zone,
-    // primary_phone_line_type: data?.primary_phone_line_type,
-    //----------------------------------------------------------------------------------
   };
   const cleanedProperties = cleanProps(properties);
 
   // 🔥 Critical safety check
   // if (!Object.keys(cleanedProperties).length) {
-    
+
   // }
 
   return {
@@ -1983,7 +1764,7 @@ const currentServicerMapping = {
   15239: "Servicing.Mohela.com",
   15071: "Mohela.studentaid.gov",
   14202: "AidVantage.studentaid.gov",
-   13044: "Edfinancial.studentaid.gov", // ✅ fixed
+  13044: "Edfinancial.studentaid.gov", // ✅ fixed
   15168: "CRI.studentaid.gov",
   15051: "Sloanservicing.com (FFEL)",
   13041: "A.E.S. (FFEL)",
@@ -2156,8 +1937,6 @@ function buildHubSpotClientPayload(data = {}) {
     return dateStr ? new Date(dateStr).getTime() : null;
   }
   const properties = cleanProps({
-    // Old Mapping Fields...
-
     // picklist Mapping fields:-
 
     tutor_name: buildOwnerMapping(clientsNameMapping[data?.tutor_name]) || null, // hubspot user
@@ -2168,7 +1947,7 @@ function buildHubSpotClientPayload(data = {}) {
       null, // hubspot user
     calculation_performed_by:
       buildOwnerMapping(
-        calculationPerformedByMapping[data?.calculation_performed_by]
+        calculationPerformedByMapping[data?.calculation_performed_by],
       ) || null, //hubspot user
     phone_1_type: phone1TypeMappingClient[data?.phone_1_type] || null,
     phone_2_type: phone2TypeMappingClient[data?.phone_2_type] || null,
@@ -2178,12 +1957,13 @@ function buildHubSpotClientPayload(data = {}) {
     current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null, //
     type_of_idr_app_submitted:
       typeOfIdrAppSubmittedMapping[data?.type_of_idr_app_submitted] || null,
-    client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
+    // client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
     aar_fee: aarFeeMapping[data?.aar_fee] || null,
     current_servicer: currentServicerMapping[data?.current_servicer0] || null,
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
-    ia_inquirer_status: iaInquirerStatusMapping[data?.ia_inquirer_status] ||null,
+    ia_inquirer_status:
+      iaInquirerStatusMapping[data?.ia_inquirer_status] || null,
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
     // ia_insurance_status: iaInsuranceStatusMapping[data?.ia_insurance_status] ||null, // hubspot missing fields
     // ia_securities_status: iaSecuritiesStatusMapping[data?.ia_securities_status] ||null, // hubspot missing fields
@@ -2200,108 +1980,110 @@ function buildHubSpotClientPayload(data = {}) {
     collection_notes: data?.collection_notes || null,
     date_calculation_ran: data?.date_calculation_ran || null,
     spouse___ssn: data?.spouse__ssn || null,
-    work_order_notes:data?.work_order_notes || null,
-    
-    
-      spouse___date_of_birth: convertToHubspotDate(data?.spouse__date_of_birth) || null,
-      multiple__which_servicers_:data?.multiple__which_servicer || null,
-      self_employed____ein:data?.self_employed__ein0 ||null,
+    work_order_notes: data?.work_order_notes || null,
 
-      pslf_employment_date_range_1:data?.pslf_employment_date_rang1 || null,
-      pslf_employment_date_range_2:data?.pslf_employment_date_rang2 || null,
-       pslf_employment_date_range_3 :data?.pslf_employment_date_rang ||null,
-       pslf_employment_date_range_4 :data?.pslf_employment_date_rang0 ||null,
-      //  affiliate_referral:data?.referring_affiliate ||null,
+    spouse___date_of_birth:
+      convertToHubspotDate(data?.spouse__date_of_birth) || null,
+    multiple__which_servicers_: data?.multiple__which_servicer || null,
+    self_employed____ein: data?.self_employed__ein0 || null,
 
-      // est__forgiveness_date:data?.pending_forgiveness || null, 
-      pslf_forgiveness_date: data?.pslf_forgiveness_date
-  ? new Date(data?.pending_forgiveness).getTime()
-  : null,
-  idr_recert_app_sub_deadline: data?.idr_recert_app_sub_deadli
-  ? new Date(data?.idr_recert_app_sub_deadli).getTime()
-  : null,
-  idr_plan_ends:data?.idr_plan_ends ? new Date(data?.idr_plan_ends).getTime() : null,
-  pslf_notes:data?.pslf_notes || null,
- 
-  social_security_number: data?.social_security_number
-  ? Number(data.social_security_number.replace(/-/g, ""))
-  : null,
-  employer_business_name: data?.employerbusiness_name || null,
-  // next_payment_due:data?.next_payment_due0 ||null,
-  next_payment_due: data?.next_payment_due0
-  ? new Date(data.next_payment_due0.split(" ")[0]).getTime()
-  : null,
+    pslf_employment_date_range_1: data?.pslf_employment_date_rang1 || null,
+    pslf_employment_date_range_2: data?.pslf_employment_date_rang2 || null,
+    pslf_employment_date_range_3: data?.pslf_employment_date_rang || null,
+    pslf_employment_date_range_4: data?.pslf_employment_date_rang0 || null,
+    //  affiliate_referral:data?.referring_affiliate ||null,
 
-  // client_action_taken:data?.client_action_taken || null,
- client_action_taken: data?.client_action_taken
-  ? new Date(data.client_action_taken.split(" ")[0]).getTime()
-  : null,
-  idr_monthly_payment_amount:data?.idr_monthly_payment_amoun ||null,
-  // days_since_action_taken:data?.days_since_action_taken || null,
-  msa_received:data?.msa_received0 ||null,
-  intake_call_complete:data?.intake_call_complete || null,
-  balance_at_save_enrollment:data?.balance_at_save_enrollmen ||null,
-  ibr_update_sent_to_client:data?.ibr_update_sent_to_client || null,
-  consol_app_submit_date:data?.consol_app_submit_date ? new Date(data.consol_app_submit_date.split(" ")[0]).getTime() : null,
-      // apc_booked:data?.apc_booked ||null,
+    // est__forgiveness_date:data?.pending_forgiveness || null,
+    pslf_forgiveness_date: data?.pslf_forgiveness_date
+      ? new Date(data?.pending_forgiveness).getTime()
+      : null,
+    idr_recert_app_sub_deadline: data?.idr_recert_app_sub_deadli
+      ? new Date(data?.idr_recert_app_sub_deadli).getTime()
+      : null,
+    idr_plan_ends: data?.idr_plan_ends
+      ? new Date(data?.idr_plan_ends).getTime()
+      : null,
+    pslf_notes: data?.pslf_notes || null,
 
-      weighted_interest_rate:data?.weighted_interest_rate || null,
-      calc_doc_in_drive:data?.calc_doc_in_drive || null,
-      myaiddata_in_drive:data?.myaiddata_in_drive || null,
-      // lpamsa__sent_from:data?.lpamsa__sent_from || null, // picklist mapping
-      msa_sent: data?.msa_sent_ || null,
-      spousal_consol_loans:data?.spousal_consol_loans || null,
-      estimations_current_as_of:data?.estimations_current_as_of || null,
-      estimated_tax_implication:data?.estimated_tax_implication || null,
-      months_toward_forgiveness:data?.months_toward_forgiveness || null,
-      est__forgiveness_date:data?.est_forgiveness_date0 ||null,
-      current_year_principal_bal:data?.current_year_principal_ba||null,
-      n2nd_date__if_2_sets_:data?.field_2nd_date_if_2_sets || null,
-      pslf_date_updated:data?.pslf_date_updated || null,
-      pslf_employer_1:data?.pslf_employer_1 || null,
-      pslf_employer_2:data?.pslf_employer_2 || null,
-      pslf_employer_3:data?.pslf_employer_3 || null,
-      pslf_employer_4:data?.pslf_employer_4 || null,
-      qualifying_payment_period_1:data?.qualifying_payment_period1 || null,
-      qualifying_payment_period_2:data?.qualifying_payment_period2 || null,
-      qualifying_payment_period_3:data?.qualifying_payment_period0 || null,
-      qualifying_payment_period_4:data?.qualifying_payment_period || null,
-      client_int_in_slt_nonprofit_program:data?.client_int_in_slt_nonpr0 ||null,
-      pslf_date_last_signed_1:data?.pslf_date_last_signed_1 || null,
-      pslf_date_last_signed_2:data?.pslf_date_last_signed_2 || null,
-      pslf_date_last_signed_3:data?.pslf_date_last_signed_3 || null,
-      pslf_date_last_signed_4:data?.pslf_date_last_signed_4 || null,
-      pslf_verified_qualifying_payments_total:data?.pslf_verified_qualifying_ ||null,
-      // primary_phone:data?.primary_phone ||null,
-      // secondary_phone:data?.secondary_phone ||null,
-      employer_city:data?.employers_city || null,
-      studentaidgov_user_not_needed:data?.studentaidgov_user_not_0 || null,
-      studentaidgov_pass_not_needed:data?.studentaidgov_pass_not_0 ||null,
-     
+    social_security_number: data?.social_security_number
+      ? Number(data.social_security_number.replace(/-/g, ""))
+      : null,
+    employer_business_name: data?.employerbusiness_name || null,
+    // next_payment_due:data?.next_payment_due0 ||null,
+    next_payment_due: data?.next_payment_due0
+      ? new Date(data.next_payment_due0.split(" ")[0]).getTime()
+      : null,
 
+    // client_action_taken:data?.client_action_taken || null,
+    client_action_taken: data?.client_action_taken
+      ? new Date(data.client_action_taken.split(" ")[0]).getTime()
+      : null,
+    idr_monthly_payment_amount: data?.idr_monthly_payment_amoun || null,
+    // days_since_action_taken:data?.days_since_action_taken || null,
+    msa_received: data?.msa_received0 || null,
+    intake_call_complete: data?.intake_call_complete || null,
+    balance_at_save_enrollment: data?.balance_at_save_enrollmen || null,
+    ibr_update_sent_to_client: data?.ibr_update_sent_to_client || null,
+    consol_app_submit_date: data?.consol_app_submit_date
+      ? new Date(data.consol_app_submit_date.split(" ")[0]).getTime()
+      : null,
+    // apc_booked:data?.apc_booked ||null,
+
+    weighted_interest_rate: data?.weighted_interest_rate || null,
+    calc_doc_in_drive: data?.calc_doc_in_drive || null,
+    myaiddata_in_drive: data?.myaiddata_in_drive || null,
+    // lpamsa__sent_from:data?.lpamsa__sent_from || null, // picklist mapping
+    msa_sent: data?.msa_sent_ || null,
+    spousal_consol_loans: data?.spousal_consol_loans || null,
+    estimations_current_as_of: data?.estimations_current_as_of || null,
+    estimated_tax_implication: data?.estimated_tax_implication || null,
+    months_toward_forgiveness: data?.months_toward_forgiveness || null,
+    est__forgiveness_date: data?.est_forgiveness_date0 || null,
+    current_year_principal_bal: data?.current_year_principal_ba || null,
+    n2nd_date__if_2_sets_: data?.field_2nd_date_if_2_sets || null,
+    pslf_date_updated: data?.pslf_date_updated || null,
+    pslf_employer_1: data?.pslf_employer_1 || null,
+    pslf_employer_2: data?.pslf_employer_2 || null,
+    pslf_employer_3: data?.pslf_employer_3 || null,
+    pslf_employer_4: data?.pslf_employer_4 || null,
+    qualifying_payment_period_1: data?.qualifying_payment_period1 || null,
+    qualifying_payment_period_2: data?.qualifying_payment_period2 || null,
+    qualifying_payment_period_3: data?.qualifying_payment_period0 || null,
+    qualifying_payment_period_4: data?.qualifying_payment_period || null,
+    client_int_in_slt_nonprofit_program: data?.client_int_in_slt_nonpr0 || null,
+    pslf_date_last_signed_1: data?.pslf_date_last_signed_1 || null,
+    pslf_date_last_signed_2: data?.pslf_date_last_signed_2 || null,
+    pslf_date_last_signed_3: data?.pslf_date_last_signed_3 || null,
+    pslf_date_last_signed_4: data?.pslf_date_last_signed_4 || null,
+    pslf_verified_qualifying_payments_total:
+      data?.pslf_verified_qualifying_ || null,
+    // primary_phone:data?.primary_phone ||null,
+    // secondary_phone:data?.secondary_phone ||null,
+    employer_city: data?.employers_city || null,
+    studentaidgov_user_not_needed: data?.studentaidgov_user_not_0 || null,
+    studentaidgov_pass_not_needed: data?.studentaidgov_pass_not_0 || null,
 
     collection_id: data?.collection_id || null,
     site_id: data?.site_id || null,
     fields_changed: data?.fields_changed || null,
-    created_by: data?.created_by ||null,
-    modified_by: data?.modified_by ||null,
+    created_by: data?.created_by || null,
+    modified_by: data?.modified_by || null,
     modified_date: data?.modified_date || null,
     // lead_owner: data?.lead_owner,
     phone_2: data?.phone_2 || null,
-    email_2: data?.email_2 ||null,
-    address_1: data?.address_1 ||null,
-    address_2: data?.address_2 ||null,
-    city: data?.city ||null,
-    state: data?.state ||null,
-    zip: data?.zip ||null,
+    email_2: data?.email_2 || null,
+    address_1: data?.address_1 || null,
+    address_2: data?.address_2 || null,
+    city: data?.city || null,
+    state: data?.state || null,
+    zip: data?.zip || null,
     spouse__partner: data?.spouse__partner || null,
     // referral: data?.referrals || null,
-    msa_received0: data?.msa_received0 ||null,
-    lpa_sent: data?.lpa_sent ||null,
-    lpa_received: data?.lpa_received ||null,
-    client_household_size_notes:data?.client_household_size_not ||null,
-    client_income_doc_notes:data?.client_income_doc_notes || null,
-   
+    msa_received0: data?.msa_received0 || null,
+    lpa_sent: data?.lpa_sent || null,
+    lpa_received: data?.lpa_received || null,
+    client_household_size_notes: data?.client_household_size_not || null,
+    client_income_doc_notes: data?.client_income_doc_notes || null,
 
     // idr_app_submitted_date: data?.idr_app_submitted_date,
     // days_since_app_sub: data?.days_since_app_sub,
@@ -2361,20 +2143,13 @@ function buildHubSpotClientPayload(data = {}) {
     q21_income_change_since_l0: data?.q21_income_change_since_l0 || null,
     q22_taxable_income_s: data?.q22_taxable_income_s || null,
 
-    reference_1_phone: data?.reference_1_phone ||null,
+    reference_1_phone: data?.reference_1_phone || null,
     reference_1_relationship: data?.reference_1_relationship || null,
     reference_2_phone: data?.reference_2_phone || null,
     reference_2_relationship: data?.reference_2_relationship || null,
-      employers_zip: data?.employers_zip
-  ? parseInt(
-      data.employers_zip
-        .toString()
-        .replace(/,/g, "")
-        .trim(),
-      10
-    )
-  : null,
-
+    employers_zip: data?.employers_zip
+      ? parseInt(data.employers_zip.toString().replace(/,/g, "").trim(), 10)
+      : null,
 
     roa_sent_to_servicer: data?.roa_sent_to_servicer || null,
     // time_zone0: data?.time_zone0,
@@ -2386,8 +2161,8 @@ function buildHubSpotClientPayload(data = {}) {
     // mn_client: data?.mn_client,
     // ny_client: data?.ny_client,
     // ca_client: data?.ca_client,
-    import_id: data?.import_id ||null,
-    mass_update: data?.mass_update_ ||null,
+    import_id: data?.import_id || null,
+    mass_update: data?.mass_update_ || null,
     // referred_to_slp: data?.referred_to_slp,
     // double_consol_ppl_in_progress: data?.double_consol_ppl_in_prog,
     servicer_account: data?.servicer_account_ || null,
@@ -2401,20 +2176,19 @@ function buildHubSpotClientPayload(data = {}) {
     email_address: data?.email_address || null,
 
     first_name: data?.first_name || null,
-    last_name: data?.last_name ||null,
-    n2nd_contact___first_name: data?.first_name ||null,
-    n2nd_contact___last_name: data?.last_name ||null,
+    last_name: data?.last_name || null,
+    n2nd_contact___first_name: data?.first_name || null,
+    n2nd_contact___last_name: data?.last_name || null,
     n2nd_contact___email: data?.email_1 || null,
     n2nd_contact___phone: data?.primary_phone || null,
-    client_name: data?.client_name ||null,
+    client_name: data?.client_name || null,
 
     email_1: data?.email_1 || null,
     // phone_1_type_ivinex: data?.phone_1_type, //
     // phone_2_type_ivinex: data?.phone_2_type, //
-    spouse_has_loans_ivinex: data?.spouse_has_loans ||null,
+    spouse_has_loans_ivinex: data?.spouse_has_loans || null,
     // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
-
   });
 
   // console.log("Cleaned properties:", properties);
@@ -2509,22 +2283,11 @@ const workNeededMapping = {
   12758: "Consolidation Out of Default",
 
   // Confirm with business:
-  15019: "Full Consolidation", 
+  15019: "Full Consolidation",
   14989: "Full Consolidation",
-  11954: "Consolidation Out of Default"
+  11954: "Consolidation Out of Default",
 };
-// const workNeededMapping = {
-//   11890: "Recert AAR",
-//   15019: "Consol",
-//   15287: "PSLF - Enter into IDR from Balanced Based",
-//   15020: "No Consol - Enter into IDR from Balance Based",
-//   12871: "No Consol - Plan Change",
-//   11889: "No Consol - Recalc",
-//   11907: "New Client Recert - No Consol",
-//   14989: "Double Consolidation - Parent Plus",
-//   11954: "Fresh Start",
-//   12758: "Default/Consol",
-// };
+
 // pslf mapping fields
 const pslfMapping = {
   12725: "Yes - Not Yet Enrolled",
@@ -2539,12 +2302,6 @@ const forbearanceNeededMapping = {
   12706: "yes",
   15022: "yes_past__due",
 };
-// const forbearanceNeededMapping = {
-//   12705: "No",
-//   12706: "Yes",
-//   15022: "Yes - Past Due",
-//   12707: "In Forbearance",
-// };
 
 //hh_size__income_threshol mapping fields
 const hhSizeIncomeThresholdMapping = {
@@ -2610,7 +2367,7 @@ function buildHubspotOrderPayload(data = {}) {
     work_needed: workNeededMapping[data?.work_needed] || null,
     pslf: pslfMapping[data?.pslf] || null,
     forbearance_needed:
-    forbearanceNeededMapping[data?.forbearance_needed] || null,
+      forbearanceNeededMapping[data?.forbearance_needed] || null,
     hh_size__income_threshol:
       hhSizeIncomeThresholdMapping[data?.hh_size__income_threshol] || null, // hubspot single-text-line
     field_2025_ibrpaye__15:
@@ -2730,52 +2487,21 @@ function buildHubspotOrderPayload(data = {}) {
     year0: data?.year0 || null,
 
     // estimated_payment: data?.estimated_payment,
-    estimated_payment: Number(
-      String(data?.estimated_payment || "").replace(/[^0-9.]/g, "")
-    ) || null,
-    client: data?.client ||null,
-    actual_payment: data?.actual_payment ||null,
+    estimated_payment:
+      Number(String(data?.estimated_payment || "").replace(/[^0-9.]/g, "")) ||
+      null,
+    client: data?.client || null,
+    actual_payment: data?.actual_payment || null,
     // tax_saving_status_apc: data?.tax_saving_status_apc,
-    created_date: data?.created_date ||null,
+    created_date: data?.created_date || null,
     // IMPORTANT: must be a STAGE ID, not pipeline ID or label
     // hs_pipeline_stage: data?.hs_pipeline_stage,
     hs_pipeline_stage: "2091193059",
-    subject: data?.subject ||null,
+    subject: data?.subject || null,
     content: data?.content || null,
   });
   return { properties: payload };
 }
-// Text Message Payload
-
-// function buildTextMessagePayload(data = {}) {
-//   const payload = {
-//     collection_id: data?.collection_id,
-//     site_id: data?.site_id,
-//     fields_changed: data?.fields_changed,
-
-//     created_by: data?.created_by,
-//     modified_by: data?.modified_by,
-//     modified_date: data?.modified_date,
-//     created_date: data?.created_date,
-
-//     read_status: data?.read_status,
-//     status: data?.status,
-
-//     message: data?.message,
-
-//     text_number: data?.text_number,
-//     external_number: data?.external_number,
-
-//     external_id: data?.external_id,
-
-//     client: data?.client,
-
-//     group_text: data?.group_text,
-//     group_text_parent: data?.group_text_parent,
-//   };
-
-//   return cleanProps(payload);
-// }
 
 // new Text Message Payload
 function buildTextMessagePayload(data = {}) {
@@ -2783,7 +2509,8 @@ function buildTextMessagePayload(data = {}) {
 
   if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
   if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
-  if (data?.fields_changed) lines.push(`Fields Changed: ${data?.fields_changed}`);
+  if (data?.fields_changed)
+    lines.push(`Fields Changed: ${data?.fields_changed}`);
 
   if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
   if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
@@ -2823,7 +2550,7 @@ function buildTextMessagePayload(data = {}) {
 
 function buildEmailPayload(data = {}) {
   const payload = {
-    collection_id: data?.collection_id ||null,
+    collection_id: data?.collection_id || null,
     site_id: data?.site_id || null,
     fields_changed: data?.fields_changed || null,
 
@@ -2847,17 +2574,17 @@ function buildEmailPayload(data = {}) {
     ivinex_attachments: data?.ivinex_attachments || null,
     file_upload_status: data?.file_upload_status || null,
 
-    template_processed: data?.template_processed ||null,
-    email_template: data?.email_template ||null,
+    template_processed: data?.template_processed || null,
+    email_template: data?.email_template || null,
 
-    replied_from: data?.replied_from ||null,
-    forwarded_from: data?.forwarded_from ||null,
+    replied_from: data?.replied_from || null,
+    forwarded_from: data?.forwarded_from || null,
 
-    reply: data?.reply ||null,
-    reply_all: data?.reply_all ||null,
-    forward: data?.forward ||null,
+    reply: data?.reply || null,
+    reply_all: data?.reply_all || null,
+    forward: data?.forward || null,
 
-    delay_send_date: data?.delay_send_date ||null,
+    delay_send_date: data?.delay_send_date || null,
 
     created_date: data?.created_date || null,
     modified_by: data?.modified_by || null,
@@ -2877,13 +2604,12 @@ function buildEmailPayload(data = {}) {
 
     email_date: data?.email_date || null,
     email_status: data?.email_status || null,
-    email_account: data?.email_account ||null,
-    user: data?.user ||null,
+    email_account: data?.email_account || null,
+    user: data?.user || null,
   };
 
   return cleanProps(payload);
 }
-
 
 //  payload Activity
 
@@ -2892,7 +2618,8 @@ function buildHubSpotActivityPayload(data = {}) {
 
   if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
   if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
-  if (data?.fields_changed) lines.push(`Fields Changed: ${data?.fields_changed}`);
+  if (data?.fields_changed)
+    lines.push(`Fields Changed: ${data?.fields_changed}`);
 
   if (data?.location) lines.push(`Location: ${data?.location}`);
   if (data?.date_email_opened)
