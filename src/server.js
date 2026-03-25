@@ -3,7 +3,7 @@ dotenv.config();
 import app from "./app.js";
 
 // import these function
-import { syncInquirer } from "./controller/inquirer.controller.js";
+import { syncInquirer,processnquirer } from "./controller/inquirer.controller.js";
 import { syncAffiliate,processAffiliate} from "./controller/affiliate.controller.js";
 import {
   syncActivity,
@@ -23,6 +23,7 @@ app.listen(PORT, () => {
   processClient();
   // processAffiliate();
   // processOrder();
+  // processnquirer();
 
 
 
