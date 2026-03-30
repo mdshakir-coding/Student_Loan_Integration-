@@ -1370,32 +1370,108 @@ const timeZoneMappingAffilate = {
 
 //  code for Affiliate Payload
 
+// helper function to normalize picklist values with flexible matching
+
+function normalizePicklistValue(mapping, value, options = {}) {
+  const { defaultValue = null, log = false } = options;
+
+  if (!value) return defaultValue;
+
+  // 🔹 normalize input
+  const normalize = (val) =>
+    val
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/\s*\/\s*/g, "/"); // normalize slash spacing
+
+  const normalizedInput = normalize(value);
+
+  // 🔹 loop mapping (works for number keys + string values)
+  for (const key in mapping) {
+    const mapValue = mapping[key];
+
+    if (!mapValue) continue;
+
+    const normalizedMapValue = normalize(mapValue);
+
+    // ✅ match by value
+    if (normalizedInput === normalizedMapValue) {
+      return mapValue; // EXACT HubSpot value
+    }
+
+    // ✅ match by key (ID case)
+    if (normalizedInput === key.toString().toLowerCase()) {
+      return mapValue;
+    }
+  }
+
+  if (log) {
+    logger.warn(`❌ Unmapped value: "${value}"`);
+  }
+
+  return defaultValue;
+}
+
 function buildHubSpotAffiliatePayload(data = {}) {
   const properties = {
     //Picklist Mapping here
 
-    lead_owner: buildOwnerMapping(STL_Owner_Mapping[data?.lead_owner]) || null, // hubspot userc
-    presenting_rep:
-      buildOwnerMapping(STL_Owner_Mapping[data?.presenting_rep]) || null, // hubspot user
-    primary_phone_line_type:
-      primaryPhoneLineTypeMapping[data?.primary_phone_line_type] || null,
-    phone_2_type: phone2TypeMappingAffiliate[data?.phone_2_type] || null,
-    affiliate_status: affiliateStatusMapping[data?.affiliate_status] || null,
-    industry: industryMapping[data?.industry] || null,
-    profession: professionMapping[data?.profession] || null,
-    lead_source: leadSourceMapping[data?.lead_source] || null,
-    comp_super_affiliate:
-      compSuperAffiliateMapping[data?.comp_super_affiliate] || null,
-    conference: conferenceMapping[data?.conference] || null,
-    time_zone: timeZoneMappingAffilate[data?.time_zone0] || null,
+    // lead_owner: buildOwnerMapping(STL_Owner_Mapping[data?.lead_owner]) || null, // hubspot user
+    // presenting_rep:
+    //   buildOwnerMapping(STL_Owner_Mapping[data?.presenting_rep]) || null, // hubspot user
+    // primary_phone_line_type:
+    //   primaryPhoneLineTypeMapping[data?.primary_phone_line_type] || null,
+    // phone_2_type: phone2TypeMappingAffiliate[data?.phone_2_type] || null,
+    // // affiliate_status: affiliateStatusMapping[data?.affiliate_status] || null,
+    // industry: industryMapping[data?.industry] || null,
+    // profession: professionMapping[data?.profession] || null,
+    // lead_source: leadSourceMapping[data?.lead_source] || null,
+    // comp_super_affiliate:
+    //   compSuperAffiliateMapping[data?.comp_super_affiliate] || null,
+    // conference: conferenceMapping[data?.conference] || null,
+    // time_zone: timeZoneMappingAffilate[data?.time_zone0] || null,
+
+    lead_owner: data?.lead_owner
+      ? buildOwnerMapping(STL_Owner_Mapping?.[data.lead_owner])
+      : null,
+
+    presenting_rep: data?.presenting_rep
+      ? buildOwnerMapping(STL_Owner_Mapping?.[data.presenting_rep])
+      : null,
+
+    primary_phone_line_type: normalizePicklistValue(
+      primaryPhoneLineTypeMapping,
+      data?.primary_phone_line_type,
+    ),
+
+    phone_2_type: normalizePicklistValue(
+      phone2TypeMappingAffiliate,
+      data?.phone_2_type,
+    ),
+
+    affiliate_status: normalizePicklistValue(affiliateStatusMapping,data?.affiliate_status),
+    industry: normalizePicklistValue(industryMapping, data?.industry),
+
+    profession: normalizePicklistValue(professionMapping, data?.profession),
+
+    lead_source: normalizePicklistValue(leadSourceMapping, data?.lead_source),
+
+    comp_super_affiliate: normalizePicklistValue(
+      compSuperAffiliateMapping,
+      data?.comp_super_affiliate,
+    ),
+
+    conference: normalizePicklistValue(conferenceMapping, data?.conference),
+
+    time_zone: normalizePicklistValue(
+      timeZoneMappingAffilate,
+      data?.time_zone0,
+    ),
+
     receives_texts_: data?.receives_texts || null,
     affiliate_nurturing_call: data?.affiliate_nurturing_call || null,
-    // hs_created_by_user_id: presentingRepMapping[data?.created_by] || null,
-
-   
-
-
-
 
     n1st: data?.field_1st || null,
     n2nd: data?.field_2nd || null,
@@ -2105,7 +2181,7 @@ function buildHubSpotClientPayload(data = {}) {
         })()
       : null,
 
-      recert_date:data?.recert_date
+    recert_date: data?.recert_date
       ? (() => {
           const d = new Date(data.recert_date);
           d.setUTCHours(0, 0, 0, 0);
@@ -2113,19 +2189,14 @@ function buildHubSpotClientPayload(data = {}) {
         })()
       : null,
 
-        middle_name:data?.middle_initialname ||null,
-        nickname:data?.nickname ||null,
-        maiden_name:data?.maiden_name ||null,
-        profession_details:data?.profession_details ||null,
-        contact_notes:data?.contact_notes ||null,
-        spouse_name:data?.spouse_name ||null,
-        n2nd_contact_notes:data?.field_2nd_contact_notes0 ||null,
-        unpaid_invoice:data?.unpaid_invoice || null,
-         
-
-
-
-
+    middle_name: data?.middle_initialname || null,
+    nickname: data?.nickname || null,
+    maiden_name: data?.maiden_name || null,
+    profession_details: data?.profession_details || null,
+    contact_notes: data?.contact_notes || null,
+    spouse_name: data?.spouse_name || null,
+    n2nd_contact_notes: data?.field_2nd_contact_notes0 || null,
+    unpaid_invoice: data?.unpaid_invoice || null,
 
     // spouse_has_loans_:data?.spouse_has_loans ||null,
 
