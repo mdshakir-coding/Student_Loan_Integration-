@@ -2429,7 +2429,7 @@ function buildHubSpotClientPayload(data = {}) {
     // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
   });
 
-  // console.log("Cleaned properties:", properties);
+  // logger.info("Cleaned properties:", properties);
 
   if (Object.keys(properties).length === 0) {
     throw new Error("Client payload is empty");

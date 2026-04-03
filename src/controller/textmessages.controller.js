@@ -55,8 +55,9 @@ export { syncTextMessages };
 // New TextMessage controller
 async function syncTextMessages() {
   try {
-    const records = await fetchTextMessagesRecords(); // fetch all text message records
-    logger.info(`TextMessages Records: ${records.length}`);
+    // fetch all text message records
+    const records = await fetchTextMessagesRecords(); 
+    logger.info(`TextMessages Records: ${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
 
@@ -84,7 +85,7 @@ async function syncTextMessages() {
           existingMessageId = upsertTextMessage[0].id || upsertTextMessage?.id;
 
           logger.info(
-            `TextMessage exists with id ${existingMessageId}, updating...`
+            `TextMessage exists with id ${JSON.stringify(existingMessageId)}, updating...`
           );
 
           upsertTextMessage = await updateTextMessageInHubSpot(
@@ -92,12 +93,12 @@ async function syncTextMessages() {
             payload
           );
 
-          logger.info(`✅ TextMessage updated: ${upsertTextMessage.id}`);
+          logger.info(`✅ TextMessage updated: ${JSON.stringify(upsertTextMessage.id)}`);
         } else {
           // Text Message does not exist → create
           upsertTextMessage = await createTextMessageInHubSpot(payload);
 
-          logger.info(`✅ TextMessage created: ${upsertTextMessage.id}`);
+          logger.info(`✅ TextMessage created: ${JSON.stringify(upsertTextMessage.id)}`);
         }
 
         // Find client based on linked_client field in Hubspot ->(Client)
@@ -143,7 +144,7 @@ async function syncTextMessages() {
       }
     }
   } catch (error) {
-    logger.error("Error fetching text message records", error);
+    logger.error("Error fetching text message records", error.message);
     return;
   }
 }

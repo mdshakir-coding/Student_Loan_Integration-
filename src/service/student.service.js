@@ -16,10 +16,10 @@ async function createAffiliateInHubSpot(Payloads) {
       },
     });
 
-    console.log("✅ Affiliate created:", response.data);
+    logger.info("✅ Affiliate created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error creating affiliate:",
       error.response?.data || error.message
     );
@@ -40,10 +40,10 @@ async function updateAffiliateInHubSpot(existingAffiliateId, Payloads) {
       },
     });
 
-    // console.log("✅ Affiliate updated:", response.data);
+    // logger.info("✅ Affiliate updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error updating affiliate:",
       error.response?.data || error.message
     );
@@ -85,7 +85,7 @@ async function searchAffiliateByInHubspot(collectionId) {
 
       return response.data.results || [];
     } catch (error) {
-      console.error(
+      logger.error(
         "❌ HubSpot Affiliate Search Error:",
         JSON.stringify(error.response?.data, null, 2)
       );
@@ -126,10 +126,10 @@ async function searchClientInHubSpot(collectionId) {
     );
 
     const result = response.data.results || [];
-    console.log("✅ Client search result:", result.length);
+    logger.info("✅ Client search result:", result.length);
     return result;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error searching client:",
       error.response?.data || error.message
     );
@@ -137,7 +137,7 @@ async function searchClientInHubSpot(collectionId) {
   }
 }
 
-// Create function in client
+// Create function in clientx
 
 async function createClientInHubSpot(Payloads) {
   const url = "https://api.hubapi.com/crm/v3/objects/2-171843307";
@@ -150,10 +150,10 @@ async function createClientInHubSpot(Payloads) {
       },
     });
 
-    console.log("✅ Client created:", response.data);
+    logger.info("✅ Client created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating client:", error.response?.data || error);
+    logger.error("❌ Error creating client:", error.response?.data || error);
     // throw error; // IMPORTANT (same as affiliate)
     return {};
   }
@@ -172,10 +172,10 @@ async function updateClientInHubSpot(existingClientId, Payloads) {
       },
     });
 
-    console.log("✅ Client updated:", response.data);
+    logger.info("✅ Client updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error updating client:",
       error.response?.data || error.message
     );
@@ -216,7 +216,7 @@ async function searchInvoiceInHubSpot(collectionId) {
 
     return response.data.results || [];
   } catch (error) {
-    console.error("❌ Error listing invoices:", error.response?.data || error);
+    logger.error("❌ Error listing invoices:", error.response?.data || error);
 
     return [];
   }
@@ -234,10 +234,10 @@ async function createInvoiceInHubSpot(payload) {
       },
     });
 
-    console.log("✅ Invoice created:", response.data);
+    logger.info("✅ Invoice created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating invoice:", error.response?.data || error);
+    logger.error("❌ Error creating invoice:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -255,10 +255,10 @@ async function updateInvoiceInHubSpot(existingInvoiceId, payload) {
       },
     });
 
-    console.log("✅ Invoice updated:", response.data);
+    logger.info("✅ Invoice updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error updating invoice:",
       error.response?.data || error.message
     );
@@ -300,10 +300,10 @@ async function searchInquirerInHubSpot(collectionId) {
     );
 
     const results = response.data?.results || [];
-    console.log("✅ Inquirer search by collection_id:", results.length);
+    logger.info("✅ Inquirer search by collection_id:", results.length);
     return results;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error searching inquirer by collection_id:",
       error.response?.data || error.message
     );
@@ -323,10 +323,10 @@ async function updateInquirerInHubSpot(existingInquirerId, payload) {
       },
     });
 
-    console.log("✅ Inquirer updated:", response.data);
+    logger.info("✅ Inquirer updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error updating inquirer:", error.response?.data || error);
+    logger.error("❌ Error updating inquirer:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -337,7 +337,7 @@ async function updateInquirerInHubSpot(existingInquirerId, payload) {
 
 //   // 🚨 Do NOT call API if nothing valid
 //   if (!properties || !Object.keys(properties).length) {
-//     console.warn("⚠️ No valid properties to update in HubSpot");
+//     logger.warn("⚠️ No valid properties to update in HubSpot");
 //     return null;
 //   }
 
@@ -353,11 +353,11 @@ async function updateInquirerInHubSpot(existingInquirerId, payload) {
 //       }
 //     );
 
-//     console.log("✅ Inquirer updated:", response.data);
+//     logger.info("✅ Inquirer updated:", response.data);
 //     return response.data;
 
 //   } catch (error) {
-//     console.error(
+//     logger.error(
 //       "❌ Error updating inquirer:",
 //       error.response?.data || error.message
 //     );
@@ -377,10 +377,10 @@ async function createInquirerInHubSpot(payload) {
       },
     });
 
-    console.log("✅ Inquirer created:", response.data);
+    logger.info("✅ Inquirer created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating inquirer:", error.response?.data || error);
+    logger.error("❌ Error creating inquirer:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return null;
   }
@@ -419,10 +419,10 @@ async function searchOrderInHubSpot(collectionId) {
     );
 
     const results = response.data?.results || [];
-    console.log("✅ Order search by collection_id:", results.length);
+    logger.info("✅ Order search by collection_id:", results.length);
     return results;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error searching order by collection_id:",
       error.response?.data || error.message
     );
@@ -443,10 +443,10 @@ async function updateOderInHubSpot(existingOrderId, Payloads) {
       },
     });
 
-    console.log("✅ Order updated:", response.data);
+    logger.info("✅ Order updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error updating order:",
       error.response?.data || error.message
     );
@@ -470,10 +470,10 @@ async function createOrderInHubSpot(Payloads) {
       },
     });
 
-    console.log("✅ Order created:", response.data);
+    logger.info("✅ Order created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating order:", error.response?.data || error);
+    logger.error("❌ Error creating order:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -512,10 +512,10 @@ async function createOrderInHubSpot(Payloads) {
 //     );
 
 //     const results = response.data?.results || [];
-//     console.log("✅ Text Message search by collection_id:", results.length);
+//     logger.info("✅ Text Message search by collection_id:", results.length);
 //     return results;
 //   } catch (error) {
-//     console.error(
+//     logger.error(
 //       "❌ Error searching text message by collection_id:",
 //       error.response?.data || error.message
 //     );
@@ -547,13 +547,13 @@ async function searchTextMessageInHubSpot(collectionId) {
       note.properties.hs_note_body?.includes(collectionId)
     );
 
-    console.log(
+    logger.info(
       "✅ Text Message fallback filtered count:",
       filteredNotes.length
     );
     return filteredNotes;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error fetching notes fallback:",
       error.response?.data || error.message
     );
@@ -574,10 +574,10 @@ async function updateTextMessageInHubSpot(existingMessageId, payload) {
       },
     });
 
-    console.log("✅ Text Message updated:", response.data);
+    logger.info("✅ Text Message updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error updating text message:",
       error.response?.data || error
     );
@@ -599,10 +599,10 @@ async function createTextMessageInHubSpot(payload) {
       },
     });
 
-    console.log("✅ Text Message created:", response.data);
+    logger.info("✅ Text Message created:", response.data);
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error creating text message:",
       error.response?.data || error
     );
@@ -644,10 +644,10 @@ async function searchEmailInHubSpot(collectionId) {
     );
 
     const results = response.data?.results || [];
-    console.log("✅ Email search by collection_id:", results.length);
+    logger.info("✅ Email search by collection_id:", results.length);
     return results;
   } catch (error) {
-    console.error(
+    logger.error(
       "❌ Error searching email by collection_id:",
       error.response?.data || error.message
     );
@@ -667,10 +667,10 @@ async function updateEmailInHubSpot(existingEmailId, payload) {
       },
     });
 
-    console.log("✅ Email updated:", response.data);
+    logger.info("✅ Email updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error updating email:", error.response?.data || error);
+    logger.error("❌ Error updating email:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -689,10 +689,10 @@ async function createEmailInHubSpot(payload) {
       },
     });
 
-    console.log("✅ Email created:", response.data);
+    logger.info("✅ Email created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating email:", error.response?.data || error);
+    logger.error("❌ Error creating email:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -731,11 +731,11 @@ async function createEmailInHubSpot(payload) {
 //     );
 
 //     const results = response.data?.results?.[0] || null;
-//     console.log("✅ Activity search by collection_id:", results.length);
+//     logger.info("✅ Activity search by collection_id:", results.length);
 
 //     return results;
 //   } catch (error) {
-//     console.error(
+//     logger.error(
 //       "❌ Error searching activity by collection_id:",
 //       error.response?.data || error.message
 //     );
@@ -777,15 +777,14 @@ async function searchActivityInHubSpot(collectionId) {
 
     const result = response.data?.results?.[0] ?? null;
 
-    console.log(
+    logger.info(
       "ℹ️ Activity search attempted, found:",
       result ? "1 note" : "no notes"
     );
 
     return result;
   } catch (error) {
-    // ❗ downgrade to warn (this is expected)
-    console.warn("⚠️ Activity search skipped (HubSpot limitation)");
+    logger.warn("⚠️ Activity search skipped (HubSpot limitation)");
     return null;
   }
 }
@@ -803,10 +802,10 @@ async function updateActivityInHubSpot(existingActivityId, payload) {
       },
     });
 
-    console.log("✅ Activity updated:", response.data);
+    logger.info("✅ Activity updated:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error updating activity:", error.response?.data || error);
+    logger.error("❌ Error updating activity:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }
@@ -824,10 +823,10 @@ async function createActivityInHubSpot(payload) {
       },
     });
 
-    console.log("✅ Activity created:", response.data);
+    logger.info("✅ Activity created:", response.data);
     return response.data;
   } catch (error) {
-    console.error("❌ Error creating activity:", error.response?.data || error);
+    logger.error("❌ Error creating activity:", error.response?.data || error);
     // throw error; // keep commented to match your pattern
     return {};
   }

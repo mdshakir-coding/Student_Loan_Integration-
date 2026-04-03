@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import app from "./app.js";
+import {logger} from "./utils/winston.logger.js";
 
 // import these function
 import { syncInquirer,processnquirer } from "./controller/inquirer.controller.js";
@@ -18,14 +19,16 @@ import { syncEmails } from "./controller/emails.controller.js";
 const PORT = process.env.PORT || 3400;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
+
+  
   // syncTextMessages();
   // processClient();
   processAffiliate();
   // processOrder();
   // processnquirer();
-
-
-
+  
+  
+  
 });
 

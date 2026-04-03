@@ -85,8 +85,9 @@ async function syncActivity() {
 
 async function syncActivity() {
   try {
-    const records = await fetchActivityReords(); // fetch activity records
-    logger.info(`Activity records:${records.length}`);
+    // fetch activity records
+    const records = await fetchActivityReords(); 
+    logger.info(`Activity records:${JSON.stringify(records.length)}`);
     // return; // todo remove after testing
 
     let startIndex = loadProgress();
@@ -99,7 +100,7 @@ async function syncActivity() {
         // Save progress after success
         // saveProgress(i + 1);
       } catch (error) {
-        logger.error("Error processing activity ", error);
+        logger.error("Error processing activity ", error.message);
         // Save progress to resume later
         // saveProgress(i);
         // break;  //todo remove after testing
@@ -159,20 +160,20 @@ async function processActivity(
       let existingActivityId = null;
       existingActivityId = upsertActivity?.id;
 
-      logger.info(`Activity exists with id ${existingActivityId}, updating...`);
+      logger.info(`Activity exists with id ${JSON.stringify(existingActivityId)}, updating...`);
 
       upsertActivity = await updateActivityInHubSpot(
         existingActivityId,
         payload
       );
 
-      logger.info(`✅ Activity updated:${upsertActivity.id}`);
+      logger.info(`✅ Activity updated:${JSON.stringify(upsertActivity.id,null,2)}`);
     } else {
       // Activity does not exist → create
       // let created = null;
       upsertActivity = await createActivityInHubSpot(payload);
 
-      logger.info(`✅ Activity created:${upsertActivity.id}`);
+      logger.info(`✅ Activity created:${JSON.stringify(upsertActivity.id,null,2)}`);
     }
 
     // Find client based on linked_client field in Hubspot ->(Client)
@@ -207,7 +208,7 @@ async function processActivity(
       );
     }
   } catch (error) {
-    logger.error("Error processing activity record", error);
+    logger.error("Error processing activity record", error.message);
   }
 }
 

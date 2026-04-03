@@ -49,8 +49,9 @@ export { syncEmails };
 
 async function syncEmails() {
   try {
-    const records = await fetchEmailsRecords(); // fetch all email records
-    logger.info("Emails Records:", records.length);
+     // fetch all email records
+    const records = await fetchEmailsRecords(); 
+    logger.info(`Emails Records :${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
 
@@ -75,37 +76,37 @@ async function syncEmails() {
           let existingEmailId = null;
           existingEmailId = searchResults[0].id;
 
-          logger.info(`Email exists with id ${existingEmailId}, updating...`);
+          logger.info(`Email exists with id ${JSON.stringify(existingEmailId,null,2)}, updating...`);
 
           let updated = null;
           updated = await updateEmailInHubSpot(existingEmailId, payload);
 
-          logger.info(`✅ Email updated: ${updated.id}`);
+          logger.info(`✅ Email updated: ${JSON.stringify(updated.id)}`);
         } else {
           // Email does not exist → create
           let created = null;
           created = await createEmailInHubSpot(payload);
 
-          logger.info(`✅ Email created: ${created.id}`);
+          logger.info(`✅ Email created: ${JSOn.stringify(created.id)}`);
         }
 
         // Save progress after success
         // saveProgress(i + 1);
 
-        break; // ❗ remove after testing
+        break; // todo remove after testing
       } catch (error) {
         logger.error("Error processing Email index", i, error);
 
         // Save progress to resume later
         // saveProgress(i);
 
-        break; // ❗ remove after testing
+        break; //todo remove after testing
       }
     }
 
     logger.info("📧 All Emails Processed");
   } catch (error) {
-    logger.error("Error fetching email records", error);
+    logger.error("Error fetching email records", error.message);
     return;
   }
 }

@@ -77,8 +77,9 @@ function loadProgress() {
 
 async function syncInvoices() {
   try {
-    const records = await fetchInvoicesRecords(); // fetch all invoice records
-    logger.info(`Invoices Records: ${records.length}`);
+    // fetch all invoice records
+    const records = await fetchInvoicesRecords(); 
+     logger.info(` Invoices Records :${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
 
@@ -98,12 +99,12 @@ async function syncInvoices() {
         const searchResults = await searchInvoiceInHubSpot(
           record.collection_id
         );
-
+      
         if (searchResults && searchResults.length > 0) {
           // Invoice exists → Update
           const existingInvoiceId = searchResults[0].id;
           logger.info(
-            `Invoice exists with id ${existingInvoiceId}, updating...`
+            `Invoice exists with id ${JSON.stringify(existingInvoiceId,null,2)}, updating...`
           );
 
           const updated = await updateInvoiceInHubSpot(
@@ -113,13 +114,15 @@ async function syncInvoices() {
 
           invoice_record_id = updated.id;
 
-          logger.info("✅ Invoice updated:", updated.id);
+          logger.info(`Invoice updated with id ${JSON.stringify(updated.id,null,2)}`);
         } else {
           // Invoice does not exist → Create
           const created = await createInvoiceInHubSpot(payload);
           invoice_record_id = created.id;
 
-          logger.info("✅ Invoice created:", created);
+          logger.info(
+            `✅ Invoice created with id ${JSON.stringify(created.id,null,2)}`
+          );
         }
         const hs_client = getHubspotClient();
         //  client affiliate inquirer

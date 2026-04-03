@@ -89,8 +89,9 @@ function loadProgress() {
 
 async function syncInquirer() {
   try {
-    const records = await fetchInquirerRecords(); // fetch all inquirer records
-    logger.info("Inquirer Records:", records.length);
+    // fetch all inquirer records
+    const records = await fetchInquirerRecords(); 
+    logger.info(` Inquirer Records :${JSON.stringify(records.length)}`);
 
     // let startIndex = loadProgress();
     let startIndex = 0;
@@ -313,17 +314,17 @@ async function processnquirer(
       // Inquirer exists → update
       let existingInquirerId = null;
       existingInquirerId = searchResults[0].id;
-      logger.info(`Inquirer exists with id ${existingInquirerId}, updating...`);
+      logger.info(`Inquirer exists with id ${JSON.stringify(existingInquirerId)}, updating...`);
       let updated = null;
       updated = await updateInquirerInHubSpot(existingInquirerId, payload);
-      logger.info(`✅ Inquirer updated: ${updated.id}`);
+      logger.info(`✅ Inquirer updated: ${JSON.stringify(updated.id,null,2)}`);
     } else {
       // Inquirer does not exist → create
       let created = null;
       created = await createInquirerInHubSpot(payload);
       inquirer_record_id = created.id;
 
-      logger.info(`✅ Inquirer created: ${created.id}`);
+      logger.info(`✅ Inquirer created: ${JSON.stringify(created.id,null,2)}`);
     }
 
     // let inquirer_record_id = null;

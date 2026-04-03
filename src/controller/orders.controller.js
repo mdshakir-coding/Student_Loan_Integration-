@@ -57,8 +57,9 @@ export { syncOrders };
 
 async function syncOrders() {
   try {
-    const records = await fetchOrdersRecords(); // fetch all order records
-    logger.info(`Orders Records : ${records.length}`);
+    // fetch all order records
+    const records = await fetchOrdersRecords(); 
+    logger.info(`Orders Records : ${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
 
@@ -216,15 +217,15 @@ async function processOrder(
       // Order exists, update it
       const existingOrderId = searchResults[0].id;
       order_record_id = searchResults[0].id;
-      logger.info(`Order exists with id ${existingOrderId}, updating...`);
+      logger.info(`Order exists with id ${JSON.stringify(existingOrderId)}, updating...`);
 
       const updated = await updateOderInHubSpot(existingOrderId, Payloads);
-      logger.info(`✅ Order updated: ${updated.id}`);
+      logger.info(`✅ Order updated: ${JSON.stringify(updated.id,null,2)}`);
     } else {
       // Order does not exist, create new
       const created = await createOrderInHubSpot(Payloads);
       order_record_id = created?.id;
-      logger.info(`✅ Order created: ${created.id}`);
+      logger.info(`✅ Order created: ${json2csv.stringify(created.id,null,2)}`);
     }
     return; // todo remove after testing
     // Associate client and order

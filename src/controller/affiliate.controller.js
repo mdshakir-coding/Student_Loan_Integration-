@@ -39,10 +39,10 @@ function loadProgress() {
 // async function syncAffiliate() {
 //   try {
 //     const records = await fetchAffiliateRecords(); // call the function for All Affiliate Records  synced
-//     console.log("Affiliate Records", records.length);
+//     logger.info("Affiliate Records", records.length);
 
 //     // if (records.length === 0) {
-//     //   console.log("🎄 All Affiliated Processed");
+//     //   logger.info("🎄 All Affiliated Processed");
 //     //   return;
 //     // }
 
@@ -56,37 +56,38 @@ function loadProgress() {
 
 //         const Payloads = buildHubSpotAffiliatePayload(record); // call the function for payload
 
-//         console.log(" Records", record);
-//         console.log("Payloads", Payloads);
+//         logger.info(" Records", record);
+//         logger.info("Payloads", Payloads);
 //         // return; // todo remove after testing
 
 //         // await createAffiliateInHubSpot(Payloads);
 
 //         // create Affiliate in hubspot
 //         const create = await createAffiliateInHubSpot(Payloads);
-//         console.log("✅ Affiliate created", affiliateId);
+//         logger.info("✅ Affiliate created", affiliateId);
 //         affiliateId = create?.id || null;
 
 //         // Save progress after successful processing
 //         // saveProgress(i + 1);
 //       } catch (error) {
-//         console.error(error);
+//         logger.error(error);
 //         // saveProgress(i);
 //         break; // todo remove after testing
 //       }
 //     }
 
-//     console.log("🎄 All Affiliated Processed");
+//     logger.info("🎄 All Affiliated Processed");
 //   } catch (error) {
-//     console.error("Error Fecting Inquirer Records", error);
+//     logger.error("Error Fecting Inquirer Records", error);
 //     return;
 //   }
 // }
 
 async function syncAffiliate() {
   try {
-    const records = await fetchAffiliateRecords(); // fetch all affiliate records
-    console.log("Affiliate Records", records.length);
+    // fetch all affiliate records
+    const records = await fetchAffiliateRecords(); 
+     logger.info(`Affiliate Records:${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
 
@@ -94,21 +95,21 @@ async function syncAffiliate() {
       try {
         const record = records[i];
 
-        await processAffiliate(record);
+         await processAffiliate(record);
 
         return;
         // Save progress after successful processing
         // saveProgress(i + 1);
       } catch (error) {
-        console.error("Error processing record index", i, error);
+        logger.error("Error processing record index", i, error);
         // Save progress here to resume later if needed
         // saveProgress(i);
       }
     }
 
-    console.log("🎄 All Affiliates Processed");
+    logger.info("🎄 All Affiliates Processed");
   } catch (error) {
-    console.error("Error fetching affiliate records", error);
+    logger.error("Error fetching affiliate records", error.message);
     return;
   }
 }

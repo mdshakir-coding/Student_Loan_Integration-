@@ -2,9 +2,9 @@ import axios from "axios";
 import { cleanProps } from "../utils/helper.js";
 import { logger } from "../index.js";
 
-// fetch Inquirer Records
 
-// Add pagenation logic
+
+// Fecth Inquirer Records with pagination
 
 async function fetchInquirerRecords(perPage = 100) {
   let page = 0;
@@ -23,7 +23,7 @@ async function fetchInquirerRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched page ${page}, records: ${records.length}`);
+      logger.info(`Fetched page ${page}, records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -36,10 +36,10 @@ async function fetchInquirerRecords(perPage = 100) {
       page += perPage; // Increment offset for next page
     }
 
-    console.log(`Total inquirer records fetched: ${allRecords.length}`);
+    logger.info(`Total inquirer records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching student loan records:",
       error.response?.data || error.message
     );
@@ -47,9 +47,8 @@ async function fetchInquirerRecords(perPage = 100) {
   }
 }
 
-// fetch Affiliated Rescords
+// fetch Affiliated Rescords with Add pagenation logic
 
-// Add pagenation logic
 
 async function fetchAffiliateRecords(perPage = 100) {
   let offset = 0;
@@ -68,7 +67,7 @@ async function fetchAffiliateRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(
+      logger.info(
         `Fetched offset ${offset}, affiliate records: ${records.length}`
       );
 
@@ -83,10 +82,10 @@ async function fetchAffiliateRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total affiliate records fetched: ${allRecords.length}`);
+    logger.info(`Total affiliate records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching records (10156):",
       error.response?.data || error.message
     );
@@ -115,7 +114,7 @@ async function fetchActivityReords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched offset ${offset}, activity records: ${records.length}`);
+      logger.info(`Fetched offset ${offset}, activity records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -128,11 +127,11 @@ async function fetchActivityReords(perPage = 100) {
       offset += perPage; // next batch
     }
 
-    console.log(`Total activity records fetched: ${allRecords.length}`);
+    logger.info(`Total activity records fetched: ${allRecords.length}`);
     return allRecords;
 
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching activity records:",
       error.response?.data || error.message
     );
@@ -161,7 +160,7 @@ async function fetchInvoicesRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched offset ${offset}, invoice records: ${records.length}`);
+      logger.info(`Fetched offset ${offset}, invoice records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -174,10 +173,10 @@ async function fetchInvoicesRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total invoice records fetched: ${allRecords.length}`);
+    logger.info(`Total invoice records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching invoice records:",
       error.response?.data || error.message
     );
@@ -206,7 +205,7 @@ async function fetchClientsRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched offset ${offset}, client records: ${records.length}`);
+      logger.info(`Fetched offset ${offset}, client records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -219,10 +218,10 @@ async function fetchClientsRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total client records fetched: ${allRecords.length}`);
+    logger.info(`Total client records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching client records:",
       error.response?.data || error.message
     );
@@ -251,7 +250,7 @@ async function fetchOrdersRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched offset ${offset}, order records: ${records.length}`);
+      logger.info(`Fetched offset ${offset}, order records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -264,10 +263,10 @@ async function fetchOrdersRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total order records fetched: ${allRecords.length}`);
+    logger.info(`Total order records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching records (CollectionTypeID=10130):",
       error.response?.data || error.message
     );
@@ -295,7 +294,7 @@ async function fetchTextMessagesRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(
+      logger.info(
         `Fetched offset ${offset}, text message records: ${records.length}`
       );
 
@@ -310,10 +309,10 @@ async function fetchTextMessagesRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total text message records fetched: ${allRecords.length}`);
+    logger.info(`Total text message records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching text message records:",
       error.response?.data || error.message
     );
@@ -342,7 +341,7 @@ async function fetchEmailsRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      console.log(`Fetched offset ${offset}, email records: ${records.length}`);
+      logger.info(`Fetched offset ${offset}, email records: ${records.length}`);
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -355,10 +354,10 @@ async function fetchEmailsRecords(perPage = 100) {
       offset += perPage;
     }
 
-    console.log(`Total email records fetched: ${allRecords.length}`);
+    logger.info(`Total email records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching email records:",
       error.response?.data || error.message
     );
@@ -387,7 +386,7 @@ async function fetchClientById(clientId, properties = []) {
 
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching HubSpot client by Id:",
       error.response?.data || error
     );
@@ -413,7 +412,7 @@ async function fetchInquirerById(inquirerId, properties = []) {
 
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching HubSpot contact:",
       error.response?.data || error
     );
@@ -440,7 +439,7 @@ async function fetchInvoiceById(invoiceId, properties = []) {
 
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching HubSpot contact:",
       error.response?.data || error
     );
@@ -466,7 +465,7 @@ async function fetchAffiliateById(affiliateId, properties = []) {
 
     return response.data;
   } catch (error) {
-    console.error(
+    logger.error(
       "Error fetching HubSpot contact:",
       error.response?.data || error
     );
@@ -534,7 +533,7 @@ async function fetchAffiliateById(affiliateId, properties = []) {
 //       associationTypeId: typeId,
 //     };
 //   } catch (error) {
-//     console.error("HubSpot association failed", {
+//     logger.error("HubSpot association failed", {
 //       fromObjectType,
 //       fromObjectId,
 //       toObjectType,
@@ -626,7 +625,7 @@ async function associateObjects({
       associationLabel: associationLabel || null,
     };
   } catch (error) {
-    console.error("❌ HubSpot association failed", {
+    logger.error("❌ HubSpot association failed", {
       fromObjectType,
       fromObjectId,
       toObjectType,
@@ -673,7 +672,7 @@ async function searchCustomObjectInHubSpot(objectType, collectionId) {
     const results = response.data?.results || null;
     return results;
   } catch (error) {
-    console.error(
+    logger.error(
       `❌ Error searching custom Object by collection_id: ${objectType}`,
       error.response?.data || error
     );
@@ -720,7 +719,7 @@ async function searchCustomObjectInHubSpotBasedonCustomeField(
     const results = response.data?.results || null;
     return results;
   } catch (error) {
-    console.error(
+    logger.error(
       `❌ Error searching custom Object by collection_id: ${objectType}`,
       error.response?.data || error
     );
