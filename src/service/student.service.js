@@ -172,7 +172,7 @@ async function updateClientInHubSpot(existingClientId, Payloads) {
       },
     });
 
-    logger.info("✅ Client updated:", response.data);
+    // logger.info("✅ Client updated:", response.data);
     return response.data;
   } catch (error) {
     logger.error(
@@ -323,7 +323,7 @@ async function updateInquirerInHubSpot(existingInquirerId, payload) {
       },
     });
 
-    logger.info("✅ Inquirer updated:", response.data);
+    // logger.info("✅ Inquirer updated:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error updating inquirer:", error.response?.data || error);
@@ -443,7 +443,7 @@ async function updateOderInHubSpot(existingOrderId, Payloads) {
       },
     });
 
-    logger.info("✅ Order updated:", response.data);
+    // logger.info("✅ Order updated:", response.data);
     return response.data;
   } catch (error) {
     logger.error(

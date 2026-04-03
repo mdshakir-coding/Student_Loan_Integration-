@@ -438,7 +438,7 @@ async function processClient(
          Payloads
         );
 
-      logger.info(`✅ Client updated:${JSON.stringify(updated.id,null,2)}`);
+      logger.info(`✅ Client updated:${JSON.stringify(updated.id)}`);
     } else {
       // Client does not exist → Create
       const created = await createClientInHubSpot(Payloads);

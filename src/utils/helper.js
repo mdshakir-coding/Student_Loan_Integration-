@@ -1,4 +1,49 @@
-import { time } from "console";
+
+import {logger} from "./winston.logger.js";
+
+// helper function to normalize picklist values with flexible matching
+
+function normalizePicklistValue(mapping, value, options = {}) {
+  const { defaultValue = null, log = false } = options;
+
+  if (!value) return defaultValue;
+
+  // 🔹 normalize input
+  const normalize = (val) =>
+    val
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/\s*\/\s*/g, "/"); // normalize slash spacing
+
+  const normalizedInput = normalize(value);
+
+  // 🔹 loop mapping (works for number keys + string values)
+  for (const key in mapping) {
+    const mapValue = mapping[key];
+
+    if (!mapValue) continue;
+
+    const normalizedMapValue = normalize(mapValue);
+
+    // ✅ match by value
+    if (normalizedInput === normalizedMapValue) {
+      return mapValue; // EXACT HubSpot value
+    }
+
+    // ✅ match by key (ID case)
+    if (normalizedInput === key.toString().toLowerCase()) {
+      return mapValue;
+    }
+  }
+
+  if (log) {
+    logger.warn(`❌ Unmapped value: "${value}"`);
+  }
+
+  return defaultValue;
+}
 
 function cleanProps(obj) {
   const cleaned = {};
@@ -51,15 +96,6 @@ function cleanProps(obj) {
   return cleaned;
 }
 
-function normalizeValue(value) {
-  if (value === undefined || value === null) return null;
-
-  if (typeof value === "string") {
-    return value.trim();
-  }
-
-  return value;
-}
 
 // lead_owner Picklist value mapped for Inquirer
 
@@ -847,6 +883,10 @@ function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
     // Inquirer Mapping fields:-
 
+
+
+    // conference: normalizePicklistValue(conferenceMapping, data?.conference),
+
     affiliate_lead_owner:
       buildOwnerMapping(
         affiliateleadOwnerMapping[data?.affiliate_lead_owner],
@@ -854,61 +894,62 @@ function buildHubSpotInquirerPayload(data = {}) {
     slt_referring_rep:
       buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) ||
       null, // hubspot user
-    lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null,
-    phone_1_type: phone1TypeMapping[data?.phone_1_type] || null,
-    phone_2_type: phone2TypeMapping[data?.phone_2_type] || null,
-    inquirer_status: inquirerStatusMapping[data?.inquirer_status] || null,
-    hs_timezone: timeZone0Mapping[data?.time_zone0] || null,
-    standby_list: standyListMapping[data?.standby_list] || null,
+    lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null, //hubspot User
+    phone_1_type: normalizePicklistValue(phone1TypeMapping,data?.phone_1_type,),
+    phone_2_type: normalizePicklistValue(phone2TypeMapping,data?.phone_2_type,),
+    inquirer_status: normalizePicklistValue(inquirerStatusMapping,data?.inquirer_status,),
+    hs_timezone: normalizePicklistValue(timeZone0Mapping,data?.time_zone0,),
+    standby_list: normalizePicklistValue(standyListMapping,data?.standby_list,),
     pc_appointment_confirmation:
-      pcAppointmentConfirmationMapping[data?.pc_appointment_confirmati] || null,
-    lead_type: leadTypeMapping[data?.lead_type] || null,
+      normalizePicklistValue(pcAppointmentConfirmationMapping,data?.pc_appointment_confirmati,),
+    lead_type: normalizePicklistValue(leadTypeMapping,data?.lead_type,),
     affiliate_presenting_tutor:
       buildOwnerMapping(
         affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto],
-      ) || null,
+      ) || null,  //Hubspot User
     conferences_dani_pr_sources:
-      conferencesDaniPrSourcesMapping[data?.conferencesdani_pr_sourc] || null,
-    podcast: podcastMapping[data?.podcast] || null,
+      normalizePicklistValue(conferencesDaniPrSourcesMapping,data?.conferencesdani_pr_sourc,),
+    podcast: normalizePicklistValue(podcastMapping,data?.podcast,),
     du_financial_planner:
-      duFinancialPlannerMapping[data?.du_financial_planner] || null,
+      normalizePicklistValue(duFinancialPlannerMapping,data?.du_financial_planner,),
     du_slt_outreach_affiliate_source:
-      duSltOutreachAffiliateSourceMapping[data?.du_slt_outreachaffiliate] ||
-      null,
+      normalizePicklistValue(duSltOutreachAffiliateSourceMapping,data?.du_slt_outreachaffiliate,),
     contractor_referred_by:
-      contractorReferredByMapping[data?.contractor_referred_by] || null,
+      normalizePicklistValue(contractorReferredByMapping,data?.contractor_referred_by,),
     inquirer_profession:
-      inquirerProfessionMapping[data?.inquirer_profession] || null,
+      normalizePicklistValue(inquirerProfessionMapping,data?.inquirer_profession,),
     inquirer_employment_type:
-      inquirerEmploymentTypeMapping[data?.inquirer_employment_type] || null,
-    marital_status: maritalStatusMapping[data?.marital_status] || null,
+      normalizePicklistValue(inquirerEmploymentTypeMapping,data?.inquirer_employment_type,),
+    marital_status: normalizePicklistValue(maritalStatusMapping,data?.marital_status,),
     eval___taxes_jointly_separate_:
-      evalTaxesJointlySeparateMapping[data?.eval__taxes_jointlysepa] || null,
+      normalizePicklistValue(evalTaxesJointlySeparateMapping,data?.eval__taxes_jointlysepa,),
     eval___spouse_has_loans:
-      evalSpouseHasLoansMapping[data?.eval__spouse_has_loans] || null,
+     normalizePicklistValue(evalSpouseHasLoansMapping,data?.eval__spouse_has_loans,),
     eval___spouse_pay_frequency:
-      evalSpousePayFrequencyMapping[data?.eval__pay_frequency] || null, // hubspot data single-line text
+      normalizePicklistValue(evalSpousePayFrequencyMapping,data?.eval__pay_frequency,),// hubspot data single-line text
     inquirer_loan_status:
-      inquirerLoanStatusMapping[data?.inquirer_loan_status] || null,
+      normalizePicklistValue(inquirerLoanStatusMapping,data?.inquirer_loan_status,),
     inquirer_current_repayment_plan:
-      inquirerCurrentRepaymentPlanMapping[data?.inquirer_current_repaymen] ||
-      null,
+      normalizePicklistValue(inquirerCurrentRepaymentPlanMapping,data?.inquirer_current_repaymen,),
     tutor: buildOwnerMapping(tutorNameMapping[data?.tutor_name]) || null,
     slt_rep_referred_by:
-      sltRepReferredByMapping[data?.slt_rep_referred_by] || null, //hubspot data single-line text
+      normalizePicklistValue(sltRepReferredByMapping,data?.slt_rep_referred_by,), //hubspot data single-line text
     fed_loan_amount_old:
-      fedLoanAmountOldMapping[data?.fed_loan_amount_old] || null, // hubspot data single-line text
+      normalizePicklistValue(fedLoanAmountOldMapping,data?.fed_loan_amount_old,), // hubspot data single-line text
     inquirer_loan_servicer:
-      inquirerLoanServicerMapping[data?.inquirer_loan_servicer] || null,
+      normalizePicklistValue(inquirerLoanServicerMapping,data?.inquirer_loan_servicer,),
     household_size___income_threshold__150__:
-      householdSizeIncomeThreshold150Mapping[data?.household_size__income_t0] ||
-      null,
+      normalizePicklistValue(householdSizeIncomeThreshold150Mapping,data?.household_size__income_t0,),
     income_amount_and_pay_frequency:
-      incomeAmountAndPayFrequencyMapping[data?.pay_frequency_stream_1] || null,
+      normalizePicklistValue(incomeAmountAndPayFrequencyMapping,data?.pay_frequency_stream_1,),
     pay_frequency_stream_2:
-      payFrequencyStream2Mapping[data?.pay_frequency_stream_2] || null,
+      normalizePicklistValue(payFrequencyStream2Mapping,data?.pay_frequency_stream_2,),
     pay_frequency_stream_3:
-      payFrequencyStream3Mapping[data?.pay_frequency_stream_3] || null,
+      normalizePicklistValue(payFrequencyStream3Mapping,data?.pay_frequency_stream_3,),
+
+
+
+
 
     inquirer_status_ivinex: data?.inquirer_status || null,
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
@@ -1370,49 +1411,7 @@ const timeZoneMappingAffilate = {
 
 //  code for Affiliate Payload
 
-// helper function to normalize picklist values with flexible matching
 
-function normalizePicklistValue(mapping, value, options = {}) {
-  const { defaultValue = null, log = false } = options;
-
-  if (!value) return defaultValue;
-
-  // 🔹 normalize input
-  const normalize = (val) =>
-    val
-      .toString()
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .replace(/\s*\/\s*/g, "/"); // normalize slash spacing
-
-  const normalizedInput = normalize(value);
-
-  // 🔹 loop mapping (works for number keys + string values)
-  for (const key in mapping) {
-    const mapValue = mapping[key];
-
-    if (!mapValue) continue;
-
-    const normalizedMapValue = normalize(mapValue);
-
-    // ✅ match by value
-    if (normalizedInput === normalizedMapValue) {
-      return mapValue; // EXACT HubSpot value
-    }
-
-    // ✅ match by key (ID case)
-    if (normalizedInput === key.toString().toLowerCase()) {
-      return mapValue;
-    }
-  }
-
-  if (log) {
-    logger.warn(`❌ Unmapped value: "${value}"`);
-  }
-
-  return defaultValue;
-}
 
 function buildHubSpotAffiliatePayload(data = {}) {
   const properties = {
@@ -2125,6 +2124,7 @@ function buildHubSpotClientPayload(data = {}) {
     tutor_name: buildOwnerMapping(clientsNameMapping[data?.tutor_name]) || null, // hubspot user
     processor_name:
       buildOwnerMapping(processorNameMapping[data?.processor_name]) || null, // hubspot user
+
     slt_referring_rep_nfm:
       buildOwnerMapping(sltReferringRepNfm[data?.slt_referring_rep_nfm]) ||
       null, // hubspot user
@@ -2132,21 +2132,25 @@ function buildHubSpotClientPayload(data = {}) {
       buildOwnerMapping(
         calculationPerformedByMapping[data?.calculation_performed_by],
       ) || null, //hubspot user
-    phone_1_type: phone1TypeMappingClient[data?.phone_1_type] || null,
-    phone_2_type: phone2TypeMappingClient[data?.phone_2_type] || null,
-    time_zone: timeZoneMapping[data?.time_zone0] || null, // hubspot single test-line
-    status: statusMapping[data?.status1] || null,
-    // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
-    current_idr_plan: currentIdrPlanMapping[data?.current_idr_plan] || null, //
+
+
+    phone_1_type: normalizePicklistValue(phone1TypeMappingClient,data?.phone_1_type,), 
+    phone_2_type: normalizePicklistValue(phone2TypeMappingClient,data?.phone_2_type,), 
+    time_zone: normalizePicklistValue(timeZoneMapping,data?.time_zone0,),
+    status: normalizePicklistValue(statusMapping,data?.status1,),
+    current_idr_plan: normalizePicklistValue(currentIdrPlanMapping,data?.current_idr_plan,), 
     type_of_idr_app_submitted:
-      typeOfIdrAppSubmittedMapping[data?.type_of_idr_app_submitted] || null,
-    // client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
-    aar_fee: aarFeeMapping[data?.aar_fee] || null,
-    current_servicer: currentServicerMapping[data?.current_servicer0] || null,
+    normalizePicklistValue(typeOfIdrAppSubmittedMapping,data?.type_of_idr_app_submitted,),
+    aar_fee: normalizePicklistValue(aarFeeMapping,data?.aar_fee,),
+    current_servicer: normalizePicklistValue(currentServicerMapping,data?.current_servicer0,),
+    ia_inquirer_status:
+    normalizePicklistValue(iaInquirerStatusMapping,data?.ia_inquirer_status,),
+
+
+    // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
+      // client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
-    ia_inquirer_status:
-      iaInquirerStatusMapping[data?.ia_inquirer_status] || null,
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
     // ia_insurance_status: iaInsuranceStatusMapping[data?.ia_insurance_status] ||null, // hubspot missing fields
     // ia_securities_status: iaSecuritiesStatusMapping[data?.ia_securities_status] ||null, // hubspot missing fields
@@ -2155,8 +2159,8 @@ function buildHubSpotClientPayload(data = {}) {
     // client_consolidation___loan_type_description:
     //   data?.client_consolidation__lo ||null,
     // client_avg__interest_rate: data?.client_avg_interest_rate || null,
-
     // idr_app_submitted_date:data?.idr_app_submitted_date ||null,
+
     idr_app_submitted_date: data?.idr_app_submitted_date
       ? (() => {
           const d = new Date(data.idr_app_submitted_date);
@@ -2594,23 +2598,28 @@ const field2025Icr20Mapping = {
 function buildHubspotOrderPayload(data = {}) {
   const payload = cleanProps({
     // picklist Mapping here
-    employment_type: employmentTypeMapping[data?.employment_type] || null,
-    income_doc_type: incomeDocTypeMapping[data?.income_doc_type] || null,
-    marital_status: maritalStatusMappingOrder[data?.marital_status] || null,
+
+
+    employment_type: normalizePicklistValue(employmentTypeMapping,data?.employment_type,),
+    income_doc_type:normalizePicklistValue(incomeDocTypeMapping,data?.income_doc_type,),
+    marital_status: normalizePicklistValue(maritalStatusMappingOrder,data?.marital_status,),
     most_recent_tax_filing_st:
-      mostRecentTaxFilingStatusMapping[data?.most_recent_tax_filing_st] || null, // hubspot single-text-line
+      normalizePicklistValue(mostRecentTaxFilingStatusMapping,data?.most_recent_tax_filing_st,), // hubspot single-text-line
     tax_saving_status_apc:
-      taxSavingStatusApcMapping[data?.tax_saving_status_apc] || null, // hubspot single-text-line
-    type0: type0Mapping[data?.type0] || null, // hubspot single-text line
-    work_needed: workNeededMapping[data?.work_needed] || null,
-    pslf: pslfMapping[data?.pslf] || null,
+      normalizePicklistValue(taxSavingStatusApcMapping,data?.tax_saving_status_apc,), // hubspot single-text-line
+    type0: normalizePicklistValue(type0Mapping,data?.type0,), // hubspot single-text line
+    work_needed: normalizePicklistValue(workNeededMapping,data?.work_needed,),
+    pslf: normalizePicklistValue(pslfMapping,data?.pslf,),
     forbearance_needed:
-      forbearanceNeededMapping[data?.forbearance_needed] || null,
+      normalizePicklistValue(forbearanceNeededMapping,data?.forbearance_needed,),
     hh_size__income_threshol:
-      hhSizeIncomeThresholdMapping[data?.hh_size__income_threshol] || null, // hubspot single-text-line
+      normalizePicklistValue(hhSizeIncomeThresholdMapping,data?.hh_size__income_threshol,), // hubspot single-text-line
     field_2025_ibrpaye__15:
-      field2025Ibrpaye15Mapping[data?.field_2025_ibrpaye__15] || null, //hubspot single text line
-    field_2025_icr__20: field2025Icr20Mapping[data?.field_2025_icr__20] || null, //hubspot single text line
+      normalizePicklistValue(field2025Ibrpaye15Mapping,data?.field_2025_ibrpaye__15,), //hubspot single text line
+    field_2025_icr__20: normalizePicklistValue(field2025Icr20Mapping,data?.field_2025_icr__20,), //hubspot single text line
+
+
+
 
     income_doc_type_ivinex: data?.income_doc_type || null,
     marital_status_ivinex: data?.marital_status || null,
