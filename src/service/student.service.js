@@ -16,7 +16,7 @@ async function createAffiliateInHubSpot(Payloads) {
       },
     });
 
-    logger.info("✅ Affiliate created:", response.data);
+    // logger.info("✅ Affiliate created:", response.data);
     return response.data;
   } catch (error) {
     logger.error(
@@ -150,7 +150,7 @@ async function createClientInHubSpot(Payloads) {
       },
     });
 
-    logger.info("✅ Client created:", response.data);
+    // logger.info("✅ Client created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating client:", error.response?.data || error);
@@ -234,7 +234,7 @@ async function createInvoiceInHubSpot(payload) {
       },
     });
 
-    logger.info("✅ Invoice created:", response.data);
+    // logger.info("✅ Invoice created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating invoice:", error.response?.data || error);
@@ -377,7 +377,7 @@ async function createInquirerInHubSpot(payload) {
       },
     });
 
-    logger.info("✅ Inquirer created:", response.data);
+    // logger.info("✅ Inquirer created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating inquirer:", error.response?.data || error);
@@ -470,7 +470,7 @@ async function createOrderInHubSpot(Payloads) {
       },
     });
 
-    logger.info("✅ Order created:", response.data);
+    // logger.info("✅ Order created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating order:", error.response?.data || error);
@@ -574,7 +574,7 @@ async function updateTextMessageInHubSpot(existingMessageId, payload) {
       },
     });
 
-    logger.info("✅ Text Message updated:", response.data);
+    // logger.info("✅ Text Message updated:", response.data);
     return response.data;
   } catch (error) {
     logger.error(
@@ -599,7 +599,7 @@ async function createTextMessageInHubSpot(payload) {
       },
     });
 
-    logger.info("✅ Text Message created:", response.data);
+    // logger.info("✅ Text Message created:", response.data);
     return response.data;
   } catch (error) {
     logger.error(
@@ -689,7 +689,7 @@ async function createEmailInHubSpot(payload) {
       },
     });
 
-    logger.info("✅ Email created:", response.data);
+    // logger.info("✅ Email created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating email:", error.response?.data || error);
@@ -802,7 +802,7 @@ async function updateActivityInHubSpot(existingActivityId, payload) {
       },
     });
 
-    logger.info("✅ Activity updated:", response.data);
+    // logger.info("✅ Activity updated:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error updating activity:", error.response?.data || error);
@@ -823,7 +823,7 @@ async function createActivityInHubSpot(payload) {
       },
     });
 
-    logger.info("✅ Activity created:", response.data);
+    // logger.info("✅ Activity created:", response.data);
     return response.data;
   } catch (error) {
     logger.error("❌ Error creating activity:", error.response?.data || error);

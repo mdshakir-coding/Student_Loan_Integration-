@@ -213,19 +213,21 @@ async function processOrder(
     // First, search existing order by collection_id
     const searchResults = await searchOrderInHubSpot(record.collection_id);
 
+    logger.info(`Search Work Order results: ${JSON.stringify(searchResults, null, 2)}`);
+
     if (searchResults && searchResults.length > 0) {
       // Order exists, update it
       const existingOrderId = searchResults[0].id;
       order_record_id = searchResults[0].id;
-      logger.info(`Order exists with id ${JSON.stringify(existingOrderId)}, updating...`);
+      // logger.info(`Order exists with id ${JSON.stringify(existingOrderId)}, updating...`);
 
       const updated = await updateOderInHubSpot(existingOrderId, Payloads);
-      logger.info(`✅ Order updated: ${JSON.stringify(updated.id,null,2)}`);
+      logger.info(`✅ Order Work updated: ${JSON.stringify(updated.id,null,2)}`);
     } else {
       // Order does not exist, create new
       const created = await createOrderInHubSpot(Payloads);
       order_record_id = created?.id;
-      logger.info(`✅ Order created: ${json2csv.stringify(created.id,null,2)}`);
+      logger.info(`✅ Order Work created: ${JSON.stringify(created.id,null,2)}`);
     }
     return; // todo remove after testing
     // Associate client and order

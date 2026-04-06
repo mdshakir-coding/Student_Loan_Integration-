@@ -17,7 +17,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js"
+    "start": "node src/Student-Loan-Integration.server.js"
   },
   "dependencies": {
     "@mohammadsaddam-dev/hubspot-toolkit": "^1.0.0",
