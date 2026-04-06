@@ -314,7 +314,7 @@ async function processnquirer(
       // Inquirer exists → update
       let existingInquirerId = null;
       existingInquirerId = searchResults[0].id;
-      logger.info(`Inquirer exists with id ${JSON.stringify(existingInquirerId)}, updating...`);
+      // logger.info(`Inquirer exists with id ${JSON.stringify(existingInquirerId)}, updating...`);
       let updated = null;
       updated = await updateInquirerInHubSpot(existingInquirerId, payload);
       logger.info(`✅ Inquirer updated: ${JSON.stringify(updated.id,null,2)}`);
@@ -326,7 +326,7 @@ async function processnquirer(
 
       logger.info(`✅ Inquirer created: ${JSON.stringify(created.id,null,2)}`);
     }
-
+      return;
     // let inquirer_record_id = null;
     // let searchResults = null;
 

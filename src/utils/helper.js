@@ -883,6 +883,10 @@ function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
     // Inquirer Mapping fields:-
 
+     affiliate_presenting_tutor:
+      buildOwnerMapping(
+        affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto],
+      ) || null,  //Hubspot User
     affiliate_lead_owner:
       buildOwnerMapping(
         affiliateleadOwnerMapping[data?.affiliate_lead_owner],
@@ -890,7 +894,8 @@ function buildHubSpotInquirerPayload(data = {}) {
     slt_referring_rep:
       buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) ||
       null, // hubspot user
-    lead_owner: leadOwnerMappingInquirer[data?.lead_owner] || null, //hubspot User
+    lead_owner: buildOwnerMapping(leadOwnerMappingInquirer[data?.lead_owner])|| null, //hubspot User
+
     phone_1_type: normalizePicklistValue(phone1TypeMapping,data?.phone_1_type,),
     phone_2_type: normalizePicklistValue(phone2TypeMapping,data?.phone_2_type,),
     inquirer_status: normalizePicklistValue(inquirerStatusMapping,data?.inquirer_status,),
@@ -899,10 +904,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     pc_appointment_confirmation:
       normalizePicklistValue(pcAppointmentConfirmationMapping,data?.pc_appointment_confirmati,),
     lead_type: normalizePicklistValue(leadTypeMapping,data?.lead_type,),
-    affiliate_presenting_tutor:
-      buildOwnerMapping(
-        affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto],
-      ) || null,  //Hubspot User
     conferences_dani_pr_sources:
       normalizePicklistValue(conferencesDaniPrSourcesMapping,data?.conferencesdani_pr_sourc,),
     podcast: normalizePicklistValue(podcastMapping,data?.podcast,),
@@ -964,8 +965,6 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_current_monthly_payment: data?.inquirer_current_monthly_ || null,
     inquirer_profession_ivinex: data?.inquirer_profession || null,
     field_of_study: data?.fields_changed || null,
-
-    //
     // apc_follow_up_date:data?.pc_follow_up_to_book || null,
 
     gross_income_amount_2: data?.adj_gross_amount_stream_0 || null,
@@ -1430,11 +1429,11 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
     lead_owner: data?.lead_owner
       ? buildOwnerMapping(STL_Owner_Mapping?.[data.lead_owner])
-      : null,
+      : null, // hubspot user
 
     presenting_rep: data?.presenting_rep
       ? buildOwnerMapping(STL_Owner_Mapping?.[data.presenting_rep])
-      : null,
+      : null, // hubspot user
 
     primary_phone_line_type: normalizePicklistValue(
       primaryPhoneLineTypeMapping,
@@ -1464,6 +1463,8 @@ function buildHubSpotAffiliatePayload(data = {}) {
       timeZoneMappingAffilate,
       data?.time_zone0,
     ),
+
+
 
     receives_texts_: data?.receives_texts || null,
     affiliate_nurturing_call: data?.affiliate_nurturing_call || null,
@@ -2141,9 +2142,10 @@ function buildHubSpotClientPayload(data = {}) {
     current_servicer: normalizePicklistValue(currentServicerMapping,data?.current_servicer0,),
     ia_inquirer_status:
     normalizePicklistValue(iaInquirerStatusMapping,data?.ia_inquirer_status,),
+    // client_status: normalizePicklistValue(ClientstatusMapping,data?.status1,),
+    // inactive_specifics: normalizePicklistValue(inactiveSpecificsMapping,data?.inactive_specifics,), // hubspot missing value
 
 
-    // inactive_specifics: inactiveSpecificsMapping[data?.inactive_specifics] || null, // hubspot missing value
       // client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
@@ -2285,12 +2287,9 @@ function buildHubSpotClientPayload(data = {}) {
     pslf_date_last_signed_4: data?.pslf_date_last_signed_4 || null,
     pslf_verified_qualifying_payments_total:
       data?.pslf_verified_qualifying_ || null,
-    // primary_phone:data?.primary_phone ||null,
-    // secondary_phone:data?.secondary_phone ||null,
     employer_city: data?.employers_city || null,
     studentaidgov_user_not_needed: data?.studentaidgov_user_not_0 || null,
     studentaidgov_pass_not_needed: data?.studentaidgov_pass_not_0 || null,
-    // days_since_app_sub: data?.days_since_app_sub || null,
     loan_2_months_toward_forgiveness: data?.months_toward_forgiveness || null,
     security_qas: data?.security_qas || null,
     email_created_for_nelnet_6digit_security_code:
@@ -2304,7 +2303,6 @@ function buildHubSpotClientPayload(data = {}) {
     created_by: data?.created_by || null,
     modified_by: data?.modified_by || null,
     modified_date: data?.modified_date || null,
-    // lead_owner: data?.lead_owner,
     phone_2: data?.phone_2 || null,
     email_2: data?.email_2 || null,
     address_1: data?.address_1 || null,
@@ -2313,15 +2311,17 @@ function buildHubSpotClientPayload(data = {}) {
     state: data?.state || null,
     zip: data?.zip || null,
     spouse__partner: data?.spouse__partner || null,
-    // referral: data?.referrals || null,
     msa_received0: data?.msa_received0 || null,
     lpa_sent: data?.lpa_sent || null,
     lpa_received: data?.lpa_received || null,
     client_household_size_notes: data?.client_household_size_not || null,
     client_income_doc_notes: data?.client_income_doc_notes || null,
-
+      // primary_phone:data?.primary_phone ||null,
+    // secondary_phone:data?.secondary_phone ||null,
+    // referral: data?.referrals || null,
     // idr_app_submitted_date: data?.idr_app_submitted_date,
     // days_since_app_sub: data?.days_since_app_sub,
+     // days_since_app_sub: data?.days_since_app_sub || null,
     error_with_payments: data?.error_with_payments || null,
     date_of_birth: data?.date_of_birth || null,
     phone_1: data?.primary_phone0 || null,
@@ -2388,21 +2388,21 @@ function buildHubSpotClientPayload(data = {}) {
       : null,
 
     roa_sent_to_servicer: data?.roa_sent_to_servicer || null,
+    desired_servicer_s: data?.servicer_account_ || null,
     // time_zone0: data?.time_zone0,
     // client_current_plan_idr_history: data?.client_current_planidr_h,
     // primary_phone0: data?.primary_phone,
-    desired_servicer_s: data?.servicer_account_ || null,
     // days_to_recert: data?.days_to_recert || null,
     // recert_date: data?.recert_date || null,
-
     // possible_testimonial: data?.possible_testimonial,
     // mn_client: data?.mn_client,
     // ny_client: data?.ny_client,
     // ca_client: data?.ca_client,
-    import_id: data?.import_id || null,
-    mass_update: data?.mass_update_ || null,
     // referred_to_slp: data?.referred_to_slp,
     // double_consol_ppl_in_progress: data?.double_consol_ppl_in_prog,
+    // special_calculation_notes: data?.special_calculation_notes,
+    import_id: data?.import_id || null,
+    mass_update: data?.mass_update_ || null,
     servicer_account: data?.servicer_account_ || null,
     first_year_of_payment: data?.first_year_of_payment,
     pp_tags_active: data?.pp_tags_active,
@@ -2410,7 +2410,6 @@ function buildHubSpotClientPayload(data = {}) {
     calculator_report_link: data?.calculator_report_link || null,
     payment_problem_to_resolve: data?.payment_problem_to_resolv || null,
     current_ffel_loans: data?.current_ffel_loans,
-    // special_calculation_notes: data?.special_calculation_notes,
     email_address: data?.email_address || null,
 
     first_name: data?.first_name || null,
@@ -2420,13 +2419,10 @@ function buildHubSpotClientPayload(data = {}) {
     n2nd_contact___email: data?.email_1 || null,
     n2nd_contact___phone: data?.primary_phone || null,
     client_name: data?.client_name || null,
-
     email_1: data?.email_1 || null,
-    // phone_1_type_ivinex: data?.phone_1_type, //
-    // phone_2_type_ivinex: data?.phone_2_type, //
     spouse_has_loans_ivinex: data?.spouse_has_loans || null,
-    // forbearance_needed0_ivinex: data?.forbearance_needed0, //todo doesnot exist in hubspot
-    // pslf_ivinex:data?.pslf, //todo doesnot exist in hubspot
+
+
   });
 
   // logger.info("Cleaned properties:", properties);
