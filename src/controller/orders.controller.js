@@ -237,7 +237,7 @@ async function processOrder(
         `✅ Order Work created: ${JSON.stringify(created.id, null, 2)}`,
       );
     }
-    return; // todo remove after testing
+    // return; // todo remove after testing
     // Associate client and order
     const hs_client = getHubspotClient();
     const client = await searchCustomObjectInHubSpot(

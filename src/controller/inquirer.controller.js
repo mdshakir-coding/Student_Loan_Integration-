@@ -326,7 +326,7 @@ async function processnquirer(
 
       logger.info(`✅ Inquirer created: ${JSON.stringify(created.id,null,2)}`);
     }
-      return;
+      // return;
     // let inquirer_record_id = null;
     // let searchResults = null;
 
@@ -350,7 +350,7 @@ async function processnquirer(
 
     //   logger.info(`✅ Inquirer created: ${created?.id}`);
     // }
-    return; // todo remove after testing
+    // return; // todo remove after testing
     // Find client based on linked_client field in Hubspot ->(Client,affiliate,inquirer)
     const hs_client = getHubspotClient();
 

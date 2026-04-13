@@ -2102,6 +2102,93 @@ const fulfillmentCompanyMapping = {
   15027: "Guardian",
   15028: "Other",
 };
+
+// client status Mapping fields
+
+// const clinetStatusMapping = {
+  
+  
+//   15073: "Pending - Tutor Following Up",
+//   15021: "Pending - Outstanding Invoice",
+//   14208: "Pending - Intake Scheduled"
+
+
+// };
+
+const clinetStatusMapping = {
+  // ✅ Direct mappings
+  15073: "Pending - Tutor Following Up",
+  15021: "Pending - Outstanding Invoice",
+  14208: "Pending - Intake Scheduled",
+
+  // 🔁 Follow-up related → Tutor Following Up
+  14995: "Pending - Tutor Following Up",
+  14195: "Pending - Tutor Following Up",
+
+  // 🔁 Process / pipeline → Intake Scheduled
+  11893: "Pending - Intake Scheduled",
+  13379: "Pending - Intake Scheduled",
+  11894: "Pending - Intake Scheduled",
+  14185: "Pending - Intake Scheduled",
+  11556: "Pending - Intake Scheduled",
+  15320: "Pending - Intake Scheduled",
+  11558: "Pending - Intake Scheduled",
+  13786: "Pending - Intake Scheduled",
+  15252: "Pending - Intake Scheduled",
+  11895: "Pending - Intake Scheduled",
+  11896: "Pending - Intake Scheduled",
+
+  // 🔴 INACTIVE (special handling)
+  13385: "Pending - Tutor Following Up"
+};
+
+const lpaMsaSentFromMapping = {
+  // 15196: "", // (please select) → usually send empty / null
+  15193: "SLT - docs@studentloantutor.com",
+  15194: "SLP - docs@studentloanprocessor.com",
+  15195: "SLP.NET - docs@studentloanprocessing.net"
+};
+
+const professionMappingClient = {
+  // 12734: "", // Blank → send null/empty
+  13381: "Unknown",
+  12735: "Chiropractor",
+  12736: "Naturopath",
+  12737: "Acupuncturist",
+  12738: "Dentist",
+  12739: "Medical Practioner",
+  12740: "Teacher",
+  12741: "Multiple",
+  13066: "Veterinarian",
+  12743: "Sales",
+  12744: "Finance",
+  12745: "Self-employed (generic)",
+  12742: "W-2 (generic)",
+  14905: "Financial Advisor",
+  13326: "Therapist",
+  14188: "Attorney",
+  14189: "Nutritionist",
+  14193: "Doctorate (PHD)",
+  14194: "Nurse",
+  14848: "Pharmacist",
+  14902: "Psychologist",
+  14913: "Physician",
+  14947: "Orthodontist",
+  12748: "Optometrist",
+  14968: "Other"
+};
+
+function mapSpouseLoans(value) {
+  if (!value) return "Unknown";
+
+  const normalized = value.toLowerCase().trim();
+
+  if (["yes", "y", "true"].includes(normalized)) return "Yes";
+  if (["no", "n", "false", "nope"].includes(normalized)) return "No";
+
+  return "Unknown";
+}
+
 function convertToHubspotDate(dateString) {
   if (!dateString) return null;
 
@@ -2141,12 +2228,18 @@ function buildHubSpotClientPayload(data = {}) {
     aar_fee: normalizePicklistValue(aarFeeMapping,data?.aar_fee,),
     current_servicer: normalizePicklistValue(currentServicerMapping,data?.current_servicer0,),
     ia_inquirer_status:
-    normalizePicklistValue(iaInquirerStatusMapping,data?.ia_inquirer_status,),
-    // client_status: normalizePicklistValue(ClientstatusMapping,data?.status1,),
-    // inactive_specifics: normalizePicklistValue(inactiveSpecificsMapping,data?.inactive_specifics,), // hubspot missing value
+    normalizePicklistValue(iaInquirerStatusMapping,data?.hf_apc_booking_status,), 
+    lpamsa__sent_from: normalizePicklistValue(lpaMsaSentFromMapping,data?.lpamsa__sent_from,),
+    profession: normalizePicklistValue(professionMappingClient,data?.profession0,),
+    // spouse_has_loans_
+    // : normalizePicklistValue(spouseHasLoansMapping,data?.spouse_has_loans,),
+    client_status: normalizePicklistValue(clinetStatusMapping,data?.status1,),
+    // inactive_specifics: normalizePicklistValue(inactiveSpecificsMapping,data?.inactive_specifics,),
+    // apc_status: normalizePicklistValue(apcStatusMapping,data?.apc_booking_status_no_lo,),
 
-
-      // client_is_pslf_: clientIsPslfMapping[data?.client_is_pslf0] || null,
+      spouse_has_loans_: mapSpouseLoans(data?.spouse_has_loans),
+      
+      client_is_pslf_: normalizePicklistValue(clientIsPslfMapping,data?.client_is_pslf0,), 
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
@@ -2158,6 +2251,11 @@ function buildHubSpotClientPayload(data = {}) {
     //   data?.client_consolidation__lo ||null,
     // client_avg__interest_rate: data?.client_avg_interest_rate || null,
     // idr_app_submitted_date:data?.idr_app_submitted_date ||null,
+
+    // work_orders: data?.work_order_notes || null,
+
+
+    spouse_has_loans_ivinex:data?.spouse_has_loans_ivinex ||null,
 
     idr_app_submitted_date: data?.idr_app_submitted_date
       ? (() => {
@@ -2194,6 +2292,7 @@ function buildHubSpotClientPayload(data = {}) {
     middle_name: data?.middle_initialname || null,
     nickname: data?.nickname || null,
     maiden_name: data?.maiden_name || null,
+    profession_detail: data?.profession_details || null,
     profession_details: data?.profession_details || null,
     contact_notes: data?.contact_notes || null,
     spouse_name: data?.spouse_name || null,

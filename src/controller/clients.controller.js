@@ -88,7 +88,7 @@ async function processClient(
     email_2: "Sheesh@bigdogs.com",
     time_zone0: "13399",
     address_1: "sux 5th ave",
-    address_2: "",
+    address_2: "Suite 99",
     city: "New York City",
     state: "NY",
     zip: "10033",
