@@ -524,13 +524,22 @@ const inquirerProfessionMapping = {
   10336: "Other",
 };
 // inquirer_employment_type picklist mapping
+// const inquirerEmploymentTypeMapping = {
+//   12925: "Self Employed",
+//   10325: "W2",
+//   10326: "1099",
+//   10327: "Unemployed",
+//   12913: "Multiple",
+//   15166: "Retired",
+// };
+
 const inquirerEmploymentTypeMapping = {
-  12925: "Self Employed",
-  10325: "W2",
-  10326: "1099",
+  12925: "Self Employed - Business Owner",
+  10325: "W2 Employee",
+  10326: "Self Employed - No Entity Set Up Yet",
   10327: "Unemployed",
-  12913: "Multiple",
-  15166: "Retired",
+  12913: "Multiple (Self Employed/W2)", // ✅ FIXED
+  15166: "Retired"
 };
 
 // marital_status picklist mapping
@@ -2542,7 +2551,7 @@ const employmentTypeMapping = {
   15054: "Self Employed - No Entity Set Up Yet",
   15067: "Self Employed - 1099",
   15055: "W2 - Employee",
-  15059: "Multiple - Self Employed/W2",
+  15059: "Multiple (Self Employed/W2)" ,
   15057: "Unemployed",
   15172: "Retired",
 };
@@ -2834,7 +2843,7 @@ function buildHubspotOrderPayload(data = {}) {
     created_date: data?.created_date || null,
     // IMPORTANT: must be a STAGE ID, not pipeline ID or label
     // hs_pipeline_stage: data?.hs_pipeline_stage,
-    hs_pipeline_stage: "2091193059", // 1300018877
+    hs_pipeline_stage: "2091193059", // 1300018877,2091193059
     subject: data?.subject || null,
     content: data?.content || null,
   });
