@@ -86,7 +86,7 @@ async function syncActivity() {
 async function syncActivity() {
   try {
     // fetch activity records
-    const records = await fetchActivityReords(); 
+    const records = await fetchActivityReords();
     logger.info(`Activity records:${JSON.stringify(records.length)}`);
     // return; // todo remove after testing
 
@@ -143,8 +143,17 @@ async function processActivity(
   }
 ) {
   try {
+    await processSingleNote(record);
+
+    await processSingleTask(record);
+  } catch (error) {
+    logger.error("Error processing activity record", error.message);
+  }
+}
+async function processSingleTask(record) {
+  try {
     // Build HubSpot payload
-    const payload = buildHubSpotActivityPayload(record);
+    const payload = hubspotTaskPayload(record);
 
     logger.info(`Activity Record: ${JSON.stringify(record, null, 2)}`);
     logger.info(`Activity Payload: ${JSON.stringify(payload, null, 2)}`);
@@ -160,20 +169,28 @@ async function processActivity(
       let existingActivityId = null;
       existingActivityId = upsertActivity?.id;
 
-      logger.info(`Activity exists with id ${JSON.stringify(existingActivityId)}, updating...`);
+      logger.info(
+        `Activity exists with id ${JSON.stringify(
+          existingActivityId
+        )}, updating...`
+      );
 
       upsertActivity = await updateActivityInHubSpot(
         existingActivityId,
         payload
       );
 
-      logger.info(`✅ Activity updated:${JSON.stringify(upsertActivity.id,null,2)}`);
+      logger.info(
+        `✅ Activity updated:${JSON.stringify(upsertActivity.id, null, 2)}`
+      );
     } else {
       // Activity does not exist → create
       // let created = null;
       upsertActivity = await createActivityInHubSpot(payload);
 
-      logger.info(`✅ Activity created:${JSON.stringify(upsertActivity.id,null,2)}`);
+      logger.info(
+        `✅ Activity created:${JSON.stringify(upsertActivity.id, null, 2)}`
+      );
     }
 
     // Find client based on linked_client field in Hubspot ->(Client)
@@ -208,7 +225,86 @@ async function processActivity(
       );
     }
   } catch (error) {
-    logger.error("Error processing activity record", error.message);
+    logger.error("Error processing activity record", error);
+  }
+}
+
+async function processSingleNote(record) {
+  try {
+    // Build HubSpot payload
+    const payload = buildHubSpotActivityPayload(record);
+
+    logger.info(`Activity Record: ${JSON.stringify(record, null, 2)}`);
+    logger.info(`Activity Payload: ${JSON.stringify(payload, null, 2)}`);
+
+    // 🔍 Search existing activity (by collection_id or email_id)
+    let upsertActivity = null;
+    upsertActivity = await searchActivityInHubSpot(
+      record.collection_id // or record.email_id
+    );
+
+    if (upsertActivity) {
+      // Activity exists → update
+      let existingActivityId = null;
+      existingActivityId = upsertActivity?.id;
+
+      logger.info(
+        `Activity exists with id ${JSON.stringify(
+          existingActivityId
+        )}, updating...`
+      );
+
+      upsertActivity = await updateActivityInHubSpot(
+        existingActivityId,
+        payload
+      );
+
+      logger.info(
+        `✅ Activity updated:${JSON.stringify(upsertActivity.id, null, 2)}`
+      );
+    } else {
+      // Activity does not exist → create
+      // let created = null;
+      upsertActivity = await createActivityInHubSpot(payload);
+
+      logger.info(
+        `✅ Activity created:${JSON.stringify(upsertActivity.id, null, 2)}`
+      );
+    }
+
+    // Find client based on linked_client field in Hubspot ->(Client)
+    const hs_client = getHubspotClient();
+
+    //  client affiliate inquirer
+    const client = await searchCustomObjectInHubSpotBasedonCustomeField(
+      "2-171843307",
+      "collection_id",
+      record.email_id
+    );
+
+    logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
+
+    if (client[0]?.id && upsertActivity?.id) {
+      // ➡️ associate here
+
+      const associate = await hs_client.associations.associate(
+        "notes",
+        upsertActivity?.id,
+        clientObject,
+        client[0].id,
+        26,
+        "USER_DEFINED"
+      );
+      logger.info(
+        `✅ Association Completed | upsertActivity Id ${
+          upsertActivity?.id
+        } associated with Client ${client[0]?.id}: Association ${JSON.stringify(
+          associate
+        )}`
+      );
+    }
+  } catch (error) {
+    logger.error("Error processing activity record", error);
   }
 }
 

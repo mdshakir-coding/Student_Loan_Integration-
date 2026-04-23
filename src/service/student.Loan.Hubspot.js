@@ -2,8 +2,6 @@ import axios from "axios";
 import { cleanProps } from "../utils/helper.js";
 import { logger } from "../index.js";
 
-
-
 // Fecth Inquirer Records with pagination
 
 async function fetchInquirerRecords(perPage = 100) {
@@ -48,7 +46,6 @@ async function fetchInquirerRecords(perPage = 100) {
 }
 
 // fetch Affiliated Rescords with Add pagenation logic
-
 
 async function fetchAffiliateRecords(perPage = 100) {
   let offset = 0;
@@ -114,7 +111,9 @@ async function fetchActivityReords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      logger.info(`Fetched offset ${offset}, activity records: ${records.length}`);
+      logger.info(
+        `Fetched offset ${offset}, activity records: ${records.length}`
+      );
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -129,7 +128,6 @@ async function fetchActivityReords(perPage = 100) {
 
     logger.info(`Total activity records fetched: ${allRecords.length}`);
     return allRecords;
-
   } catch (error) {
     logger.error(
       "Error fetching activity records:",
@@ -160,7 +158,9 @@ async function fetchInvoicesRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      logger.info(`Fetched offset ${offset}, invoice records: ${records.length}`);
+      logger.info(
+        `Fetched offset ${offset}, invoice records: ${records.length}`
+      );
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -205,7 +205,9 @@ async function fetchClientsRecords(perPage = 100) {
 
       const records = response.data?.Records || [];
 
-      logger.info(`Fetched offset ${offset}, client records: ${records.length}`);
+      logger.info(
+        `Fetched offset ${offset}, client records: ${records.length}`
+      );
 
       allRecords.push(...records);
       return allRecords; //todo remove after testing
@@ -253,7 +255,7 @@ async function fetchOrdersRecords(perPage = 100) {
       logger.info(`Fetched offset ${offset}, order records: ${records.length}`);
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+      // return allRecords; //todo remove after testing
 
       // stop when last batch reached
       if (records.length < perPage) {
@@ -266,10 +268,7 @@ async function fetchOrdersRecords(perPage = 100) {
     logger.info(`Total order records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching records (CollectionTypeID=10130):",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching records (CollectionTypeID=10130):", error);
     return allRecords;
   }
 }

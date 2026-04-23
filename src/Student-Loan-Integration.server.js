@@ -1,11 +1,17 @@
 import dotenv from "dotenv";
 dotenv.config();
 import app from "./app.js";
-import {logger} from "./utils/winston.logger.js";
+import { logger } from "./utils/winston.logger.js";
 
 // import these function
-import { syncInquirer,processnquirer } from "./controller/inquirer.controller.js";
-import { syncAffiliate,processAffiliate} from "./controller/affiliate.controller.js";
+import {
+  syncInquirer,
+  processnquirer,
+} from "./controller/inquirer.controller.js";
+import {
+  syncAffiliate,
+  processAffiliate,
+} from "./controller/affiliate.controller.js";
 import {
   syncActivity,
   processActivity,
@@ -21,14 +27,9 @@ const PORT = process.env.PORT || 3400;
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
 
-  
   // syncTextMessages();
   // processClient();
   // processAffiliate();
-  processOrder();
+  syncOrders();
   // processnquirer();
-  
-  
-  
 });
-

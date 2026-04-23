@@ -416,7 +416,7 @@ async function processClient(
     days_to_recert: "-407",
     status1: "13385",
     days_since_client_cont: "0",
-  },
+  }
 ) {
   try {
     // Build payload
@@ -434,7 +434,11 @@ async function processClient(
       // Client exists → Update
       const existingClientId = searchResults[0].id;
       logger.info(
-        `Client exists with id ${JSON.stringify(existingClientId, null, 2)}, updating...`,
+        `Client exists with id ${JSON.stringify(
+          existingClientId,
+          null,
+          2
+        )}, updating...`
       );
 
       const updated = await updateClientInHubSpot(existingClientId, Payloads);
@@ -445,6 +449,8 @@ async function processClient(
       const created = await createClientInHubSpot(Payloads);
       logger.info(`✅ Client created: ${JSON.stringify(created.id, null, 2)}`);
     }
+
+    // work order, task and note associate with client
   } catch (error) {
     logger.error("Error processing client record", error.message);
   }

@@ -49,8 +49,8 @@ export { syncEmails };
 
 async function syncEmails() {
   try {
-     // fetch all email records
-    const records = await fetchEmailsRecords(); 
+    // fetch all email records
+    const records = await fetchEmailsRecords();
     logger.info(`Emails Records :${JSON.stringify(records.length)}`);
 
     let startIndex = loadProgress();
@@ -76,7 +76,13 @@ async function syncEmails() {
           let existingEmailId = null;
           existingEmailId = searchResults[0].id;
 
-          logger.info(`Email exists with id ${JSON.stringify(existingEmailId,null,2)}, updating...`);
+          logger.info(
+            `Email exists with id ${JSON.stringify(
+              existingEmailId,
+              null,
+              2
+            )}, updating...`
+          );
 
           let updated = null;
           updated = await updateEmailInHubSpot(existingEmailId, payload);
