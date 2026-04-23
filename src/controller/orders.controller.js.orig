@@ -91,6 +91,9 @@ async function syncOrders() {
   }
 }
 
+<<<<<<< HEAD
+async function processOrder() {
+=======
 async function processOrder(
   record = {
     collection_id: "22796",

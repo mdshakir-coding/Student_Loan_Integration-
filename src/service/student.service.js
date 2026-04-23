@@ -461,9 +461,7 @@ async function createOrderInHubSpot(Payloads) {
   const url = "https://api.hubapi.com/crm/v3/objects/0-5";
 
   try {
-    
     const response = await axios.post(url, Payloads, {
-
       headers: {
         Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
         "Content-Type": "application/json",
@@ -788,6 +786,49 @@ async function searchActivityInHubSpot(collectionId) {
     return null;
   }
 }
+async function searchTaskInHubSpot(collectionId) {
+  if (!collectionId) return null;
+
+  const payload = {
+    filterGroups: [
+      {
+        filters: [
+          {
+            propertyName: "hs_task_body", // only searchable-ish field
+            operator: "CONTAINS_TOKEN",
+            value: String(collectionId),
+          },
+        ],
+      },
+    ],
+    limit: 1,
+  };
+
+  try {
+    const response = await axios.post(
+      "https://api.hubapi.com/crm/v3/objects/notes/search",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const result = response.data?.results?.[0] ?? null;
+
+    logger.info(
+      "ℹ️ Activity search attempted, found:",
+      result ? "1 note" : "no notes"
+    );
+
+    return result;
+  } catch (error) {
+    logger.warn("⚠️ Activity search skipped (HubSpot limitation)");
+    return null;
+  }
+}
 
 // update Activity In hubspot
 
@@ -831,8 +872,28 @@ async function createActivityInHubSpot(payload) {
     return {};
   }
 }
+async function createTaskInHubSpot(payload) {
+  const url = "https://api.hubapi.com/crm/v3/objects/tasks";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // logger.info("✅ Activity created:", response.data);
+    return response.data;
+  } catch (error) {
+    logger.error("❌ Error creating Task:", error.response?.data || error);
+    // throw error; // keep commented to match your pattern
+    return {};
+  }
+}
 
 export {
+  createTaskInHubSpot,
   createAffiliateInHubSpot,
   updateAffiliateInHubSpot,
   searchAffiliateByInHubspot,

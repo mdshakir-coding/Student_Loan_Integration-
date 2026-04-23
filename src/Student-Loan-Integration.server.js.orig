@@ -26,5 +26,14 @@ const PORT = process.env.PORT || 3400;
 
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
+
+  // syncTextMessages();
+  processClient();
+  // processAffiliate();
+<<<<<<< HEAD
+  syncOrders();
+=======
+  // processOrder();
+>>>>>>> main
   // processnquirer();
 });

@@ -1,5 +1,4 @@
-
-import {logger} from "./winston.logger.js";
+import { logger } from "./winston.logger.js";
 
 // helper function to normalize picklist values with flexible matching
 
@@ -95,7 +94,6 @@ function cleanProps(obj) {
 
   return cleaned;
 }
-
 
 // lead_owner Picklist value mapped for Inquirer
 
@@ -524,12 +522,21 @@ const inquirerProfessionMapping = {
   10336: "Other",
 };
 // inquirer_employment_type picklist mapping
+// const inquirerEmploymentTypeMapping = {
+//   12925: "Self Employed",
+//   10325: "W2",
+//   10326: "1099",
+//   10327: "Unemployed",
+//   12913: "Multiple",
+//   15166: "Retired",
+// };
+
 const inquirerEmploymentTypeMapping = {
-  12925: "Self Employed",
-  10325: "W2",
-  10326: "1099",
+  12925: "Self Employed - Business Owner",
+  10325: "W2 Employee",
+  10326: "Self Employed - No Entity Set Up Yet",
   10327: "Unemployed",
-  12913: "Multiple",
+  12913: "Multiple (Self Employed/W2)", // ✅ FIXED
   15166: "Retired",
 };
 
@@ -883,70 +890,111 @@ function buildHubSpotInquirerPayload(data = {}) {
   const properties = cleanProps({
     // Inquirer Mapping fields:-
 
-     affiliate_presenting_tutor:
+    affiliate_presenting_tutor:
       buildOwnerMapping(
-        affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto],
-      ) || null,  //Hubspot User
+        affiliatePresentingTutorMapping[data?.affiliate_presenting_tuto]
+      ) || null, //Hubspot User
     affiliate_lead_owner:
       buildOwnerMapping(
-        affiliateleadOwnerMapping[data?.affiliate_lead_owner],
+        affiliateleadOwnerMapping[data?.affiliate_lead_owner]
       ) || null, // hubspot user
     slt_referring_rep:
       buildOwnerMapping(sltReferringRepMapping[data?.slt_referring_rep]) ||
       null, // hubspot user
-    lead_owner: buildOwnerMapping(leadOwnerMappingInquirer[data?.lead_owner])|| null, //hubspot User
+    lead_owner:
+      buildOwnerMapping(leadOwnerMappingInquirer[data?.lead_owner]) || null, //hubspot User
 
-    phone_1_type: normalizePicklistValue(phone1TypeMapping,data?.phone_1_type,),
-    phone_2_type: normalizePicklistValue(phone2TypeMapping,data?.phone_2_type,),
-    inquirer_status: normalizePicklistValue(inquirerStatusMapping,data?.inquirer_status,),
-    hs_timezone: normalizePicklistValue(timeZone0Mapping,data?.time_zone0,),
-    standby_list: normalizePicklistValue(standyListMapping,data?.standby_list,),
-    pc_appointment_confirmation:
-      normalizePicklistValue(pcAppointmentConfirmationMapping,data?.pc_appointment_confirmati,),
-    lead_type: normalizePicklistValue(leadTypeMapping,data?.lead_type,),
-    conferences_dani_pr_sources:
-      normalizePicklistValue(conferencesDaniPrSourcesMapping,data?.conferencesdani_pr_sourc,),
-    podcast: normalizePicklistValue(podcastMapping,data?.podcast,),
-    du_financial_planner:
-      normalizePicklistValue(duFinancialPlannerMapping,data?.du_financial_planner,),
-    du_slt_outreach_affiliate_source:
-      normalizePicklistValue(duSltOutreachAffiliateSourceMapping,data?.du_slt_outreachaffiliate,),
-    contractor_referred_by:
-      normalizePicklistValue(contractorReferredByMapping,data?.contractor_referred_by,),
-    inquirer_profession:
-      normalizePicklistValue(inquirerProfessionMapping,data?.inquirer_profession,),
-    inquirer_employment_type:
-      normalizePicklistValue(inquirerEmploymentTypeMapping,data?.inquirer_employment_type,),
-    marital_status: normalizePicklistValue(maritalStatusMapping,data?.marital_status,),
-    eval___taxes_jointly_separate_:
-      normalizePicklistValue(evalTaxesJointlySeparateMapping,data?.eval__taxes_jointlysepa,),
-    eval___spouse_has_loans:
-     normalizePicklistValue(evalSpouseHasLoansMapping,data?.eval__spouse_has_loans,),
-    eval___spouse_pay_frequency:
-      normalizePicklistValue(evalSpousePayFrequencyMapping,data?.eval__pay_frequency,),// hubspot data single-line text
-    inquirer_loan_status:
-      normalizePicklistValue(inquirerLoanStatusMapping,data?.inquirer_loan_status,),
-    inquirer_current_repayment_plan:
-      normalizePicklistValue(inquirerCurrentRepaymentPlanMapping,data?.inquirer_current_repaymen,),
+    phone_1_type: normalizePicklistValue(phone1TypeMapping, data?.phone_1_type),
+    phone_2_type: normalizePicklistValue(phone2TypeMapping, data?.phone_2_type),
+    inquirer_status: normalizePicklistValue(
+      inquirerStatusMapping,
+      data?.inquirer_status
+    ),
+    hs_timezone: normalizePicklistValue(timeZone0Mapping, data?.time_zone0),
+    standby_list: normalizePicklistValue(standyListMapping, data?.standby_list),
+    pc_appointment_confirmation: normalizePicklistValue(
+      pcAppointmentConfirmationMapping,
+      data?.pc_appointment_confirmati
+    ),
+    lead_type: normalizePicklistValue(leadTypeMapping, data?.lead_type),
+    conferences_dani_pr_sources: normalizePicklistValue(
+      conferencesDaniPrSourcesMapping,
+      data?.conferencesdani_pr_sourc
+    ),
+    podcast: normalizePicklistValue(podcastMapping, data?.podcast),
+    du_financial_planner: normalizePicklistValue(
+      duFinancialPlannerMapping,
+      data?.du_financial_planner
+    ),
+    du_slt_outreach_affiliate_source: normalizePicklistValue(
+      duSltOutreachAffiliateSourceMapping,
+      data?.du_slt_outreachaffiliate
+    ),
+    contractor_referred_by: normalizePicklistValue(
+      contractorReferredByMapping,
+      data?.contractor_referred_by
+    ),
+    inquirer_profession: normalizePicklistValue(
+      inquirerProfessionMapping,
+      data?.inquirer_profession
+    ),
+    inquirer_employment_type: normalizePicklistValue(
+      inquirerEmploymentTypeMapping,
+      data?.inquirer_employment_type
+    ),
+    marital_status: normalizePicklistValue(
+      maritalStatusMapping,
+      data?.marital_status
+    ),
+    eval___taxes_jointly_separate_: normalizePicklistValue(
+      evalTaxesJointlySeparateMapping,
+      data?.eval__taxes_jointlysepa
+    ),
+    eval___spouse_has_loans: normalizePicklistValue(
+      evalSpouseHasLoansMapping,
+      data?.eval__spouse_has_loans
+    ),
+    eval___spouse_pay_frequency: normalizePicklistValue(
+      evalSpousePayFrequencyMapping,
+      data?.eval__pay_frequency
+    ), // hubspot data single-line text
+    inquirer_loan_status: normalizePicklistValue(
+      inquirerLoanStatusMapping,
+      data?.inquirer_loan_status
+    ),
+    inquirer_current_repayment_plan: normalizePicklistValue(
+      inquirerCurrentRepaymentPlanMapping,
+      data?.inquirer_current_repaymen
+    ),
     tutor: buildOwnerMapping(tutorNameMapping[data?.tutor_name]) || null,
-    slt_rep_referred_by:
-      normalizePicklistValue(sltRepReferredByMapping,data?.slt_rep_referred_by,), //hubspot data single-line text
-    fed_loan_amount_old:
-      normalizePicklistValue(fedLoanAmountOldMapping,data?.fed_loan_amount_old,), // hubspot data single-line text
-    inquirer_loan_servicer:
-      normalizePicklistValue(inquirerLoanServicerMapping,data?.inquirer_loan_servicer,),
-    household_size___income_threshold__150__:
-      normalizePicklistValue(householdSizeIncomeThreshold150Mapping,data?.household_size__income_t0,),
-    income_amount_and_pay_frequency:
-      normalizePicklistValue(incomeAmountAndPayFrequencyMapping,data?.pay_frequency_stream_1,),
-    pay_frequency_stream_2:
-      normalizePicklistValue(payFrequencyStream2Mapping,data?.pay_frequency_stream_2,),
-    pay_frequency_stream_3:
-      normalizePicklistValue(payFrequencyStream3Mapping,data?.pay_frequency_stream_3,),
-
-
-
-
+    slt_rep_referred_by: normalizePicklistValue(
+      sltRepReferredByMapping,
+      data?.slt_rep_referred_by
+    ), //hubspot data single-line text
+    fed_loan_amount_old: normalizePicklistValue(
+      fedLoanAmountOldMapping,
+      data?.fed_loan_amount_old
+    ), // hubspot data single-line text
+    inquirer_loan_servicer: normalizePicklistValue(
+      inquirerLoanServicerMapping,
+      data?.inquirer_loan_servicer
+    ),
+    household_size___income_threshold__150__: normalizePicklistValue(
+      householdSizeIncomeThreshold150Mapping,
+      data?.household_size__income_t0
+    ),
+    income_amount_and_pay_frequency: normalizePicklistValue(
+      incomeAmountAndPayFrequencyMapping,
+      data?.pay_frequency_stream_1
+    ),
+    pay_frequency_stream_2: normalizePicklistValue(
+      payFrequencyStream2Mapping,
+      data?.pay_frequency_stream_2
+    ),
+    pay_frequency_stream_3: normalizePicklistValue(
+      payFrequencyStream3Mapping,
+      data?.pay_frequency_stream_3
+    ),
 
     inquirer_status_ivinex: data?.inquirer_status || null,
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
@@ -1406,8 +1454,6 @@ const timeZoneMappingAffilate = {
 
 //  code for Affiliate Payload
 
-
-
 function buildHubSpotAffiliatePayload(data = {}) {
   const properties = {
     //Picklist Mapping here
@@ -1437,15 +1483,18 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
     primary_phone_line_type: normalizePicklistValue(
       primaryPhoneLineTypeMapping,
-      data?.primary_phone_line_type,
+      data?.primary_phone_line_type
     ),
 
     phone_2_type: normalizePicklistValue(
       phone2TypeMappingAffiliate,
-      data?.phone_2_type,
+      data?.phone_2_type
     ),
 
-    affiliate_status: normalizePicklistValue(affiliateStatusMapping,data?.affiliate_status),
+    affiliate_status: normalizePicklistValue(
+      affiliateStatusMapping,
+      data?.affiliate_status
+    ),
     industry: normalizePicklistValue(industryMapping, data?.industry),
 
     profession: normalizePicklistValue(professionMapping, data?.profession),
@@ -1454,17 +1503,15 @@ function buildHubSpotAffiliatePayload(data = {}) {
 
     comp_super_affiliate: normalizePicklistValue(
       compSuperAffiliateMapping,
-      data?.comp_super_affiliate,
+      data?.comp_super_affiliate
     ),
 
     conference: normalizePicklistValue(conferenceMapping, data?.conference),
 
     time_zone: normalizePicklistValue(
       timeZoneMappingAffilate,
-      data?.time_zone0,
+      data?.time_zone0
     ),
-
-
 
     receives_texts_: data?.receives_texts || null,
     affiliate_nurturing_call: data?.affiliate_nurturing_call || null,
@@ -1568,52 +1615,52 @@ function buildHubSpotInvoicePayload(data = {}) {
     site_id: data?.site_id || null,
     fields_changed: data?.fields_changed || null,
     dont_use_setter_if_25_: data?.dont_use_setter_if_25_ || null,
-    hours_spent: data?.hours_spent ||null,
-    created_by: data?.created_by ||null,
-    project_description: data?.project_description ||null,
-    amount_of_expense_receip: data?.amount_of_expense_receip ||null,
-    expense_description: data?.expense_description ||null,
-    review_bonuses__processi: data?.review_bonuses__processi ||null,
-    marketing_bonuses: data?.marketing_bonuses ||null,
-    advanced_planning_activit: data?.advanced_planning_activit ||null,
-    affiliate_bonus: data?.affiliate_bonus ||null,
-    related_client: data?.related_client ||null,
-    no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_ ||null,
-    hourly_rate: data?.hourly_rate ||null,
-    setter_name: data?.setter_name ||null,
-    sale_financing___recurri: data?.sale_financing___recurri ||null,
-    special_details: data?.special_details ||null,
-    amount_charged_today: data?.amount_charged_today ||null,
-    commission_: data?.commission_ ||null,
-    sales_commission: data?.sales_commission ||null,
-    clients_tutor__only_sel: data?.clients_tutor__only_sel  ||null,
-    related_affiliate: data?.related_affiliate ||null,
-    additional_work_completed: data?.additional_work_completed ||null,
-    payment_type: data?.payment_type ||null,
-    date_reconciled: data?.date_reconciled ||null,
-    related_inquirer: data?.related_inquirer ||null,
-    related_client_processin: data?.related_client_processin ||null,
-    special_notes: data?.special_notes ||null,
-    related_client_recertifc: data?.related_client_recertifc ||null,
-    aar_sale_amount: data?.aar_sale_amount ||null,
-    payment_arrangementtrade: data?.payment_arrangementtrade ||null,
-    modified_date: data?.modified_date  ||null,
-    modified_by: data?.modified_by ||null,
-    tutor_sale_amount: data?.tutor_sale_amount ||null,
-    payment_arrangement: data?.payment_arrangement ||null,
-    dont_use__setter_if_50_: data?.dont_use__setter_if_50_ ||null,
-    special_arrangements_deta: data?.special_arrangements_deta ||null,
-    created_date: data?.created_date ||null,
-    date_of_activity: data?.date_of_activity ||null,
-    contractor_name: data?.contractor_name ||null,
-    sales_category_report_cc: data?.sales_category_report_cc ||null,
-    invoice_category: data?.invoice_category ||null,
-    total_sale_amount: data?.total_sale_amount ||null,
-    total_invoice_amount: data?.total_invoice_amount ||null,
+    hours_spent: data?.hours_spent || null,
+    created_by: data?.created_by || null,
+    project_description: data?.project_description || null,
+    amount_of_expense_receip: data?.amount_of_expense_receip || null,
+    expense_description: data?.expense_description || null,
+    review_bonuses__processi: data?.review_bonuses__processi || null,
+    marketing_bonuses: data?.marketing_bonuses || null,
+    advanced_planning_activit: data?.advanced_planning_activit || null,
+    affiliate_bonus: data?.affiliate_bonus || null,
+    related_client: data?.related_client || null,
+    no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_ || null,
+    hourly_rate: data?.hourly_rate || null,
+    setter_name: data?.setter_name || null,
+    sale_financing___recurri: data?.sale_financing___recurri || null,
+    special_details: data?.special_details || null,
+    amount_charged_today: data?.amount_charged_today || null,
+    commission_: data?.commission_ || null,
+    sales_commission: data?.sales_commission || null,
+    clients_tutor__only_sel: data?.clients_tutor__only_sel || null,
+    related_affiliate: data?.related_affiliate || null,
+    additional_work_completed: data?.additional_work_completed || null,
+    payment_type: data?.payment_type || null,
+    date_reconciled: data?.date_reconciled || null,
+    related_inquirer: data?.related_inquirer || null,
+    related_client_processin: data?.related_client_processin || null,
+    special_notes: data?.special_notes || null,
+    related_client_recertifc: data?.related_client_recertifc || null,
+    aar_sale_amount: data?.aar_sale_amount || null,
+    payment_arrangementtrade: data?.payment_arrangementtrade || null,
+    modified_date: data?.modified_date || null,
+    modified_by: data?.modified_by || null,
+    tutor_sale_amount: data?.tutor_sale_amount || null,
+    payment_arrangement: data?.payment_arrangement || null,
+    dont_use__setter_if_50_: data?.dont_use__setter_if_50_ || null,
+    special_arrangements_deta: data?.special_arrangements_deta || null,
+    created_date: data?.created_date || null,
+    date_of_activity: data?.date_of_activity || null,
+    contractor_name: data?.contractor_name || null,
+    sales_category_report_cc: data?.sales_category_report_cc || null,
+    invoice_category: data?.invoice_category || null,
+    total_sale_amount: data?.total_sale_amount || null,
+    total_invoice_amount: data?.total_invoice_amount || null,
     first_name: data?.first_name,
-    last_name: data?.last_name ||null,
-    aar_activity_commission: data?.aar_activity_commission ||null,
-    processing_activity: data?.processing_activity ||null,
+    last_name: data?.last_name || null,
+    aar_activity_commission: data?.aar_activity_commission || null,
+    processing_activity: data?.processing_activity || null,
     clients_tutor__only_sel0: data?.clients_tutor__only_sel0 || null,
   });
 
@@ -2106,12 +2153,10 @@ const fulfillmentCompanyMapping = {
 // client status Mapping fields
 
 // const clinetStatusMapping = {
-  
-  
+
 //   15073: "Pending - Tutor Following Up",
 //   15021: "Pending - Outstanding Invoice",
 //   14208: "Pending - Intake Scheduled"
-
 
 // };
 
@@ -2139,14 +2184,14 @@ const clinetStatusMapping = {
   11896: "Pending - Intake Scheduled",
 
   // 🔴 INACTIVE (special handling)
-  13385: "Pending - Tutor Following Up"
+  13385: "Pending - Tutor Following Up",
 };
 
 const lpaMsaSentFromMapping = {
   // 15196: "", // (please select) → usually send empty / null
   15193: "SLT - docs@studentloantutor.com",
   15194: "SLP - docs@studentloanprocessor.com",
-  15195: "SLP.NET - docs@studentloanprocessing.net"
+  15195: "SLP.NET - docs@studentloanprocessing.net",
 };
 
 const professionMappingClient = {
@@ -2175,7 +2220,7 @@ const professionMappingClient = {
   14913: "Physician",
   14947: "Orthodontist",
   12748: "Optometrist",
-  14968: "Other"
+  14968: "Other",
 };
 
 function mapSpouseLoans(value) {
@@ -2214,32 +2259,56 @@ function buildHubSpotClientPayload(data = {}) {
       null, // hubspot user
     calculation_performed_by:
       buildOwnerMapping(
-        calculationPerformedByMapping[data?.calculation_performed_by],
+        calculationPerformedByMapping[data?.calculation_performed_by]
       ) || null, //hubspot user
 
-
-    phone_1_type: normalizePicklistValue(phone1TypeMappingClient,data?.phone_1_type,), 
-    phone_2_type: normalizePicklistValue(phone2TypeMappingClient,data?.phone_2_type,), 
-    time_zone: normalizePicklistValue(timeZoneMapping,data?.time_zone0,),
-    status: normalizePicklistValue(statusMapping,data?.status1,),
-    current_idr_plan: normalizePicklistValue(currentIdrPlanMapping,data?.current_idr_plan,), 
-    type_of_idr_app_submitted:
-    normalizePicklistValue(typeOfIdrAppSubmittedMapping,data?.type_of_idr_app_submitted,),
-    aar_fee: normalizePicklistValue(aarFeeMapping,data?.aar_fee,),
-    current_servicer: normalizePicklistValue(currentServicerMapping,data?.current_servicer0,),
-    ia_inquirer_status:
-    normalizePicklistValue(iaInquirerStatusMapping,data?.hf_apc_booking_status,), 
-    lpamsa__sent_from: normalizePicklistValue(lpaMsaSentFromMapping,data?.lpamsa__sent_from,),
-    profession: normalizePicklistValue(professionMappingClient,data?.profession0,),
+    phone_1_type: normalizePicklistValue(
+      phone1TypeMappingClient,
+      data?.phone_1_type
+    ),
+    phone_2_type: normalizePicklistValue(
+      phone2TypeMappingClient,
+      data?.phone_2_type
+    ),
+    time_zone: normalizePicklistValue(timeZoneMapping, data?.time_zone0),
+    status: normalizePicklistValue(statusMapping, data?.status1),
+    current_idr_plan: normalizePicklistValue(
+      currentIdrPlanMapping,
+      data?.current_idr_plan
+    ),
+    type_of_idr_app_submitted: normalizePicklistValue(
+      typeOfIdrAppSubmittedMapping,
+      data?.type_of_idr_app_submitted
+    ),
+    aar_fee: normalizePicklistValue(aarFeeMapping, data?.aar_fee),
+    current_servicer: normalizePicklistValue(
+      currentServicerMapping,
+      data?.current_servicer0
+    ),
+    ia_inquirer_status: normalizePicklistValue(
+      iaInquirerStatusMapping,
+      data?.hf_apc_booking_status
+    ),
+    lpamsa__sent_from: normalizePicklistValue(
+      lpaMsaSentFromMapping,
+      data?.lpamsa__sent_from
+    ),
+    profession: normalizePicklistValue(
+      professionMappingClient,
+      data?.profession0
+    ),
     // spouse_has_loans_
     // : normalizePicklistValue(spouseHasLoansMapping,data?.spouse_has_loans,),
-    client_status: normalizePicklistValue(clinetStatusMapping,data?.status1,),
+    client_status: normalizePicklistValue(clinetStatusMapping, data?.status1),
     // inactive_specifics: normalizePicklistValue(inactiveSpecificsMapping,data?.inactive_specifics,),
     // apc_status: normalizePicklistValue(apcStatusMapping,data?.apc_booking_status_no_lo,),
 
-      spouse_has_loans_: mapSpouseLoans(data?.spouse_has_loans),
-      
-      client_is_pslf_: normalizePicklistValue(clientIsPslfMapping,data?.client_is_pslf0,), 
+    spouse_has_loans_: mapSpouseLoans(data?.spouse_has_loans),
+
+    client_is_pslf_: normalizePicklistValue(
+      clientIsPslfMapping,
+      data?.client_is_pslf0
+    ),
     // new_client_or_aar0: newClientOrAar0Mapping[data?.new_client_or_aar0] ||null, // hubspot missing fileds
     // does_client_have_a_financ: doesClientHaveAFinancMapping[data?.does_client_have_a_financ] ||null, // hubspot missing fileds
     // solic_agent: solicAgentMapping[data?.solic_agent] ||null, // hubspot missing fields
@@ -2254,8 +2323,7 @@ function buildHubSpotClientPayload(data = {}) {
 
     // work_orders: data?.work_order_notes || null,
 
-
-    spouse_has_loans_ivinex:data?.spouse_has_loans_ivinex ||null,
+    spouse_has_loans_ivinex: data?.spouse_has_loans_ivinex || null,
 
     idr_app_submitted_date: data?.idr_app_submitted_date
       ? (() => {
@@ -2415,12 +2483,12 @@ function buildHubSpotClientPayload(data = {}) {
     lpa_received: data?.lpa_received || null,
     client_household_size_notes: data?.client_household_size_not || null,
     client_income_doc_notes: data?.client_income_doc_notes || null,
-      // primary_phone:data?.primary_phone ||null,
+    // primary_phone:data?.primary_phone ||null,
     // secondary_phone:data?.secondary_phone ||null,
     // referral: data?.referrals || null,
     // idr_app_submitted_date: data?.idr_app_submitted_date,
     // days_since_app_sub: data?.days_since_app_sub,
-     // days_since_app_sub: data?.days_since_app_sub || null,
+    // days_since_app_sub: data?.days_since_app_sub || null,
     error_with_payments: data?.error_with_payments || null,
     date_of_birth: data?.date_of_birth || null,
     phone_1: data?.primary_phone0 || null,
@@ -2520,8 +2588,6 @@ function buildHubSpotClientPayload(data = {}) {
     client_name: data?.client_name || null,
     email_1: data?.email_1 || null,
     spouse_has_loans_ivinex: data?.spouse_has_loans || null,
-
-
   });
 
   // logger.info("Cleaned properties:", properties);
@@ -2542,7 +2608,7 @@ const employmentTypeMapping = {
   15054: "Self Employed - No Entity Set Up Yet",
   15067: "Self Employed - 1099",
   15055: "W2 - Employee",
-  15059: "Multiple - Self Employed/W2",
+  15059: "Multiple (Self Employed/W2)",
   15057: "Unemployed",
   15172: "Retired",
 };
@@ -2690,27 +2756,45 @@ function buildHubspotOrderPayload(data = {}) {
   const payload = cleanProps({
     // picklist Mapping here
 
-
-    employment_type: normalizePicklistValue(employmentTypeMapping,data?.employment_type,),
-    income_doc_type:normalizePicklistValue(incomeDocTypeMapping,data?.income_doc_type,),
-    marital_status: normalizePicklistValue(maritalStatusMappingOrder,data?.marital_status,),
-    most_recent_tax_filing_st:
-      normalizePicklistValue(mostRecentTaxFilingStatusMapping,data?.most_recent_tax_filing_st,), // hubspot single-text-line
-    tax_saving_status_apc:
-      normalizePicklistValue(taxSavingStatusApcMapping,data?.tax_saving_status_apc,), // hubspot single-text-line
-    type0: normalizePicklistValue(type0Mapping,data?.type0,), // hubspot single-text line
-    work_needed: normalizePicklistValue(workNeededMapping,data?.work_needed,),
-    pslf: normalizePicklistValue(pslfMapping,data?.pslf,),
-    forbearance_needed:
-      normalizePicklistValue(forbearanceNeededMapping,data?.forbearance_needed,),
-    hh_size__income_threshol:
-      normalizePicklistValue(hhSizeIncomeThresholdMapping,data?.hh_size__income_threshol,), // hubspot single-text-line
-    field_2025_ibrpaye__15:
-      normalizePicklistValue(field2025Ibrpaye15Mapping,data?.field_2025_ibrpaye__15,), //hubspot single text line
-    field_2025_icr__20: normalizePicklistValue(field2025Icr20Mapping,data?.field_2025_icr__20,), //hubspot single text line
-
-
-
+    employment_type: normalizePicklistValue(
+      employmentTypeMapping,
+      data?.employment_type
+    ),
+    income_doc_type: normalizePicklistValue(
+      incomeDocTypeMapping,
+      data?.income_doc_type
+    ),
+    marital_status: normalizePicklistValue(
+      maritalStatusMappingOrder,
+      data?.marital_status
+    ),
+    most_recent_tax_filing_st: normalizePicklistValue(
+      mostRecentTaxFilingStatusMapping,
+      data?.most_recent_tax_filing_st
+    ), // hubspot single-text-line
+    tax_saving_status_apc: normalizePicklistValue(
+      taxSavingStatusApcMapping,
+      data?.tax_saving_status_apc
+    ), // hubspot single-text-line
+    type0: normalizePicklistValue(type0Mapping, data?.type0), // hubspot single-text line
+    work_needed: normalizePicklistValue(workNeededMapping, data?.work_needed),
+    pslf: normalizePicklistValue(pslfMapping, data?.pslf),
+    forbearance_needed: normalizePicklistValue(
+      forbearanceNeededMapping,
+      data?.forbearance_needed
+    ),
+    hh_size__income_threshol: normalizePicklistValue(
+      hhSizeIncomeThresholdMapping,
+      data?.hh_size__income_threshol
+    ), // hubspot single-text-line
+    field_2025_ibrpaye__15: normalizePicklistValue(
+      field2025Ibrpaye15Mapping,
+      data?.field_2025_ibrpaye__15
+    ), //hubspot single text line
+    field_2025_icr__20: normalizePicklistValue(
+      field2025Icr20Mapping,
+      data?.field_2025_icr__20
+    ), //hubspot single text line
 
     income_doc_type_ivinex: data?.income_doc_type || null,
     marital_status_ivinex: data?.marital_status || null,
@@ -2834,7 +2918,7 @@ function buildHubspotOrderPayload(data = {}) {
     created_date: data?.created_date || null,
     // IMPORTANT: must be a STAGE ID, not pipeline ID or label
     // hs_pipeline_stage: data?.hs_pipeline_stage,
-    hs_pipeline_stage: "2091193059", // 1300018877
+    hs_pipeline_stage: "2091193059", // 1300018877,2091193059
     subject: data?.subject || null,
     content: data?.content || null,
   });
@@ -3074,7 +3158,69 @@ function buildOwnerMapping(owner) {
   return ownerId;
 }
 
+function buildHubSpotTaskPayload(data = {}) {
+  // 1. Map Status & Priority to HubSpot's accepted Enums
+  // HubSpot task priorities: "LOW", "MEDIUM", "HIGH"
+  const priorityMap = {
+    10006: "LOW",
+    10007: "MEDIUM",
+    10009: "HIGH",
+    // TODO: Add other source priority ID mappings if needed
+  };
+
+  // HubSpot task statuses: "NOT_STARTED", "IN_PROGRESS", "WAITING", "COMPLETED", "DEFERRED"
+  const statusMap = {
+    10002: "NOT_STARTED",
+    10003: "IN_PROGRESS",
+    10004: "COMPLETED",
+    // TODO: Add other source status ID mappings if needed
+  };
+
+  // 2. Build the Task Body (Description + Metadata block)
+  const bodyLines = [];
+
+  if (data?.description) {
+    bodyLines.push(data.description);
+    bodyLines.push("\n--- Source Details ---"); // Visual separator for the HubSpot UI
+  }
+
+  // Push relevant metadata that lacks a 1:1 HubSpot property
+  if (data?.collection_id)
+    bodyLines.push(`Collection ID: ${data.collection_id}`);
+  if (data?.site_id) bodyLines.push(`Site ID: ${data.site_id}`);
+  if (data?.fields_changed)
+    bodyLines.push(`Fields Changed: ${data.fields_changed}`);
+  if (data?.assigned) bodyLines.push(`Source Assignee ID: ${data.assigned}`);
+  if (data?.created_date)
+    bodyLines.push(`Source Created: ${data.created_date}`);
+  if (data?.modified_date)
+    bodyLines.push(`Source Modified: ${data.modified_date}`);
+
+  // 3. Construct the HubSpot Task Object
+  return {
+    properties: {
+      // If subject is blank, provide a fallback title so the task isn't nameless in HubSpot
+      hs_task_subject:
+        data?.subject ||
+        `Task Follow-up (ID: ${data?.collection_id || "Unknown"})`,
+
+      // Join the description and metadata into the rich text body
+      hs_task_body: bodyLines.join("\n"),
+
+      // Map the follow-up 'date' if it exists, otherwise fallback to current time
+      hs_timestamp: data?.date
+        ? new Date(data.date).toISOString()
+        : new Date().toISOString(),
+
+      hs_task_status: statusMap[data?.status] || "NOT_STARTED",
+      hs_task_priority: priorityMap[data?.priority] || "MEDIUM",
+      hs_task_type: "TODO",
+    },
+  };
+}
+
 export {
+  buildHubSpotTaskPayload,
   buildOwnerMap,
   normalizeName,
   cleanProps,

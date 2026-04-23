@@ -5,8 +5,14 @@ import {
   searchCustomObjectInHubSpot,
   searchCustomObjectInHubSpotBasedonCustomeField,
 } from "../service/student.loan.Hubspot.js";
-import { buildHubSpotActivityPayload } from "../utils/helper.js";
-import { searchActivityInHubSpot } from "../service/student.service.js";
+import {
+  buildHubSpotActivityPayload,
+  buildHubSpotTaskPayload,
+} from "../utils/helper.js";
+import {
+  searchActivityInHubSpot,
+  createTaskInHubSpot,
+} from "../service/student.service.js";
 import { updateActivityInHubSpot } from "../service/student.service.js";
 import { createActivityInHubSpot } from "../service/student.service.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
@@ -114,38 +120,40 @@ async function syncActivity() {
 
 async function processActivity(
   record = {
-    collection_id: "1352",
+    collection_id: "423771",
     site_id: "1",
-    fields_changed: "0,10053,0",
+    fields_changed: "ALL",
     location: "",
-    date_email_opened: "2016-08-24 10:22:04",
-    email_id: "38",
-    subject: "Student Loan Tutor - Client Intake Call - Next Steps",
+    date_email_opened: null,
+    email_id: null,
+    subject: "",
     bcc: "",
     cc: "",
-    field_from: "jen@studentloantutor.com",
-    email_to: "meklimek@gmail.com",
-    recurrence: "0",
+    field_from: "",
+    email_to: "",
+    recurrence: null,
     all_day_event: "false",
     end_time: null,
     start_time: null,
     priority: "0",
-    modified_date: "2016-08-24 10:20:46",
-    modified_by: "0",
-    status: "0",
-    activity: "1005",
-    description:
-      "<div>Hi ,</div>\n<div>&nbsp;</div>\n<div>It was a pleasure speaking with you today!</div>\n<div>&nbsp;</div>\n<div>Your phone appointment is confirmed for&nbsp;August 24th, 2016 @ 1:30 PST with Dr. Brian Liljenquist.</div>\n<div>&nbsp;</div>\n<div>The next step in getting an accurate figure for your new Federal student loan payment is to have a 30 minute conversation covering your actual loan balance. Please have the following information prepared for this call:</div>\n<div>&nbsp;</div>\n<div>\n<div>\n<div>- FSA ID and Password. To set this up, please copy and paste this link: https://fsaid.ed.gov/npas/index.htm</div>\n</div>\n</div>\n<div>- Last month's income</div>\n<div>- Your spouse&rsquo;s FSA ID and income, if applicable</div>\n<div>&nbsp;</div>\n<div>The FSA ID replaces the 4-digit PIN you used to sign loan documents in the past. It takes approximately 15 minutes to create a new one.</div>\n<div>&nbsp;</div>\n<div>Please contact me at your earliest convenience at 510-876-0784 if you need to reschedule this appointment.</div>\n<div>&nbsp;</div>\n<div>&nbsp;</div>\n<div>All the best,</div>\n<p>Jennifer Jensen</p>\n<p>&nbsp;</p>",
-    assigned: "17",
-    created_date: "2016-08-17 16:00:06",
-    created_by: "17",
-    date: null,
+    modified_date: "2026-03-24 10:10:31",
+    modified_by: "70",
+    status: "10003",
+    activity: "10001",
+    description: "Lets get walter's loans taken care of ASAP. ",
+    assigned: "70",
+    created_date: "2026-03-24 10:10:31",
+    created_by: "70",
+    date: "2026-04-07",
   }
 ) {
   try {
-    await processSingleNote(record);
-
-    await processSingleTask(record);
+    //  if date exists then it is task else it is note
+    if (record.date) {
+      return await processSingleTask(record);
+    } else {
+      await processSingleNote(record);
+    }
   } catch (error) {
     logger.error("Error processing activity record", error.message);
   }
@@ -153,45 +161,49 @@ async function processActivity(
 async function processSingleTask(record) {
   try {
     // Build HubSpot payload
-    const payload = hubspotTaskPayload(record);
+    const payload = buildHubSpotTaskPayload(record);
 
-    logger.info(`Activity Record: ${JSON.stringify(record, null, 2)}`);
-    logger.info(`Activity Payload: ${JSON.stringify(payload, null, 2)}`);
+    logger.info(
+      `[Student Loan] Avticity Record: ${JSON.stringify(record, null, 2)}`
+    );
+    logger.info(
+      `[Student Loan] Activity Payload: ${JSON.stringify(payload, null, 2)}`
+    );
 
     // 🔍 Search existing activity (by collection_id or email_id)
     let upsertActivity = null;
-    upsertActivity = await searchActivityInHubSpot(
-      record.collection_id // or record.email_id
+    // upsertActivity = await searchActivityInHubSpot(
+    //   record.collection_id // or record.email_id
+    // );
+
+    // if (upsertActivity) {
+    //   // Activity exists → update
+    //   let existingActivityId = null;
+    //   existingActivityId = upsertActivity?.id;
+
+    //   logger.info(
+    //     `Activity exists with id ${JSON.stringify(
+    //       existingActivityId
+    //     )}, updating...`
+    //   );
+
+    //   upsertActivity = await updateActivityInHubSpot(
+    //     existingActivityId,
+    //     payload
+    //   );
+
+    //   logger.info(
+    //     `✅ Activity updated:${JSON.stringify(upsertActivity.id, null, 2)}`
+    //   );
+    // } else {
+    // Activity does not exist → create
+    // let created = null;
+    upsertActivity = await createTaskInHubSpot(payload);
+
+    logger.info(
+      `[Hubspot] Task created:${JSON.stringify(upsertActivity.id, null, 2)}`
     );
-
-    if (upsertActivity) {
-      // Activity exists → update
-      let existingActivityId = null;
-      existingActivityId = upsertActivity?.id;
-
-      logger.info(
-        `Activity exists with id ${JSON.stringify(
-          existingActivityId
-        )}, updating...`
-      );
-
-      upsertActivity = await updateActivityInHubSpot(
-        existingActivityId,
-        payload
-      );
-
-      logger.info(
-        `✅ Activity updated:${JSON.stringify(upsertActivity.id, null, 2)}`
-      );
-    } else {
-      // Activity does not exist → create
-      // let created = null;
-      upsertActivity = await createActivityInHubSpot(payload);
-
-      logger.info(
-        `✅ Activity created:${JSON.stringify(upsertActivity.id, null, 2)}`
-      );
-    }
+    // }
 
     // Find client based on linked_client field in Hubspot ->(Client)
     const hs_client = getHubspotClient();
@@ -200,7 +212,7 @@ async function processSingleTask(record) {
     const client = await searchCustomObjectInHubSpotBasedonCustomeField(
       "2-171843307",
       "collection_id",
-      record.email_id
+      record.assigned
     );
 
     logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
@@ -209,11 +221,11 @@ async function processSingleTask(record) {
       // ➡️ associate here
 
       const associate = await hs_client.associations.associate(
-        "notes",
+        "tasks",
         upsertActivity?.id,
         clientObject,
         client[0].id,
-        26,
+        32,
         "USER_DEFINED"
       );
       logger.info(
@@ -279,7 +291,7 @@ async function processSingleNote(record) {
     const client = await searchCustomObjectInHubSpotBasedonCustomeField(
       "2-171843307",
       "collection_id",
-      record.email_id
+      record.assigned
     );
 
     logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
