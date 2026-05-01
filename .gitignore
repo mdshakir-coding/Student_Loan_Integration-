@@ -12,6 +12,8 @@ lerna-debug.log*
 .pnpm-debug.log*
 orderProgress.json
 progress.json
+failedCollectionsInquirer
+failedCollectionsWorkaffiliate
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
