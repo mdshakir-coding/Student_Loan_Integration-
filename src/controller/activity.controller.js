@@ -1,163 +1,95 @@
 import { logger } from "../index.js";
-
 import {
-  fetchActivityReords,
-  searchCustomObjectInHubSpot,
-  searchCustomObjectInHubSpotBasedonCustomeField,
-} from "../service/student.loan.Hubspot.js";
+  saveProgress,
+  loadProgress,
+  saveFailedCollectionId,
+} from "../utils/activityProgress.js";
+
+import { searchCustomObjectInHubSpotBasedonCustomeField } from "../services/studentLoan.service.js";
 import {
   buildHubSpotActivityPayload,
   buildHubSpotTaskPayload,
 } from "../utils/helper.js";
+
 import {
   searchActivityInHubSpot,
   createTaskInHubSpot,
-} from "../service/student.service.js";
-import { updateActivityInHubSpot } from "../service/student.service.js";
-import { createActivityInHubSpot } from "../service/student.service.js";
+  createActivityInHubSpot,
+  updateActivityInHubSpot,
+} from "../services/hubspot.service.js";
+
 import { getHubspotClient } from "../configs/hubspot.config.js";
 
-import { fileURLToPath } from "url";
-import path from "path";
-import fs from "fs";
-// Recreate __dirname in ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const progressFile = path.resolve(__dirname, "progress.json");
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
-function saveProgress(index) {
-  fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
-}
 
-function loadProgress() {
-  if (fs.existsSync(progressFile)) {
-    try {
-      const data = fs.readFileSync(progressFile, "utf-8");
-      const obj = JSON.parse(data);
-      return typeof obj.index === "number" ? obj.index : 0;
-    } catch {
-      return 0;
-    }
-  }
-  return 0;
-}
-
-/*
-async function syncActivity() {
+async function syncActivity(records) {
   try {
-
-    const records = await fetchActivityReords(); // call the function 
-    logger.info("Activity records", records.length);
-
-
- let startIndex = loadProgress();
-
-    for (let i = startIndex; i < records.length; i++) {
-      try {
-        const record = records[i];
-
-        let affiliateId = null;
-
-        const Payloads =  buildHubSpotActivityPayload(record); // call the function 
-
-        logger.info(" Records", record);
-        logger.info("Payloads", Payloads);
-        return; // todo remove after testing
-        
-
-        
-
-        // Save progress after successful processing
-        // saveProgress(i + 1);
-      } catch (error) {
-        logger.error(error);
-        // saveProgress(i);
-        // break; // todo remove after testing
-      }
-    }
-
-
-  } catch (error) {
-    logger.error("Error feching records", error);
-    return;
-  }
-}
-*/
-
-// new code Activity controller
-
-async function syncActivity() {
-  try {
-    // fetch activity records
-    const records = await fetchActivityReords();
+    const timeLabel = "Activity Records processing";
+    console.time(timeLabel);
     logger.info(`Activity records:${JSON.stringify(records.length)}`);
-    // return; // todo remove after testing
 
-    let startIndex = loadProgress();
+    let startIndex = await loadProgress();
 
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
-        await processActivity(record);
-        return;
-        // Save progress after success
-        // saveProgress(i + 1);
+        //  if date exists then it is task else it is note
+        if (record.date) {
+          return await processSingleTask(record);
+        } else {
+          await processSingleNote(record);
+        }
       } catch (error) {
-        logger.error("Error processing activity ", error.message);
-        // Save progress to resume later
-        // saveProgress(i);
-        // break;  //todo remove after testing
+        logger.error("Error processing activity ", {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.method,
+          url: error?.config?.url,
+          message: error.message,
+          stack: error?.stack || error,
+        });
+      } finally {
+        await saveProgress(i + 1);
       }
     }
+
+    console.timeEnd(timeLabel);
   } catch (error) {
-    logger.error("Error fetching activity records", error);
-    return;
+    logger.error("Error fetching activity records", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 
-async function processActivity(
-  record = {
-    collection_id: "423771",
-    site_id: "1",
-    fields_changed: "ALL",
-    location: "",
-    date_email_opened: null,
-    email_id: null,
-    subject: "",
-    bcc: "",
-    cc: "",
-    field_from: "",
-    email_to: "",
-    recurrence: null,
-    all_day_event: "false",
-    end_time: null,
-    start_time: null,
-    priority: "0",
-    modified_date: "2026-03-24 10:10:31",
-    modified_by: "70",
-    status: "10003",
-    activity: "10001",
-    description: "Lets get walter's loans taken care of ASAP. ",
-    assigned: "70",
-    created_date: "2026-03-24 10:10:31",
-    created_by: "70",
-    date: "2026-04-07",
-  }
-) {
-  try {
-    //  if date exists then it is task else it is note
-    if (record.date) {
-      return await processSingleTask(record);
-    } else {
-      await processSingleNote(record);
-    }
-  } catch (error) {
-    logger.error("Error processing activity record", error.message);
-  }
-}
+// async function processActivity(record) {
+//   try {
+//     //  if date exists then it is task else it is note
+//     if (record.date) {
+//       return await processSingleTask(record);
+//     } else {
+//       await processSingleNote(record);
+//     }
+//   } catch (error) {
+//     logger.error("Error processing activity record", {
+//       status: error?.status,
+//       response: error.response?.data,
+//       method: error?.method,
+//       url: error?.config?.url,
+//       message: error.message,
+//       stack: error?.stack || error,
+//     });
+//   } finally {
+//     await saveProgress(i + 1);
+//   }
+// }
 async function processSingleTask(record) {
   try {
     // Build HubSpot payload
@@ -237,7 +169,14 @@ async function processSingleTask(record) {
       );
     }
   } catch (error) {
-    logger.error("Error processing activity record", error);
+    logger.error("Error processing activity record", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 
@@ -316,7 +255,14 @@ async function processSingleNote(record) {
       );
     }
   } catch (error) {
-    logger.error("Error processing activity record", error);
+    logger.error("Error processing activity record", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 

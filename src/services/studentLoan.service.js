@@ -1,6 +1,19 @@
 import axios from "axios";
 import { cleanProps } from "../utils/helper.js";
 import { logger } from "../index.js";
+import { syncClients } from "../controller/clients.controller.js";
+import { syncOrders } from "../controller/orders.controller.js";
+import { syncInquirer } from "../controller/inquirer.controller.js";
+
+import { syncAffiliate } from "../controller/affiliate.controller.js";
+
+import { syncInvoices } from "../controller/invoices.controller.js";
+
+// import { syncActivity } from "../controllers/activity.controller.js";
+
+import { syncEmails } from "../controller/emails.controller.js";
+
+import { hubspotExecutor, studentLoan } from "../utils/executors.js";
 
 // Fecth Inquirer Records with pagination
 
@@ -12,19 +25,26 @@ async function fetchInquirerRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10103&Offset=${page}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
-
+        { name: `fetchInquirerRecords` }
+      );
       const records = response.data?.Records || [];
 
-      logger.info(`Fetched page ${page}, records: ${records.length}`);
-
+      logger.info(
+        `[Student Loan] Inquirer records: ${page}/${allRecords.length}, processed`
+      );
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+
+      // Sync current before fetching new records to avoid large memory consumption
+      await syncInquirer(allRecords);
 
       // Stop if less than perPage records are returned => last page
       if (records.length < perPage) {
@@ -37,10 +57,14 @@ async function fetchInquirerRecords(perPage = 100) {
     logger.info(`Total inquirer records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching student loan records:",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching student loan records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords; // return what was fetched before error
   }
 }
@@ -55,21 +79,27 @@ async function fetchAffiliateRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10156&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              // Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchAffiliateRecords` }
+      );
 
       const records = response.data?.Records || [];
 
       logger.info(
-        `Fetched offset ${offset}, affiliate records: ${records.length}`
+        `[Student Loan] Affiliate records: ${offset}/${allRecords.length}, processed`
       );
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+
+      await syncAffiliate(allRecords);
 
       // stop when last batch reached
       if (records.length < perPage) {
@@ -82,10 +112,14 @@ async function fetchAffiliateRecords(perPage = 100) {
     logger.info(`Total affiliate records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching records (10156):",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching records (10156):", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
@@ -102,21 +136,26 @@ async function fetchActivityReords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=50&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchActivityReords` }
+      );
 
       const records = response.data?.Records || [];
 
       logger.info(
-        `Fetched offset ${offset}, activity records: ${records.length}`
+        `[Student Loan] Activity records: ${offset}/${allRecords.length}, processed`
       );
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+      // await syncActivity(allRecords, page);
 
       // stop if last page
       if (records.length < perPage) {
@@ -129,10 +168,14 @@ async function fetchActivityReords(perPage = 100) {
     logger.info(`Total activity records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching activity records:",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching activity records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
@@ -149,21 +192,27 @@ async function fetchInvoicesRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10151&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchInvoicesRecords` }
+      );
 
       const records = response.data?.Records || [];
 
       logger.info(
-        `Fetched offset ${offset}, invoice records: ${records.length}`
+        `[Student Loan] Invoice records: ${offset}/${allRecords.length}, processed`
       );
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+
+      await syncInvoices(allRecords);
 
       // Stop when last batch is reached
       if (records.length < perPage) {
@@ -176,10 +225,14 @@ async function fetchInvoicesRecords(perPage = 100) {
     logger.info(`Total invoice records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching invoice records:",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching invoice records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
@@ -196,21 +249,29 @@ async function fetchClientsRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10116&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchClientsRecords` }
+      );
 
       const records = response.data?.Records || [];
 
+      allRecords.push(...records);
+      // return allRecords; //todo remove after testing
       logger.info(
-        `Fetched offset ${offset}, client records: ${records.length}`
+        `[Student Loan] Client records: ${offset}/${allRecords.length}, processed`
       );
 
-      allRecords.push(...records);
-      return allRecords; //todo remove after testing
+      await syncClients(allRecords, offset);
+
+      // allRecords = [];
 
       // stop when last batch reached
       if (records.length < perPage) {
@@ -223,10 +284,14 @@ async function fetchClientsRecords(perPage = 100) {
     logger.info(`Total client records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching client records:",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching client records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
@@ -243,19 +308,25 @@ async function fetchOrdersRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10130&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchOrdersRecords` }
+      );
 
       const records = response.data?.Records || [];
 
-      logger.info(`Fetched offset ${offset}, order records: ${records.length}`);
-
       allRecords.push(...records);
-      // return allRecords; //todo remove after testing
+      logger.info(
+        `[Student Loan] Order records: ${offset}/${allRecords.length}, processed`
+      );
+      await syncOrders(allRecords);
 
       // stop when last batch reached
       if (records.length < perPage) {
@@ -268,7 +339,14 @@ async function fetchOrdersRecords(perPage = 100) {
     logger.info(`Total order records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error("Error fetching records (CollectionTypeID=10130):", error);
+    logger.error("Error fetching records (CollectionTypeID=10130):", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
@@ -284,12 +362,17 @@ async function fetchTextMessagesRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10129&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { nanme: `fetchTextMessagesRecords` }
+      );
 
       const records = response.data?.Records || [];
 
@@ -311,18 +394,19 @@ async function fetchTextMessagesRecords(perPage = 100) {
     logger.info(`Total text message records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching text message records:",
-      error.response?.data || error.message
-    );
+    logger.error("Error fetching text message records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
     return allRecords;
   }
 }
 
 // fetch Emails Records
-
-// Add pagenation Logic here
-
 async function fetchEmailsRecords(perPage = 100) {
   let offset = 0;
   let allRecords = [];
@@ -331,19 +415,24 @@ async function fetchEmailsRecords(perPage = 100) {
     while (true) {
       const url = `https://studentloantutor.ivinex.com/API/Records.php?CollectionTypeID=10141&Offset=${offset}&Limit=${perPage}`;
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
-          Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+      const response = await studentLoan(
+        () => {
+          return axios.get(url, {
+            headers: {
+              Authorization: `Basic ${process.env.IVINEX_API_KEY}`,
+              Cookie: "PHPSESSID=ma52q48rkj4splq1qq4anatq4e",
+            },
+          });
         },
-      });
+        { name: `fetchEmailsRecords` }
+      );
 
       const records = response.data?.Records || [];
 
       logger.info(`Fetched offset ${offset}, email records: ${records.length}`);
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+      await syncEmails(allRecords);
 
       // stop when last batch is reached
       if (records.length < perPage) {
@@ -356,11 +445,14 @@ async function fetchEmailsRecords(perPage = 100) {
     logger.info(`Total email records fetched: ${allRecords.length}`);
     return allRecords;
   } catch (error) {
-    logger.error(
-      "Error fetching email records:",
-      error.response?.data || error.message
-    );
-    return allRecords;
+    logger.error("Error fetching email records:", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 
@@ -639,7 +731,7 @@ async function associateObjects({
 }
 
 async function searchCustomObjectInHubSpot(objectType, collectionId) {
-  if (!collectionId) return [];
+  if (!collectionId) return null;
 
   const payload = {
     filterGroups: [

@@ -1,10 +1,18 @@
 import { logger } from "../index.js";
 
-import { fetchEmailsRecords } from "../service/student.loan.Hubspot.js";
+import { fetchEmailsRecords } from "../services/studentLoan.service.js";
 import { buildEmailPayload } from "../utils/helper.js";
-import { searchEmailInHubSpot } from "../service/student.service.js";
-import { createEmailInHubSpot } from "../service/student.service.js";
-import { updateEmailInHubSpot } from "../service/student.service.js";
+
+import {
+  saveProgress,
+  loadProgress,
+  saveFailedCollectionId,
+} from "../utils/emailProgress.js";
+import {
+  searchEmailInHubSpot,
+  createEmailInHubSpot,
+  updateEmailInHubSpot,
+} from "../services/hubspot.service.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
@@ -17,103 +25,97 @@ const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
-function saveProgress(index) {
-  fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
-}
 
-function loadProgress() {
-  if (fs.existsSync(progressFile)) {
-    try {
-      const data = fs.readFileSync(progressFile, "utf-8");
-      const obj = JSON.parse(data);
-      return typeof obj.index === "number" ? obj.index : 0;
-    } catch {
-      return 0;
-    }
-  }
-  return 0;
-}
-
-/*
-async function syncEmails() {
-  try {
-    const response = await fetchEmailsRecords();
-    logger.info("Emails respoce", response.length);
-  } catch (error) {
-    logger.error("Error feching records", error);
-    return;
-  }
-}
-export { syncEmails };
-*/
-
-async function syncEmails() {
+async function syncEmails(records) {
   try {
     // fetch all email records
-    const records = await fetchEmailsRecords();
+    // const records = await fetchEmailsRecords();
     logger.info(`Emails Records :${JSON.stringify(records.length)}`);
+    const length = records.length;
 
-    let startIndex = loadProgress();
+    let startIndex = await loadProgress();
 
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
 
-        // Build HubSpot payload
-        const payload = buildEmailPayload(record);
-
-        logger.info(`Emails Record: ${JSON.stringify(record, null, 2)}`);
-        logger.info(`Emails Payload: ${JSON.stringify(payload, null, 2)}`);
-
-        // 🔍 Search existing email (example: by collection_id or external_id)
-        let searchResults = null;
-        searchResults = await searchEmailInHubSpot(
-          record.collection_id // or record.external_id
-        );
-
-        if (searchResults && searchResults.length > 0) {
-          // Email exists → update
-          let existingEmailId = null;
-          existingEmailId = searchResults[0].id;
-
-          logger.info(
-            `Email exists with id ${JSON.stringify(
-              existingEmailId,
-              null,
-              2
-            )}, updating...`
-          );
-
-          let updated = null;
-          updated = await updateEmailInHubSpot(existingEmailId, payload);
-
-          logger.info(`✅ Email updated: ${JSON.stringify(updated.id)}`);
-        } else {
-          // Email does not exist → create
-          let created = null;
-          created = await createEmailInHubSpot(payload);
-
-          logger.info(`✅ Email created: ${JSOn.stringify(created.id)}`);
-        }
-
-        // Save progress after success
-        // saveProgress(i + 1);
-
-        break; // todo remove after testing
+        await processSingleEmail(record, i, length);
       } catch (error) {
-        logger.error("Error processing Email index", i, error);
-
-        // Save progress to resume later
-        // saveProgress(i);
-
-        break; //todo remove after testing
+        logger.error("Error processing Email ", {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.method,
+          url: error?.config?.url,
+          message: error.message,
+          stack: error?.stack || error,
+        });
+      } finally {
+        await saveProgress(i + 1);
       }
     }
-
-    logger.info("📧 All Emails Processed");
   } catch (error) {
-    logger.error("Error fetching email records", error.message);
-    return;
+    logger.error("Error fetching email records", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
+  }
+}
+
+async function processSingleEmail(record, index, totalLength) {
+  try {
+    // Build HubSpot payload
+    const payload = buildEmailPayload(record);
+
+    logger.info(
+      `[Student Loan] Email at index ${index}/${totalLength}, Record: ${JSON.stringify(
+        record,
+        null,
+        2
+      )}`
+    );
+    logger.info(`[Student Loan] Emails Payload: ${JSON.stringify(payload)}`);
+
+    // 🔍 Search existing email (example: by collection_id or external_id)
+    let searchResults = null;
+    searchResults = await searchEmailInHubSpot(
+      record.collection_id // or record.external_id
+    );
+
+    if (searchResults && searchResults.length > 0) {
+      // Email exists → update
+      let existingEmailId = null;
+      existingEmailId = searchResults[0].id;
+
+      logger.info(
+        `[Hubspot] Email exists with id ${JSON.stringify(
+          existingEmailId,
+          null,
+          2
+        )}, updating...`
+      );
+
+      const updated = await updateEmailInHubSpot(existingEmailId, payload);
+
+      logger.info(`[Hubspot] Email updated: ${JSON.stringify(updated)}`);
+    } else {
+      // Email does not exist → create
+      const created = await createEmailInHubSpot(payload);
+
+      logger.info(`[Hubspot] Email created: ${JSOn.stringify(created)}`);
+    }
+  } catch (error) {
+    logger.error(`Error procesing email in processSingleEmail`, {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 

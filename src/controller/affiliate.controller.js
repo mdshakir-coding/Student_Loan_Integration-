@@ -1,196 +1,83 @@
 import { logger } from "../index.js";
 
-import { fetchAffiliateRecords } from "../service/student.loan.Hubspot.js";
+// import { fetchAffiliateRecords } from "../service/studentLoan.service.js";
 import { buildHubSpotAffiliatePayload } from "../utils/helper.js";
-import { createAffiliateInHubSpot } from "../service/student.service.js";
-import { updateAffiliateInHubSpot } from "../service/student.service.js";
-import { searchAffiliateByInHubspot } from "../service/student.service.js";
-// import {buildAffiliateHubspotUser} from '../utils/helper.js'
+import {
+  searchAffiliateByInHubspot,
+  updateAffiliateInHubSpot,
+  createAffiliateInHubSpot,
+} from "../services/hubspot.service.js";
 
-import { fileURLToPath } from "url";
-import path from "path";
-import fs from "fs";
-// Recreate __dirname in ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const progressFile = path.resolve(__dirname, "progress.json");
+import {
+  saveProgress,
+  loadProgress,
+  saveFailedCollectionId,
+} from "../utils/affiliateProgress.js";
+
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
 
-function saveProgress(index) {
-  fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
-}
-
-function loadProgress() {
-  if (fs.existsSync(progressFile)) {
-    try {
-      const data = fs.readFileSync(progressFile, "utf-8");
-      const obj = JSON.parse(data);
-      return typeof obj.index === "number" ? obj.index : 0;
-    } catch {
-      return 0;
-    }
-  }
-  return 0;
-}
-
-// async function syncAffiliate() {
-//   try {
-//     const records = await fetchAffiliateRecords(); // call the function for All Affiliate Records  synced
-//     logger.info("Affiliate Records", records.length);
-
-//     // if (records.length === 0) {
-//     //   logger.info("🎄 All Affiliated Processed");
-//     //   return;
-//     // }
-
-//     let startIndex = loadProgress();
-
-//     for (let i = startIndex; i < records.length; i++) {
-//       try {
-//         const record = records[i];
-
-//         let affiliateId = null;
-
-//         const Payloads = buildHubSpotAffiliatePayload(record); // call the function for payload
-
-//         logger.info(" Records", record);
-//         logger.info("Payloads", Payloads);
-//         // return; // todo remove after testing
-
-//         // await createAffiliateInHubSpot(Payloads);
-
-//         // create Affiliate in hubspot
-//         const create = await createAffiliateInHubSpot(Payloads);
-//         logger.info("✅ Affiliate created", affiliateId);
-//         affiliateId = create?.id || null;
-
-//         // Save progress after successful processing
-//         // saveProgress(i + 1);
-//       } catch (error) {
-//         logger.error(error);
-//         // saveProgress(i);
-//         break; // todo remove after testing
-//       }
-//     }
-
-//     logger.info("🎄 All Affiliated Processed");
-//   } catch (error) {
-//     logger.error("Error Fecting Inquirer Records", error);
-//     return;
-//   }
-// }
-
-async function syncAffiliate() {
+// Process Bulk Affiliate Records
+async function syncAffiliate(records) {
   try {
-    // fetch all affiliate records
-    const records = await fetchAffiliateRecords(); 
-     logger.info(`Affiliate Records:${JSON.stringify(records.length)}`);
+    const timerLabel = "Affiliate Records processing";
+    console.time(timerLabel);
+    logger.info(`Affiliate Records : ${JSON.stringify(records.length)}`);
+    const length = records.length;
 
-    let startIndex = loadProgress();
+    let startIndex = await loadProgress();
 
     for (let i = startIndex; i < records.length; i++) {
       try {
         const record = records[i];
-
-         await processAffiliate(record);
-
-        return;
-        // Save progress after successful processing
-        // saveProgress(i + 1);
+        // Process Each record independently
+        await processAffiliate(record, i, length);
       } catch (error) {
-        logger.error("Error processing record index", i, error);
+        logger.error("Error processing record index", {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.method,
+          url: error?.config?.url,
+          message: error.message,
+          stack: error?.stack || error,
+        });
         // Save progress here to resume later if needed
-        // saveProgress(i);
+      } finally {
+        saveProgress(i + 1);
+        saveFailedCollectionId(
+          "affiliateCollectionId",
+          records[i].collection_id
+        );
       }
     }
-
-    logger.info("🎄 All Affiliates Processed");
+    console.timeEnd(timerLabel);
   } catch (error) {
-    logger.error("Error fetching affiliate records", error.message);
-    return;
+    logger.error("Error fetching affiliate records", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 
-async function processAffiliate(
-  record={
-            "collection_id": "13329",
-            "site_id": "1",
-            "fields_changed": "ALL",
-            "date_setter_spoke_w_affi": "2026-03-24",
-            "created_by": "41",
-            "employment_type_s": "1",
-            "field_30_day_income_s": "1",
-            "tome_zone_intake": "1",
-            "lead_description__specia0": "Draw complete - test Affiliate",
-            "date_of_last_contact": "2026-03-24",
-            "industry": "14739",
-            "presenting_rep": "41",
-            "bd_andor_ria_rep": "Yes",
-            "date_of_birth__year": "05/08/1935",
-            "receives_texts": "true",
-            "name_stated_on_vm": "Walt Bingus",
-            "date_of_fa_presentation": "2026-03-24",
-            "title": "Owner",
-            "_of_registered_states": "6",
-            "marital_status_s": "1",
-            "vip_affiliate": "true",
-            "_of_years_an_agent_new": "5",
-            "email__personal_type": "walterb@enail.com",
-            "linkedin": "testing this out",
-            "has_referrals_in_mind_asa": "true",
-            "date_of_first_client_refe": "2026-03-24",
-            "affiliate_nurturing_call": "true",
-            "revenue_share": "true",
-            "comp_super_affiliate": "15130",
-            "conference": "15133",
-            "fa_draw": "",
-            "field_1st": "true",
-            "field_2nd": "true",
-            "field_3rd": "true",
-            "primary_address_1": "300 Main St",
-            "created_date": "2026-03-24 16:47:19",
-            "modified_by": "41",
-            "modified_date": "2026-03-24 16:47:19",
-            "time_zone": "0",
-            "primary_phone_line_type": "14265",
-            "phone_2": "5551326745",
-            "phone_2_type": "14269",
-            "email__business2_type": "walterb@enail.com",
-            "time_zone0": "14334",
-            "spouse_has_loans_s": "1",
-            "primary_address_2": "ste 108",
-            "primary_city": "nowhere",
-            "no_sale_reason": "14525",
-            "type_of_repayment_s": "1",
-            "fed_loan_payment_s": "1",
-            "loan_status_s": "1",
-            "actively_in_school_s": "1",
-            "fed_loan_amount_s": "1",
-            "profession": "14393",
-            "click_on_convert_2": "1",
-            "click_on_convert_1": "1",
-            "primary_zip_code": "13325",
-            "lead_owner": "41",
-            "first_name": "Walter",
-            "last_name": "Bingus",
-            "primary_phone": "5551234567",
-            "email__business_type": "walterb@fnone.com",
-            "affiliate_status": "14757",
-            "lead_source": "14842",
-            "_of_years_an_agent_old": "4",
-            "firm_name": "Halfway Finance",
-            "primary_state": "NY"
-        }
-) {
+async function processAffiliate(record, i, length) {
   try {
     // Build payload
     const Payloads = buildHubSpotAffiliatePayload(record);
 
-    logger.info(`Affiliate Record: ${JSON.stringify(record, null, 2)}`);
-    logger.info(`Affiliate Payload: ${JSON.stringify(Payloads,  null, 2)}`);
+    logger.info(
+      `[Student Loan] , Index: ${i}/${length}, Affilaite Record: ${JSON.stringify(
+        record
+      )}`
+    );
+    logger.info(
+      `[Student Loan] Affiliate Payload: ${JSON.stringify(Payloads)}`
+    );
 
     // First, search existing affiliate by collection_id
     const searchResults = await searchAffiliateByInHubspot(
@@ -209,22 +96,24 @@ async function processAffiliate(
         Payloads
       );
 
-      logger.info(` ✅ Affiliate updated: ${JSON.stringify(updated,null, 2)}`);
+      logger.info(`[Hubspot] Affiliate updated: ${JSON.stringify(updated)}`);
     } else {
       // Affiliate does not exist, create new
       const created = await createAffiliateInHubSpot(Payloads);
-      logger.info(` ✅ Affiliate created: ${JSON.stringify(created, null, 2)}`);
+      logger.info(
+        `[Hubspot] Affiliate Record created: ${JSON.stringify(created)}`
+      );
     }
-    // return; // todo remove after testing
-    // Save progress after successful processing
-    // saveProgress(i + 1);
   } catch (error) {
-    logger.error("Error processing record index", error);
-    // Save progress here to resume later if needed
-    // saveProgress(i);
+    logger.error("Error processing record index", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
   }
 }
 
-
-
-export { syncAffiliate,processAffiliate };
+export { syncAffiliate, processAffiliate };

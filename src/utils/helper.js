@@ -1,4 +1,11 @@
 import { logger } from "./winston.logger.js";
+import { fileURLToPath } from "url";
+import path from "path";
+import fs from "fs";
+// Recreate __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const progressFile = path.resolve(__dirname, "progress.json");
 
 // helper function to normalize picklist values with flexible matching
 
@@ -42,6 +49,128 @@ function normalizePicklistValue(mapping, value, options = {}) {
   }
 
   return defaultValue;
+}
+
+function cleanPrincipalAmount(rawValue) {
+  if (!rawValue) return null;
+
+  // Convert to string if needed
+  let value = String(rawValue);
+
+  // If there are multiple values (separated by tabs, spaces, etc.), take the first one
+  // Or handle as needed based on your business logic
+  if (value.includes("\t") || value.includes("  ")) {
+    // Split by whitespace and take the first valid number
+    const parts = value.split(/\s+/);
+    value = parts[0]; // Take first amount
+    console.warn(`Multiple principal values found, using first: ${value}`);
+  }
+
+  // Remove dollar signs, commas, and any non-numeric characters except decimal point
+  let cleaned = value.replace(/[^0-9.-]/g, "");
+
+  // Handle multiple decimal points (keep only first)
+  const decimalParts = cleaned.split(".");
+  if (decimalParts.length > 2) {
+    cleaned = decimalParts[0] + "." + decimalParts.slice(1).join("");
+  }
+
+  // Convert to number
+  const number = parseFloat(cleaned);
+
+  // Return null if invalid number
+  return isNaN(number) ? null : number;
+}
+
+function cleanNumericField(value, fieldName) {
+  if (value === null || value === undefined) return null;
+
+  let strValue = String(value).trim();
+
+  // Common non-numeric values
+  const nullIndicators = [
+    "-",
+    "—",
+    "N/A",
+    "n/a",
+    "NA",
+    "na",
+    "",
+    "null",
+    "undefined",
+    "none",
+    "None",
+    "--",
+  ];
+  if (nullIndicators.includes(strValue)) {
+    console.log(`[INFO] ${fieldName}: Converting "${strValue}" to null`);
+    return null;
+  }
+
+  // Remove commas, dollar signs, percent signs, and now - extract only the number
+  strValue = strValue.replace(/[,%$€£()]/g, "");
+
+  // Extract the first numeric value (handles "5 years", "5 years 6 months", etc.)
+  const numberMatch = strValue.match(/\d+(?:\.\d+)?/);
+
+  if (!numberMatch) {
+    console.warn(
+      `[WARN] ${fieldName}: Could not parse "${strValue}" as number`
+    );
+    return null;
+  }
+
+  const number = parseFloat(numberMatch[0]);
+
+  if (isNaN(number)) {
+    console.warn(`[WARN] ${fieldName}: "${strValue}" resulted in NaN`);
+    return null;
+  }
+
+  // For forgiveness years, likely want integer (floor)
+  const result = Math.floor(number);
+
+  // Log the cleaning for debugging
+  if (String(value) !== result.toString()) {
+    console.log(`[INFO] ${fieldName}: Cleaned "${value}" → ${result}`);
+  }
+
+  return result;
+}
+
+function cleanIntegerValue(value) {
+  if (!value || value === null || value === undefined) return null;
+
+  // Convert to string and trim
+  let strValue = String(value).trim();
+
+  // Check for common "empty" or "null" representations
+  const invalidPatterns = [
+    "-",
+    "—",
+    "N/A",
+    "n/a",
+    "NA",
+    "na",
+    "",
+    "null",
+    "undefined",
+    "none",
+    "None",
+  ];
+  if (invalidPatterns.includes(strValue)) {
+    return null;
+  }
+
+  // Remove commas and extract numbers
+  const cleaned = strValue.replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
+
+  if (!cleaned) return null;
+
+  const number = parseFloat(cleaned[0]);
+
+  // Return integer (floor) or null if NaN
+  return isNaN(number) ? null : Math.floor(number);
 }
 
 function cleanProps(obj) {
@@ -184,7 +313,7 @@ const inquirerStatusMapping = {
   15041: "No Show (Planning Call)",
   13016: "Tutor Following Up",
   15286: "$0 Payment Currently",
-  15101: "Tutor ARR Follow up",
+  15101: "Tutor AAR Follow up",
   13049: "No Sale (tutor)",
   15285: "Outstanding Invoice",
   12865: "Became Client",
@@ -201,11 +330,26 @@ const inquirerStatusMapping = {
 
 // time_zone0 picklist mapping
 
+// const timeZone0Mapping = {
+//   10275: "america_slash_new_york", // EST
+//   10276: "america_slash_chicago", // CST
+//   10277: "america_slash_denver", // MST
+//   13056: "america_slash_phoenix", // MST (Arizona, no DST)
+//   10278: "america_slash_los_angeles", // PST
+//   10279: "pacific_slash_honolulu", // HAST
+//   10280: "america_slash_anchorage", // AKST
+//   11522: "america_slash_anchorage", // AK
+//   11520: "america_slash_anchorage", // AKS
+//   11523: "america_slash_halifax", // HAT
+//   13398: "pacific_slash_honolulu", // HST
+//   11524: "america_slash_san_juan", // PR
+//   11521: "utc", // UTC
+// };
 const timeZone0Mapping = {
   10275: "america_slash_new_york", // EST
   10276: "america_slash_chicago", // CST
   10277: "america_slash_denver", // MST
-  13056: "america_slash_pheonix", // MST (Arizona, no DST)
+  13056: "america_slash_phoenix", // MST (Arizona, no DST)
   10278: "america_slash_los_angeles", // PST
   10279: "pacific_slash_honolulu", // HAST
   10280: "america_slash_anchorage", // AKST
@@ -213,7 +357,7 @@ const timeZone0Mapping = {
   11520: "america_slash_anchorage", // AKS
   11523: "america_slash_halifax", // HAT
   13398: "pacific_slash_honolulu", // HST
-  11524: "america_slash_san_juan", // PR
+  11524: "america_slash_puerto_rico", // PR - FIXED
   11521: "utc", // UTC
 };
 
@@ -278,17 +422,54 @@ const sltReferringRepMapping = {
 
 // lead_type picklist mapping
 
+// const leadTypeMapping = {
+//   12919: "Client Referral",
+//   12923: "SLT Contractor Referral",
+//   13333: "Outbound Affiliates (Financial Planner) - NO APC",
+//   12922: "SLT/Tutor Affiliates",
+//   15311: "Webinar - Dani",
+//   14234: "Email Campaign (Marketing)",
+//   14210: "Low Balance Lead",
+//   12932: "Conferences",
+//   13395: "FB Groups/Word of Mouth",
+//   15032: "Non-Client Referral/Direct Mention",
+//   13293: "Undetermined",
+//   13036: "Spouse/Partner",
+//   14232: "Podcast",
+//   14774: "Webinar",
+//   14928: "Csaba",
+//   15031: "Non-Commission Referrals (Csaba)",
+//   15236: "Non-qual HF Lead",
+//   14993: "Dani PR",
+//   15068: "Dani - Partner Link",
+//   15153: "Dani - Conferences",
+//   14940: "PR Articles - Dani",
+//   14984: "Parker University - Tony",
+//   12921: "DU Website (dont use)",
+//   15082: "DU Dani/Csaba Split",
+//   14937: "DU Csaba FA",
+//   14938: "DU Csaba - PSLF",
+//   13140: "DU Digital Ad (Marketing)",
+//   12992: "DU Chiro Assoc. Affiliate (don't use)",
+//   13059: "DU SLT In-house Marketing (dont use)",
+//   13076: "DU Direct Outreach (dont use)",
+//   12987: "DU Kyle FB Ad/Affiliate Marketing (Don't use)",
+//   12920: "DU Online Generic (dont use)",
+//   14901: "DU M Physicians",
+// };
 const leadTypeMapping = {
   12919: "Client Referral",
   12923: "SLT Contractor Referral",
-  13333: "Outbound Affiliates (Financial Planner) - NO APC",
+  // Fixed: Removed the dash before NO APC
+  13333: "Outbound Affiliates (Financial Planner) NO APC",
   12922: "SLT/Tutor Affiliates",
   15311: "Webinar - Dani",
   14234: "Email Campaign (Marketing)",
   14210: "Low Balance Lead",
   12932: "Conferences",
   13395: "FB Groups/Word of Mouth",
-  15032: "Non-Client Referral/Direct Mention",
+  // Fixed: Added space after the slash
+  15032: "Non-Client Referral/ Direct Mention",
   13293: "Undetermined",
   13036: "Spouse/Partner",
   14232: "Podcast",
@@ -301,16 +482,21 @@ const leadTypeMapping = {
   15153: "Dani - Conferences",
   14940: "PR Articles - Dani",
   14984: "Parker University - Tony",
-  12921: "DU Website (dont use)",
-  15082: "DU Dani/Csaba Split",
+  // Fixed: Added apostrophe
+  12921: "DU Website (don't use)",
+  // Fixed: Added space after the slash
+  15082: "DU Dani/ Csaba Split",
   14937: "DU Csaba FA",
   14938: "DU Csaba - PSLF",
   13140: "DU Digital Ad (Marketing)",
   12992: "DU Chiro Assoc. Affiliate (don't use)",
-  13059: "DU SLT In-house Marketing (dont use)",
-  13076: "DU Direct Outreach (dont use)",
+  // Fixed: Added apostrophe
+  13059: "DU SLT In-house Marketing (don't use)",
+  // Fixed: Added apostrophe
+  13076: "DU Direct Outreach (don't use)",
   12987: "DU Kyle FB Ad/Affiliate Marketing (Don't use)",
-  12920: "DU Online Generic (dont use)",
+  // Fixed: Added apostrophe (The one that caused your current error)
+  12920: "DU Online Generic (don't use)",
   14901: "DU M Physicians",
 };
 
@@ -363,17 +549,65 @@ const affiliatePresentingTutorMapping = {
 
 // conferences_dani_pr_sources picklist mapping
 
+// const conferencesDaniPrSourcesMapping = {
+//   15305: "Texas Chiro Assoc. Conference 2025 - Derek and Kevin",
+//   15096: "Better Wealth FA Conference - CO - Dani/Michael",
+//   14991: "Chiro Congress 2023",
+//   15001: "Kentucky Assoc. of Chiropractics - Dani",
+//   15003: "California Chiro Assoc 2023/2024 - Dani",
+//   15004: "Colorado Chiro Newsletter - Dani",
+//   15005: "Virginia Chiro Newsletter - Dani",
+//   15006: "Texas Chiro Newsletter - Dani",
+//   15007: "Georgia Chiro Newsletter - Dani",
+//   15008: "Missouri Chiro Newsletter - Dani",
+//   15009: "Florida Chiro Newsletter - Dani",
+//   15010: "Ohio Chiro Newsletter - Dani",
+//   15011: "Arizona Chiro Newsletter - Dani",
+//   15012: "Illinois Chiro Newsletter - Dani",
+//   15013: "Utah Chiro Newsletter - Dani",
+//   15023: "OSCA Newsletter - Dani",
+//   15046: "Washington Chiro Newsletter - Dani PR",
+//   15060: "NC Chiro Association - Dani",
+//   15062: "MyBalto - Dani",
+//   15063: "Open Door Consults - Dani",
+//   15064: "Florida Chiro Association",
+//   15065: "Illinois State Veterinary Assoc. - Dani",
+//   15066: "Texas Veterinary Med Assoc. - Dani",
+//   15070: "CE - Chiro Economics",
+//   15093: "Texas Chiro Assoc. Conference 2024 - Tony and Kevin",
+//   14992: "MAC - Michigan Chiro 2023",
+//   14987: "OSCA 2023 - Ohio",
+//   13073: "Whiplash Group 2020",
+//   15024: "TCA Webinar 2024 - Tony",
+//   14939: "Texas Chiro Expo 2023 - Tony and Derek",
+//   14979: "Unison 2023",
+//   14220: "2022 Whiplash - Derek and Max",
+//   13077: "Idaho Chiro Association (old)",
+//   13078: "California Chiro Association (old)",
+//   13079: "Utah Chiro Association (old)",
+//   13096: "Washington Chiro Association (old)",
+//   13157: "Texas Chiro Conference (2018/2019)",
+//   13266: "Colorado Chiro Conference",
+//   13393: "2021 Washington State (WSCA) - Derek",
+//   14752: "ABCA 2022 KCMO",
+//   14893: "ACS - Alaska Chiro Society Oct 2022",
+//   13158: "Virginia Chiro Conference 2020",
+//   14931: "Texas Chiro Expo - 2023 - Tony and Derek",
+// };
+
+// podcast mapping picklist mapping
+
 const conferencesDaniPrSourcesMapping = {
   15305: "Texas Chiro Assoc. Conference 2025 - Derek and Kevin",
   15096: "Better Wealth FA Conference - CO - Dani/Michael",
   14991: "Chiro Congress 2023",
   15001: "Kentucky Assoc. of Chiropractics - Dani",
-  15003: "California Chiro Assoc 2023/2024 - Dani",
+  15003: "California Chiro Assoc. 2023/2024 - Dani", // Added period after "Assoc"
   15004: "Colorado Chiro Newsletter - Dani",
   15005: "Virginia Chiro Newsletter - Dani",
   15006: "Texas Chiro Newsletter - Dani",
   15007: "Georgia Chiro Newsletter - Dani",
-  15008: "Missouri Chiro Newsletter - Dani",
+  15008: "Missouri Chiro Newsletter - -Dani", // Double dash before Dani
   15009: "Florida Chiro Newsletter - Dani",
   15010: "Ohio Chiro Newsletter - Dani",
   15011: "Arizona Chiro Newsletter - Dani",
@@ -389,7 +623,7 @@ const conferencesDaniPrSourcesMapping = {
   15066: "Texas Veterinary Med Assoc. - Dani",
   15070: "CE - Chiro Economics",
   15093: "Texas Chiro Assoc. Conference 2024 - Tony and Kevin",
-  14992: "MAC - Michigan Chiro 2023",
+  14992: "MAC - Michigan Chrio 2023", // "Chrio" not "Chiro" (HubSpot typo)
   14987: "OSCA 2023 - Ohio",
   13073: "Whiplash Group 2020",
   15024: "TCA Webinar 2024 - Tony",
@@ -408,9 +642,6 @@ const conferencesDaniPrSourcesMapping = {
   13158: "Virginia Chiro Conference 2020",
   14931: "Texas Chiro Expo - 2023 - Tony and Derek",
 };
-
-// podcast mapping picklist mapping
-
 const podcastMapping = {
   14230: "Zeitgeist Podcast (Expect the Charles Episode)", // ✅ fixed
   14226: "Charles Eisenstein Podcast",
@@ -431,49 +662,49 @@ const podcastMapping = {
 // du_financial_planner picklist mapping
 const duFinancialPlannerMapping = {
   14241: "Belle Ives (NM) - Tony",
-  14238: "Dani Converse (NM) - Tony",
-  14240: "Hannah Morando (NM) - Tony",
-  14239: "Van Everett (NM) - Tony",
-  14256: "Lauren Peter (NM) - Tony",
-  14751: "Trina Sessions (NM) - Tony",
-  14754: "Alex Morgan (NM) - Tony",
-  14755: "Nicki Morgan (NM) - Tony",
-  14759: "Kimmy Schimek (NM) - Tony",
-  14760: "Matt Schimek (NM) - Tony",
-  14242: "John Coeuille (Ed Jones)",
-  14753: "Hannah Moeller (NM) - Tony",
-  14237: "Renata (Ed.Jones) - Tony",
-  14746: "Myron (Chris) Henley - Derek",
+  // 14238: "Dani Converse (NM) - Tony",
+  // 14240: "Hannah Morando (NM) - Tony",
+  // 14239: "Van Everett (NM) - Tony",
+  // 14256: "Lauren Peter (NM) - Tony",
+  // 14751: "Trina Sessions (NM) - Tony",
+  // 14754: "Alex Morgan (NM) - Tony",
+  // 14755: "Nicki Morgan (NM) - Tony",
+  // 14759: "Kimmy Schimek (NM) - Tony",
+  // 14760: "Matt Schimek (NM) - Tony",
+  // 14242: "John Coeuille (Ed Jones)",
+  // 14753: "Hannah Moeller (NM) - Tony",
+  // 14237: "Renata (Ed.Jones) - Tony",
+  // 14746: "Myron (Chris) Henley - Derek",
 };
 
 // du_slt_outreach_affiliate_source picklist mapping
 const duSltOutreachAffiliateSourceMapping = {
-  13264: "Not Listed Yet",
-  13117: "KSL Ad Michael Did",
-  13127: "Mass Mutual (Michael)",
-  14756: "KC Credit",
-  13156: "Renata EdJones (Tony)",
-  14215: "Dani Converse (NW M) - Tony",
-  14225: "Van Everett (NW M) - Tony",
-  14235: "Hannah Morando (NW M) - Tony",
-  14236: "Belle Ives (NW M) - Tony",
-  13120: "Ian Hoffman Student Loan Eraser",
-  13128: "Amber Landry (pslf service/michael)",
-  13121: "UCPA (Utah Physicians Chiropractic Association)",
-  13126: "WSCA (Washington State Chiropractic Association)",
-  13132: "UVCA (Virginia Chiropractic Association)",
-  13133: "TCA (Texas Chiropractic Association)",
-  13137: "IACP (Idaho Association of Chiropractic Physicians)",
-  13138: "Calchiro (California Chiropractic Association)",
-  13139: "FCA (Florida Chiropractic Association)",
-  13227: "Florida Acupuncture Assoc",
-  13228: "AT/DC Articles",
-  13240: "ABCA",
-  13256: "Life West Zoom",
-  13267: "Women's FB Chiro Group",
-  13355: "John Coeuille (Ed Jones)",
-  14221: "Wealth Factory",
-  14222: "Tom Pratt (Financial Planner)",
+  13264: "Not Listed yet",
+  // 13117: "KSL Ad Michael Did",
+  // 13127: "Mass Mutual (Michael)",
+  // 14756: "KC Credit",
+  // 13156: "Renata EdJones (Tony)",
+  // 14215: "Dani Converse (NW M) - Tony",
+  // 14225: "Van Everett (NW M) - Tony",
+  // 14235: "Hannah Morando (NW M) - Tony",
+  // 14236: "Belle Ives (NW M) - Tony",
+  // 13120: "Ian Hoffman Student Loan Eraser",
+  // 13128: "Amber Landry (pslf service/michael)",
+  // 13121: "UCPA (Utah Physicians Chiropractic Association)",
+  // 13126: "WSCA (Washington State Chiropractic Association)",
+  // 13132: "UVCA (Virginia Chiropractic Association)",
+  // 13133: "TCA (Texas Chiropractic Association)",
+  // 13137: "IACP (Idaho Association of Chiropractic Physicians)",
+  // 13138: "Calchiro (California Chiropractic Association)",
+  // 13139: "FCA (Florida Chiropractic Association)",
+  // 13227: "Florida Acupuncture Assoc",
+  // 13228: "AT/DC Articles",
+  // 13240: "ABCA",
+  // 13256: "Life West Zoom",
+  // 13267: "Women's FB Chiro Group",
+  // 13355: "John Coeuille (Ed Jones)",
+  // 14221: "Wealth Factory",
+  // 14222: "Tom Pratt (Financial Planner)",
 };
 
 // contractor_referred_by picklist mapping
@@ -514,8 +745,8 @@ const inquirerProfessionMapping = {
   13332: "Therapist",
   13363: "Nutritionist",
   14187: "Teacher",
-  14190: "Self Employed (generic)",
-  14191: "W-2 (generic)",
+  14190: "Self Employed (Generic)",
+  14191: "W-2 (Generic)",
   14192: "Sales",
   14967: "Optometrist",
   15167: "Pharmacist",
@@ -525,19 +756,28 @@ const inquirerProfessionMapping = {
 // const inquirerEmploymentTypeMapping = {
 //   12925: "Self Employed",
 //   10325: "W2",
-//   10326: "1099",
+//   10326: "1 99",
 //   10327: "Unemployed",
 //   12913: "Multiple",
 //   15166: "Retired",
 // };
 
+// const inquirerEmploymentTypeMapping = {
+//   12925: "Self Employed - Business Owner",
+//   10325: "W2 Employee",
+//   10326: "Self Employed - No Entity Set Up Yet",
+//   10327: "Unemployed",
+//   12913: "Multiple (Self Employed/W2)", // ✅ FIXED
+//   15166: "Retired",
+// };
+
 const inquirerEmploymentTypeMapping = {
-  12925: "Self Employed - Business Owner",
-  10325: "W2 Employee",
-  10326: "Self Employed - No Entity Set Up Yet",
-  10327: "Unemployed",
-  12913: "Multiple (Self Employed/W2)", // ✅ FIXED
-  15166: "Retired",
+  12925: "Self Employed", // Changed from "Self Employed - Business Owner"
+  10325: "W2", // Changed from "W2 Employee"
+  10326: "1 99", // Assuming this maps to "Self Employed - No Entity Set Up Yet" (likely a typo in the CRM for "1099")
+  10327: "Unemployed", // Already valid
+  12913: "Multiple", // Changed from "Multiple (Self Employed/W2)"
+  15166: "Retired", // Already valid
 };
 
 // marital_status picklist mapping
@@ -546,13 +786,13 @@ const maritalStatusMapping = {
   10304: "Single",
   10305: "Divorced",
   10306: "Engaged",
-  10307: "Separated",
+  10307: "Seperated", // ✅ Changed from "Separated" to "Seperated" (HubSpot's typo)
 };
 
 // eval___taxes_jointly_separate_picklist mapping
 const evalTaxesJointlySeparateMapping = {
   14250: "Jointly",
-  14251: "Separate",
+  14251: "Seperate", // Match HubSpot's typo
 };
 
 //eval___spouse_has_loans picklist mapping
@@ -566,7 +806,7 @@ const evalSpouseHasLoansMapping = {
 const inquirerLoanStatusMapping = {
   12930: "Unknown",
   10296: "Current",
-  10297: "Deferment Or Forbearance",
+  10297: "Deferment or Forbearance", // ✅ Changed 'O' to 'o'
   10298: "Default",
   10299: "Past Due",
   10300: "Garnishment",
@@ -578,7 +818,7 @@ const inquirerCurrentRepaymentPlanMapping = {
   10323: "Unknown",
   10321: "Balance Based",
   10322: "Income Driven",
-  13364: "Recent Grad (Not setup yet)",
+  13364: "Recent Grad(Not setup yet)", // Removed the space before "("
 };
 // tutor_name picklist mapping
 const tutorNameMapping = {
@@ -752,8 +992,8 @@ const inquirerLoanServicerMapping = {
   13308: "Mohela",
   15275: "CRI (Central Research Incorporated)",
   13305: "Multiple Servicers",
-  13306: "A.E.S.",
-  13307: "A.C.S.",
+  13306: "A.E.S", // ✅ Removed trailing period
+  13307: "A.C.S.", // Keep as is - check if HubSpot expects "A.C.S" or "A.C.S."
   13302: "Navient (Inactive)",
   15050: "SLOAN",
   13310: "Cornerstone",
@@ -807,14 +1047,23 @@ const householdSizeIncomeThreshold150Mapping = {
 };
 
 // income_amount_and_pay_frequency picklist mapping
+// const incomeAmountAndPayFrequencyMapping = {
+//   12873: "Bi-weekly",
+//   12874: "Semi-Monthly",
+//   12875: "Weekly",
+//   12888: "Monthly",
+//   12877: "Annually",
+//   12876: "Quarterly",
+//   12878: "Daily",
+// };
 const incomeAmountAndPayFrequencyMapping = {
-  12873: "Bi-weekly",
-  12874: "Semi-Monthly",
+  12873: "Bi-Weekly", // ✅ Changed 'w' to 'W'
+  12874: "Bi-Monthly", // ✅ Changed "Semi-Monthly" to match HubSpot's "Bi-Monthly"
   12875: "Weekly",
   12888: "Monthly",
-  12877: "Annually",
+  12877: "Annual Gross (AGI)", // ✅ Changed "Annually" to match HubSpot's option
   12876: "Quarterly",
-  12878: "Daily",
+  12878: null, // ⚠️ "Daily" is NOT in HubSpot's list! This will crash if you send it. Pass null or add "Daily" to HubSpot.
 };
 
 // pay_frequency_stream_2 picklist mapping
@@ -824,7 +1073,7 @@ const payFrequencyStream2Mapping = {
   12887: "Weekly",
   12883: "Monthly",
   12885: "Annually",
-  12884: "Quarterly",
+  12884: "Quaterly",
   12886: "Daily",
 };
 
@@ -930,10 +1179,10 @@ function buildHubSpotInquirerPayload(data = {}) {
       duSltOutreachAffiliateSourceMapping,
       data?.du_slt_outreachaffiliate
     ),
-    contractor_referred_by: normalizePicklistValue(
-      contractorReferredByMapping,
-      data?.contractor_referred_by
-    ),
+    // contractor_referred_by: normalizePicklistValue(
+    //   contractorReferredByMapping,
+    //   data?.contractor_referred_by
+    // ),
     inquirer_profession: normalizePicklistValue(
       inquirerProfessionMapping,
       data?.inquirer_profession
@@ -1000,7 +1249,10 @@ function buildHubSpotInquirerPayload(data = {}) {
     spouse_has_loans_s_ivinex: data?.spouse_has_loans_s || null, //
     eval_taxes_jointlysepa_ivinex: data?.eval__taxes_jointlysepa || null, //
     du_slt_outreachaffiliate_ivinex: data?.du_slt_outreachaffiliate || null, //
-    contractor_referred_by_ivinex: data?.contractor_referred_by || null, //
+    contractor_referred_by_ivinex: normalizePicklistValue(
+      contractorReferredByMapping,
+      data?.contractor_referred_by
+    ), //
     affiliate_referral_ivinex: data?.affiliate_referral || null, //
     entered_info_for_nfm_ivinex: data?.entered_info_for_nfm || null, //
     inquirer_loan_status_ivinex: data?.inquirer_loan_status || null, //
@@ -1015,9 +1267,12 @@ function buildHubSpotInquirerPayload(data = {}) {
     field_of_study: data?.fields_changed || null,
     // apc_follow_up_date:data?.pc_follow_up_to_book || null,
 
-    gross_income_amount_2: data?.adj_gross_amount_stream_0 || null,
+    gross_income_amount_2: cleanNumericField(data?.adj_gross_amount_stream_0),
     gross_income_amount_3: data?.adj_gross_amount_stream_1 || null,
-    income_amount: data?.adj_gross_amount_stream_ || null,
+    income_amount: cleanNumericField(
+      data?.adj_gross_amount_stream_,
+      "income_amount"
+    ),
     inquirer_household_size_n: data?.inquirer_household_size_n || null,
     loan_services_notes: data?.loan_servicer_notes || null,
     inquirer_profession__if_other_: data?.inquirer_profession_if_o || null,
@@ -1033,13 +1288,16 @@ function buildHubSpotInquirerPayload(data = {}) {
     firstname: data?.first_name || null,
     inquirer_middle_name: data?.inquirer_middle_name || null,
     lastname: data?.last_name || null,
-    email: data?.email_1 || null,
+    email: data?.email_1?.trim() || null,
     //  email_2:data?.email_2 || null,
     //  phone_2:data?.phone_2 || null,
     income_notes: data?.income_documentation_note || null,
     tutor_followup_date: data?.date_of_tutor_fu || null,
     date_of_tutor_f_u: data?.date_of_tutor_fu || null,
-    date_became_client: data?.date_became_client || null,
+    date_became_client:
+      data?.date_became_client === "0000-00-00" || !data?.date_became_client
+        ? null
+        : data.date_became_client,
 
     si_creation_date: data?.si_creation_date || null,
     zip: data?.zip || null,
@@ -1077,12 +1335,18 @@ function buildHubSpotInquirerPayload(data = {}) {
     inquirer_current_planidr: data?.inquirer_current_planidr || null,
     married: data?.married || null,
     married_: data?.married || null,
-    sps_total_balance: data?.sps_total_balance || null,
+    sps_total_balance: cleanNumericField(
+      data?.sps_total_balance,
+      "sps_total_balance"
+    ),
     inquirer_consolidation___loan_types:
       data?.inquirer_consolidation__0 || null,
     est__tax_burden: data?.est_tax_burden || null,
 
-    sps___of_sub_loans: data?.sps___of_sub_loans || null,
+    sps___of_sub_loans:
+      data?.sps___of_sub_loans === "-"
+        ? null
+        : cleanIntegerValue(data?.sps___of_sub_loans),
     sps__already_enrolled_in_autopay_:
       data?.sps__already_enrolled_in_autopay_ || null,
     sps__loan_servicer_s_: data?.sps_loan_servicers || null,
@@ -1101,9 +1365,15 @@ function buildHubSpotInquirerPayload(data = {}) {
     balance_based_scenarios: data?.balance_based_scenarios || null,
     tutor_approx_value_of_sav: data?.tutor_approx_value_of_sav || null,
     loan_servicer_notes: data?.loan_servicer_notes || null,
-    sps_outstanding_principal: data?.sps_outstanding_principal || null,
+    sps_outstanding_principal: cleanNumericField(
+      data?.sps_outstanding_principal,
+      "sps_outstanding_principal"
+    ),
     sps_avg_interest_rate: data?.sps_avg_interest_rate || null,
-    sps__years_towards_forgiveness: data?.sps_years_towards_forgiv || null,
+    sps__years_towards_forgiveness: cleanNumericField(
+      data?.sps_years_towards_forgiv,
+      "sps_years_towards_forgiv"
+    ),
     sps_loan_types: data?.sps_loan_types || null,
     // sps_loan_servicers: data?.sps_loan_servicers || null,
     inquirer_household_size_notes: data?.inquirer_household_size_n || null,
@@ -1132,7 +1402,9 @@ function buildHubSpotInquirerPayload(data = {}) {
     date_eval_occured: data?.date_eval_occured || null,
     graduation_year: data?.graduation_year || null,
     eval__current_income: data?.eval__current_income || null,
-    eval___current_income: data?.eval__current_income || null,
+    eval___current_income: data?.eval__current_income
+      ? parseFloat(String(data.eval__current_income).replace(/[^0-9.]/g, ""))
+      : null,
     eval__spouse_current_inc: data?.eval__spouse_current_inc || null,
     good_timing_for_strategy_0: data?.good_timing_for_strategy_0 || null,
     financial_experience: data?.financial_experience || null,
@@ -1184,16 +1456,30 @@ function buildHubSpotInquirerPayload(data = {}) {
     // tutor_name_: data?.tutor_name,
     notes_on_pricing_quoted_etc_: data?.notes_on_pricing_quoted_e || null,
     spouse__last_year__agi: data?.spouse__last_year__agi || null,
-    sps___of_sub_loans: data?.sps__of_sub_loans || null,
-    inquirer_avg__interest_rate: data?.inquirer_avg_interest_ra || null,
-    inquirer_years_towards_forgiveness: data?.inquirer_years_towards_fo || null,
+    // sps___of_sub_loans: data?.sps__of_sub_loans || null,
+    // Quick fix for just the percentage issue
+    inquirer_avg__interest_rate: (() => {
+      const value = data?.inquirer_avg_interest_ra;
+      if (!value || value === "-" || value === "N/A") return null;
+
+      let cleaned = String(value).replace("%", "").trim();
+      const number = parseFloat(cleaned);
+
+      return isNaN(number) ? null : number;
+    })(),
+    inquirer_years_towards_forgiveness: cleanNumericField(
+      data?.inquirer_years_towards_fo,
+      "inquirer_years_towards_forgiveness"
+    ),
     already_enrolled_in_autopay_: data?.already_enrolled_in_autop || null,
     // of_subsidized_loans: data?._of_subsidized_loans,
     of_subsidized_loans:
       data?._of_subsidized_loans === "-"
         ? null
         : Number(data?._of_subsidized_loans),
-    inquirer_outstanding_principal: data?.inquirer_outstanding_prin || null,
+    inquirer_outstanding_principal: cleanPrincipalAmount(
+      data?.inquirer_outstanding_prin
+    ),
     time_zone__custom: data?.time_zone || null,
     adj_gross_amount_stream_0: data?.adj_gross_amount_stream_0 || null,
     adj_gross_amount_stream_1: data?.adj_gross_amount_stream_1 || null,
@@ -1852,7 +2138,7 @@ const statusMapping = {
   13379: "Waiting to Submit",
   11894: "App Submitted",
   14185: "Ready for Sign-Off",
-  11556: "Complete",
+  11556: "- Complete -",
   15320: "Processor Consultation in Process",
   11558: "Manual AAR Booking in Process",
   13786: "AAR - Booked",
@@ -1909,7 +2195,7 @@ const typeOfIdrAppSubmittedMapping = {
   15259: "Plan Change - to IBR",
   15261: "Plan Change - to ICR",
   15262: "Recertification",
-  15263: "Recalculation",
+  // 15263: "Recalculation",
   15308: "Multiple IDR Plans",
 };
 
@@ -1971,14 +2257,23 @@ const calculationPerformedByMapping = {
 };
 
 //aar_fee Mapping fields
+// const aarFeeMapping = {
+//   11552: "$250",
+//   11493: "$450",
+//   13370: "$600",
+//   15325: "$800",
+//   14253: "$400 (Low Bal./Spouse)",
+//   14200: "$300 (F&F)",
+//   13130: "Other (Trade etc.)",
+// };
 const aarFeeMapping = {
   11552: "$250",
   11493: "$450",
   13370: "$600",
   15325: "$800",
-  14253: "$400 (Low Bal./Spouse)",
+  14253: "$400 (Low Bal/Spouse)", // Removed period after Bal
   14200: "$300 (F&F)",
-  13130: "Other (Trade etc.)",
+  13130: "Other (Trade etc)", // Removed period after etc
 };
 //current_servicer Mapping fields
 const currentServicerMapping = {
@@ -2066,35 +2361,37 @@ const sltReferringRepNfmMapping = {
 };
 
 //ia_inquirer_status Mapping fields
+
+// TODO : check this, Commented because of error only allowed field value is "DON'T BOOK APC!
 const iaInquirerStatusMapping = {
   13380: "DON'T BOOK APC!",
-  13238: "Missed Apt.",
-  13394: "Priority Case (likely)",
-  13032: "Following Up",
-  13235: "Client in Progress",
-  13135: "Active Client (Schedule with Current Advisor)",
-  15186: "Inactive Client",
-  13069: "Advisor Long Term Scheduled F/U",
-  13026: "No Sale - Own Plan in Place",
-  13241: "No Sale - MIA",
-  13289: "No Sale - Offer APC Next Year",
-  13290: "No Sale - Advisor F/U OK",
-  13291: "No Sale - Don't Offer APC",
-  13318: "No Sale - No $",
-  15097: "Lost Opp (MIA)",
-  15098: "Lost Opp (Health)",
-  15099: "Lost Opp (Competitor)",
-  15100: "Lost Opp (Misc.)",
-  13246: "Advisor Final F/U Needed",
-  14914: "Please book at AAR",
-  13237: "Advisor F/U With Securities Option",
-  15034: "Julia G. Transferred",
-  14999: "Katie J. Transferred",
-  14850: "No Sale - Matt",
-  14890: "Pending Scheduling",
-  14183: "Active HF Client (Securities Only)",
-  14849: "Active HF Client (Matt)",
-  13027: "Advisor Short Term Scheduled F/U",
+  // 13238: "Missed Apt.",
+  // 13394: "Priority Case (likely)",
+  // 13032: "Following Up",
+  // 13235: "Client in Progress",
+  // 13135: "Active Client (Schedule with Current Advisor)",
+  // 15186: "Inactive Client",
+  // 13069: "Advisor Long Term Scheduled F/U",
+  // 13026: "No Sale - Own Plan in Place",
+  // 13241: "No Sale - MIA",
+  // 13289: "No Sale - Offer APC Next Year",
+  // 13290: "No Sale - Advisor F/U OK",
+  // 13291: "No Sale - Don't Offer APC",
+  // 13318: "No Sale - No $",
+  // 15097: "Lost Opp (MIA)",
+  // 15098: "Lost Opp (Health)",
+  // 15099: "Lost Opp (Competitor)",
+  // 15100: "Lost Opp (Misc.)",
+  // 13246: "Advisor Final F/U Needed",
+  // 14914: "Please book at AAR",
+  // 13237: "Advisor F/U With Securities Option",
+  // 15034: "Julia G. Transferred",
+  // 14999: "Katie J. Transferred",
+  // 14850: "No Sale - Matt",
+  // 14890: "Pending Scheduling",
+  // 14183: "Active HF Client (Securities Only)",
+  // 14849: "Active HF Client (Matt)",
+  // 13027: "Advisor Short Term Scheduled F/U",
 };
 
 // solic_agent Mapping fields
@@ -2201,14 +2498,14 @@ const professionMappingClient = {
   12736: "Naturopath",
   12737: "Acupuncturist",
   12738: "Dentist",
-  12739: "Medical Practioner",
+  12739: " Medical Practitioner",
   12740: "Teacher",
   12741: "Multiple",
   13066: "Veterinarian",
   12743: "Sales",
   12744: "Finance",
-  12745: "Self-employed (generic)",
-  12742: "W-2 (generic)",
+  12745: "Self Employed (Generic)",
+  12742: "W-2 (Generic)",
   14905: "Financial Advisor",
   13326: "Therapist",
   14188: "Attorney",
@@ -2606,8 +2903,8 @@ const employmentTypeMapping = {
   // 15056: "(please select)",
   15053: "Self Employed - Business Owner",
   15054: "Self Employed - No Entity Set Up Yet",
-  15067: "Self Employed - 1099",
-  15055: "W2 - Employee",
+  // 15067: "Self Employed - 1099",
+  15055: "W2 Employee",
   15059: "Multiple (Self Employed/W2)",
   15057: "Unemployed",
   15172: "Retired",
@@ -2692,7 +2989,7 @@ const pslfMapping = {
   12725: "Yes - Not Yet Enrolled",
   11945: "Yes - Already Enrolled",
   11946: "No",
-  11947: "In Process",
+  // 11947: "In Process",
 };
 //forbearance_needed mapping fields
 
@@ -2753,6 +3050,14 @@ const field2025Icr20Mapping = {
 // Order Payload
 
 function buildHubspotOrderPayload(data = {}) {
+  const rawChildren = data?.children;
+  const parsedChildren = Number(rawChildren);
+
+  const finalChildren =
+    rawChildren !== "-" && rawChildren !== "" && Number.isFinite(parsedChildren)
+      ? parsedChildren
+      : null;
+
   const payload = cleanProps({
     // picklist Mapping here
 
@@ -2818,7 +3123,7 @@ function buildHubspotOrderPayload(data = {}) {
     // most_recent_tax_filing_st: data?.most_recent_tax_filing_st,
     filed_taxes_in_the_last_t: data?.filed_taxes_in_the_last_t || null,
     household_size: data?.household_size || null,
-    children: data?.children || null,
+    children: finalChildren || null,
     other: data?.other || null,
     amount: data?.amount || null,
     income_frequency: data?.income_frequency || null,
@@ -3219,7 +3524,26 @@ function buildHubSpotTaskPayload(data = {}) {
   };
 }
 
+function saveProgress(index) {
+  fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
+}
+
+function loadProgress() {
+  if (fs.existsSync(progressFile)) {
+    try {
+      const data = fs.readFileSync(progressFile, "utf-8");
+      const obj = JSON.parse(data);
+      return typeof obj.index === "number" ? obj.index : 0;
+    } catch {
+      return 0;
+    }
+  }
+  return 0;
+}
+
 export {
+  saveProgress,
+  loadProgress,
   buildHubSpotTaskPayload,
   buildOwnerMap,
   normalizeName,

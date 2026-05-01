@@ -2,14 +2,14 @@ import { createRequestExecutor } from "./requestExecutor.js";
 
 const hubspotExecutor = createRequestExecutor({
   name: "HubSpot",
-  rateLimit: 5, // Lowered to 5 for safety
+  rateLimit: 100, // Lowered to 5 for safety
   intervalMs: 1000,
   retries: 5, // Increased retries to handle temporary spikes
 });
 
 const studentLoan = createRequestExecutor({
   name: "studentLoanTutor",
-  rateLimit: 2,
+  rateLimit: 20,
   intervalMs: 1000,
   retries: 4,
 });

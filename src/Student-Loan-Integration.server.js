@@ -1,30 +1,24 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 import app from "./app.js";
 import { logger } from "./utils/winston.logger.js";
 
 // import these function
 import {
-  syncInquirer,
-  processnquirer,
-} from "./controller/inquirer.controller.js";
-import {
-  syncAffiliate,
-  processAffiliate,
-} from "./controller/affiliate.controller.js";
-import {
-  syncActivity,
-  processActivity,
-} from "./controller/activity.controller.js";
-import { syncInvoices } from "./controller/invoices.controller.js";
-import { syncClients, processClient } from "./controller/clients.controller.js";
-import { syncOrders, processOrder } from "./controller/orders.controller.js";
-import { syncTextMessages } from "./controller/textmessages.controller.js";
-import { syncEmails } from "./controller/emails.controller.js";
+  fetchClientsRecords,
+  fetchOrdersRecords,
+  fetchAffiliateRecords,
+  fetchInquirerRecords,
+  fetchInvoicesRecords,
+} from "./services/studentLoan.service.js";
 
 const PORT = process.env.PORT || 3400;
 
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
-  // processnquirer();
+  logger.info(`Server running on Envirnment ${process.env.NODE_ENV}`);
+
+  // fetchOrdersRecords(); // And sync them last collectionid = 24374
+  // fetchAffiliateRecords(); // 10717 records
+  fetchInquirerRecords();
+  // fetchInvoicesRecords();
 });
