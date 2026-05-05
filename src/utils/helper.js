@@ -463,7 +463,7 @@ const leadTypeMapping = {
   // Fixed: Removed the dash before NO APC
   13333: "Outbound Affiliates (Financial Planner) NO APC",
   12922: "SLT/Tutor Affiliates",
-  15311: "Webinar - Dani",
+  // 15311: "Webinar - Dani",
   14234: "Email Campaign (Marketing)",
   14210: "Low Balance Lead",
   12932: "Conferences",

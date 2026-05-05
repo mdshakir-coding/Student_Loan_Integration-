@@ -9,6 +9,7 @@ import {
   fetchAffiliateRecords,
   fetchInquirerRecords,
   fetchInvoicesRecords,
+  fetchTextMessagesRecords,
 } from "./services/studentLoan.service.js";
 
 const PORT = process.env.PORT || 3400;
@@ -19,6 +20,7 @@ app.listen(PORT, () => {
 
   // fetchOrdersRecords(); // And sync them last collectionid = 24374
   // fetchAffiliateRecords(); // 10717 records
-  fetchInquirerRecords();
-  // fetchInvoicesRecords();
+  // fetchInquirerRecords();
+  // fetchTextMessagesRecords();
+  fetchInvoicesRecords();
 });

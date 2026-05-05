@@ -9,6 +9,8 @@ import { syncAffiliate } from "../controller/affiliate.controller.js";
 
 import { syncInvoices } from "../controller/invoices.controller.js";
 
+import { syncTextMessages } from "../controller/textmessages.controller.js";
+
 // import { syncActivity } from "../controllers/activity.controller.js";
 
 import { syncEmails } from "../controller/emails.controller.js";
@@ -381,7 +383,7 @@ async function fetchTextMessagesRecords(perPage = 100) {
       );
 
       allRecords.push(...records);
-      return allRecords; //todo remove after testing
+      await syncTextMessages(allRecords);
 
       // stop when last batch is reached
       if (records.length < perPage) {

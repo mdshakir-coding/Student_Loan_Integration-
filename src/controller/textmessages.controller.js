@@ -5,7 +5,7 @@ import {
   saveFailedCollectionId,
 } from "../utils/testMessagesProgress.js";
 
-import { fetchTextMessagesRecords } from "../service/studentLoan.service.js";
+// import { fetchTextMessagesRecords } from "../service/studentLoan.service.js";
 import { buildTextMessagePayload } from "../utils/helper.js";
 
 import { searchCustomObjectInHubSpotBasedonCustomeField } from "../services/studentLoan.service.js";
@@ -59,6 +59,10 @@ async function syncTextMessages(records) {
         // saveProgress(i);
       } finally {
         await saveProgress(i + 1);
+        await saveFailedCollectionId(
+          "textMessageCollectionId",
+          records[i].collection_id
+        );
       }
     }
   } catch (error) {

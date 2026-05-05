@@ -1,7 +1,10 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs/promises";
+import { logger } from "../index.js";
+
 // Recreate __dirname in ES module
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "noteProgress.json");

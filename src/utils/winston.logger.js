@@ -79,13 +79,13 @@ const developmentLogger = () => {
       // }),
       // 2. Combined file for ALL logs (debug, info, warn, error)
       new transports.File({
-        filename: "logs/inquirer.log",
+        filename: "logs/invoice.log",
         format: fileFormat,
         maxsize: 50 * 1024 * 1024, // 150MB
       }),
       // 3. Separate file for ONLY errors
       new transports.File({
-        filename: "logs/inquirer-error.log",
+        filename: "logs/invoice-error.log",
         level: "error",
         format: fileFormat,
         maxsize: 10 * 1024 * 1024, // 10MB
