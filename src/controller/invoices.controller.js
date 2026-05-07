@@ -47,12 +47,12 @@ async function syncInvoices(records) {
           message: error.message,
           stack: error?.stack || error,
         });
-      } finally {
-        await saveProgress(i + 1);
         await saveFailedCollectionId(
           "invoiceCollectionId",
           records[i].collection_id
         );
+      } finally {
+        await saveProgress(i + 1);
       }
     }
 

@@ -5,6 +5,7 @@ import fs from "fs/promises";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const progressFile = path.resolve(__dirname, "activityProgress.json");
+import { logger } from "../index.js";
 
 async function saveProgress(index) {
   await fs.writeFile(progressFile, JSON.stringify({ index }), "utf-8");

@@ -9,6 +9,8 @@ import { searchCustomObjectInHubSpotBasedonCustomeField } from "../services/stud
 import {
   buildHubSpotActivityPayload,
   buildHubSpotTaskPayload,
+  buildHubSpotActivityPayloadBatch,
+  buildHubSpotTaskPayloadBatch,
 } from "../utils/helper.js";
 
 import {
@@ -16,6 +18,7 @@ import {
   createTaskInHubSpot,
   createActivityInHubSpot,
   updateActivityInHubSpot,
+  makeBatchCall,
 } from "../services/hubspot.service.js";
 
 import { getHubspotClient } from "../configs/hubspot.config.js";
@@ -51,6 +54,7 @@ async function syncActivity(records) {
           message: error.message,
           stack: error?.stack || error,
         });
+        await saveFailedCollectionId("activityCollectionId", records[i].id);
       } finally {
         await saveProgress(i + 1);
       }
@@ -132,9 +136,7 @@ async function processSingleTask(record) {
     // let created = null;
     upsertActivity = await createTaskInHubSpot(payload);
 
-    logger.info(
-      `[Hubspot] Task created:${JSON.stringify(upsertActivity.id, null, 2)}`
-    );
+    logger.info(`[Hubspot] Task created:${JSON.stringify(upsertActivity)}`);
     // }
 
     // Find client based on linked_client field in Hubspot ->(Client)
@@ -146,8 +148,6 @@ async function processSingleTask(record) {
       "collection_id",
       record.assigned
     );
-
-    logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
 
     if (client[0]?.id && upsertActivity?.id) {
       // ➡️ associate here
@@ -161,7 +161,7 @@ async function processSingleTask(record) {
         "USER_DEFINED"
       );
       logger.info(
-        `✅ Association Completed | upsertActivity Id ${
+        `[Hubspot] Association Completed | upsertActivity Id ${
           upsertActivity?.id
         } associated with Client ${client[0]?.id}: Association ${JSON.stringify(
           associate
@@ -185,8 +185,8 @@ async function processSingleNote(record) {
     // Build HubSpot payload
     const payload = buildHubSpotActivityPayload(record);
 
-    logger.info(`Activity Record: ${JSON.stringify(record, null, 2)}`);
-    logger.info(`Activity Payload: ${JSON.stringify(payload, null, 2)}`);
+    logger.info(`[Student Loan] Activity Record: ${JSON.stringify(record)}`);
+    logger.info(`[Student Loan] Activity Payload: ${JSON.stringify(payload)}`);
 
     // 🔍 Search existing activity (by collection_id or email_id)
     let upsertActivity = null;
@@ -199,11 +199,11 @@ async function processSingleNote(record) {
       let existingActivityId = null;
       existingActivityId = upsertActivity?.id;
 
-      logger.info(
-        `Activity exists with id ${JSON.stringify(
-          existingActivityId
-        )}, updating...`
-      );
+      // logger.info(
+      //   `Activity exists with id ${JSON.stringify(
+      //     existingActivityId
+      //   )}, updating...`
+      // );
 
       upsertActivity = await updateActivityInHubSpot(
         existingActivityId,
@@ -211,7 +211,11 @@ async function processSingleNote(record) {
       );
 
       logger.info(
-        `✅ Activity updated:${JSON.stringify(upsertActivity.id, null, 2)}`
+        `[Hubspot] Activity updated:${JSON.stringify(
+          upsertActivity.id,
+          null,
+          2
+        )}`
       );
     } else {
       // Activity does not exist → create
@@ -219,7 +223,11 @@ async function processSingleNote(record) {
       upsertActivity = await createActivityInHubSpot(payload);
 
       logger.info(
-        `✅ Activity created:${JSON.stringify(upsertActivity.id, null, 2)}`
+        `[Hubspot] Activity created:${JSON.stringify(
+          upsertActivity.id,
+          null,
+          2
+        )}`
       );
     }
 
@@ -233,7 +241,7 @@ async function processSingleNote(record) {
       record.assigned
     );
 
-    logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
+    // logger.info(`✅ Client found: ${JSON.stringify(client, null, 2)}`);
 
     if (client[0]?.id && upsertActivity?.id) {
       // ➡️ associate here
@@ -247,7 +255,7 @@ async function processSingleNote(record) {
         "USER_DEFINED"
       );
       logger.info(
-        `✅ Association Completed | upsertActivity Id ${
+        `[Hubspot] Association Completed | upsertActivity Id ${
           upsertActivity?.id
         } associated with Client ${client[0]?.id}: Association ${JSON.stringify(
           associate
@@ -266,4 +274,224 @@ async function processSingleNote(record) {
   }
 }
 
-export { syncActivity, processActivity };
+//  Make batch call to hubspot for notes
+
+async function syncActivityBatch(records) {
+  try {
+    const timeLabel = "Activity Records processing";
+    console.time(timeLabel);
+    logger.info(`Activity records received: ${records?.length || 0}`);
+
+    if (!records || records.length === 0) return;
+
+    // Separate tasks and notes
+    const tasks = records.filter((rec) => rec && rec?.date && rec?.assigned);
+    const notes = records.filter((rec) => rec && !rec?.date && rec?.assigned);
+
+    const tasksPayload = [];
+    const notesPayload = [];
+
+    // --- CACHE TO PREVENT API RATE LIMITS ---
+    const clientCache = new Map();
+
+    async function getClientId(assignedValue) {
+      if (!assignedValue) return null;
+      if (clientCache.has(assignedValue)) {
+        return clientCache.get(assignedValue); // Return instantly if already searched
+      }
+
+      const client = await searchCustomObjectInHubSpotBasedonCustomeField(
+        "2-171843307",
+        "collection_id",
+        assignedValue
+      );
+
+      const clientId = client && client[0]?.id ? client[0].id : null;
+      if (clientId) {
+        clientCache.set(assignedValue, clientId); // Save for the next record
+      }
+      return clientId;
+    }
+
+    // --- Build Task Payloads ---
+    for (const task of tasks) {
+      try {
+        const clientId = await getClientId(task.assigned);
+
+        if (clientId) {
+          const payload = buildHubSpotTaskPayloadBatch(task, clientId);
+          tasksPayload.push(payload);
+        }
+      } catch (error) {
+        logger.error(`Error creating task payload ${task.id || "unknown"}`, {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.config?.method,
+          url: error?.config?.url,
+          message: error.message,
+        });
+      }
+    }
+
+    // --- Build Note Payloads ---
+    for (const note of notes) {
+      try {
+        const clientId = await getClientId(note.assigned);
+
+        if (clientId) {
+          const payload = buildHubSpotActivityPayloadBatch(note, clientId);
+          notesPayload.push(payload);
+        }
+      } catch (error) {
+        logger.error(`Error creating note payload ${note.id || "unknown"}`, {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.config?.method,
+          url: error?.config?.url,
+          message: error.message,
+        });
+      }
+    }
+
+    // --- Execute Batch Calls Directly (Max 100 Guaranteed) ---
+    if (tasksPayload.length > 0) {
+      logger.info(`Sending batch of ${tasksPayload.length} tasks to HubSpot`);
+      await makeBatchCall(tasksPayload, "tasks");
+    }
+
+    if (notesPayload.length > 0) {
+      logger.info(`Sending batch of ${notesPayload.length} notes to HubSpot`);
+      await makeBatchCall(notesPayload, "notes");
+    }
+
+    console.timeEnd(timeLabel);
+  } catch (error) {
+    logger.error("Error in syncActivityBatch execution", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.config?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
+  }
+}
+
+// Helper function for the 100-limit rule
+function chunkArray(array, size = 100) {
+  const chunked = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
+async function syncActivityBatchwithChunks(records) {
+  try {
+    if (!records || records.length === 0) return;
+
+    // Separate tasks and notes
+    const tasks = records.filter((rec) => rec && rec?.date && rec?.assigned);
+    const notes = records.filter((rec) => rec && !rec?.date && rec?.assigned);
+
+    const tasksPayload = [];
+    const notesPayload = [];
+
+    // --- CACHE TO PREVENT API RATE LIMITS ---
+    const clientCache = new Map();
+
+    async function getClientId(assignedValue) {
+      if (!assignedValue) return null;
+      if (clientCache.has(assignedValue)) {
+        return clientCache.get(assignedValue); // Return instantly if already searched
+      }
+
+      const client = await searchCustomObjectInHubSpotBasedonCustomeField(
+        "2-171843307",
+        "collection_id",
+        assignedValue
+      );
+
+      const clientId = client && client[0]?.id ? client[0].id : null;
+      if (clientId) {
+        clientCache.set(assignedValue, clientId); // Save for the next record
+      }
+      return clientId;
+    }
+
+    // --- Build Task Payloads ---
+    for (const task of tasks) {
+      try {
+        const clientId = await getClientId(task.assigned);
+
+        if (clientId) {
+          const payload = buildHubSpotTaskPayloadBatch(task, clientId);
+          tasksPayload.push(payload);
+        }
+      } catch (error) {
+        logger.error(`Error creating task payload ${task.id || "unknown"}`, {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.config?.method, // Fixed duplicate
+          url: error?.config?.url,
+          message: error.message,
+        });
+      }
+    }
+
+    // --- Build Note Payloads ---
+    for (const note of notes) {
+      try {
+        const clientId = await getClientId(note.assigned);
+
+        if (clientId) {
+          const payload = buildHubSpotActivityPayloadBatch(note, clientId);
+          notesPayload.push(payload);
+        }
+      } catch (error) {
+        logger.error(`Error creating note payload ${note.id || "unknown"}`, {
+          status: error?.status,
+          response: error.response?.data,
+          method: error?.config?.method, // Fixed duplicate
+          url: error?.config?.url,
+          message: error.message,
+        });
+      }
+    }
+
+    // --- Execute Batch Calls in Chunks of 100 ---
+    if (tasksPayload.length > 0) {
+      const taskChunks = chunkArray(tasksPayload, 100);
+      for (const [index, chunk] of taskChunks.entries()) {
+        logger.info(`Sending Task Batch ${index + 1} of ${taskChunks.length}`);
+        await makeBatchCall(chunk, "tasks");
+      }
+    }
+
+    if (notesPayload.length > 0) {
+      const noteChunks = chunkArray(notesPayload, 100);
+      for (const [index, chunk] of noteChunks.entries()) {
+        logger.info(`Sending Note Batch ${index + 1} of ${noteChunks.length}`);
+        await makeBatchCall(chunk, "notes");
+      }
+    }
+
+    console.timeEnd(timeLabel);
+  } catch (error) {
+    logger.error("Error fetching activity records", {
+      status: error?.status,
+      response: error.response?.data,
+      method: error?.config?.method,
+      url: error?.config?.url,
+      message: error.message,
+      stack: error?.stack || error,
+    });
+  }
+}
+
+export {
+  syncActivity,
+  processActivity,
+  syncActivityBatch,
+  syncActivityBatchwithChunks,
+};

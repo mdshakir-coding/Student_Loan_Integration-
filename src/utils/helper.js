@@ -3341,6 +3341,10 @@ function buildEmailPayload(data = {}) {
 //  payload Activity
 
 function buildHubSpotActivityPayload(data = {}) {
+  if (!data) {
+    logger.warn(`Record :${JSON.stringify} missing`);
+    return null;
+  }
   const lines = [];
 
   if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
@@ -3388,6 +3392,72 @@ function buildHubSpotActivityPayload(data = {}) {
       hs_note_body: lines.join("\n"),
       hs_timestamp: new Date().toISOString(), // ✅ REQUIRED
     },
+  };
+}
+function buildHubSpotActivityPayloadBatch(data = {}, clientId) {
+  const lines = [];
+
+  if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
+  if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
+  if (data?.fields_changed)
+    lines.push(`Fields Changed: ${data?.fields_changed}`);
+
+  if (data?.location) lines.push(`Location: ${data?.location}`);
+  if (data?.date_email_opened)
+    lines.push(`Email Opened: ${data?.date_email_opened}`);
+
+  if (data?.email_id) lines.push(`Email ID: ${data?.email_id}`);
+  if (data?.subject) lines.push(`Subject: ${data?.subject}`);
+
+  if (data?.field_from) lines.push(`From: ${data?.field_from}`);
+  if (data?.email_to) lines.push(`To: ${data?.email_to}`);
+  if (data?.cc) lines.push(`CC: ${data?.cc}`);
+  if (data?.bcc) lines.push(`BCC: ${data?.bcc}`);
+
+  if (data?.recurrence) lines.push(`Recurrence: ${data?.recurrence}`);
+  if (data?.all_day_event !== undefined)
+    lines.push(`All Day Event: ${data?.all_day_event}`);
+
+  if (data?.start_time) lines.push(`Start Time: ${data?.start_time}`);
+  if (data?.end_time) lines.push(`End Time: ${data?.end_time}`);
+
+  if (data?.priority) lines.push(`Priority: ${data?.priority}`);
+  if (data?.status) lines.push(`Status: ${data?.status}`);
+
+  if (data?.activity) lines.push(`Activity: ${data?.activity}`);
+  if (data?.description) lines.push(`Description: ${data?.description}`);
+
+  if (data?.assigned) lines.push(`Assigned: ${data?.assigned}`);
+
+  if (data?.created_date) lines.push(`Created Date: ${data?.created_date}`);
+  if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
+
+  if (data?.modified_date) lines.push(`Modified Date: ${data?.modified_date}`);
+  if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
+
+  if (data?.date) lines.push(`Date: ${data?.date}`);
+
+  return {
+    properties: {
+      hs_note_body: lines.join("\n"),
+      hs_timestamp: new Date().toISOString(), // ✅ REQUIRED
+    },
+
+    associations: clientId
+      ? [
+          {
+            to: {
+              id: clientId,
+            },
+            types: [
+              {
+                associationCategory: "USER_DEFINED",
+                associationTypeId: 26,
+              },
+            ],
+          },
+        ]
+      : [],
   };
 }
 
@@ -3523,6 +3593,84 @@ function buildHubSpotTaskPayload(data = {}) {
     },
   };
 }
+// 1. Map Status & Priority to HubSpot's accepted Enums
+// HubSpot task priorities: "LOW", "MEDIUM", "HIGH"
+const priorityMap = {
+  10006: "LOW",
+  10007: "MEDIUM",
+  10009: "HIGH",
+  // TODO: Add other source priority ID mappings if needed
+};
+
+// HubSpot task statuses: "NOT_STARTED", "IN_PROGRESS", "WAITING", "COMPLETED", "DEFERRED"
+const statusMap = {
+  10002: "NOT_STARTED",
+  10003: "IN_PROGRESS",
+  10004: "COMPLETED",
+  // TODO: Add other source status ID mappings if needed
+};
+function buildHubSpotTaskPayloadBatch(data = {}, clientId) {
+  if (!data || clientId) {
+    return null;
+  }
+  // 2. Build the Task Body (Description + Metadata block)
+  const bodyLines = [];
+
+  if (data?.description) {
+    bodyLines.push(data.description);
+    bodyLines.push("\n--- Source Details ---"); // Visual separator for the HubSpot UI
+  }
+  // Push relevant metadata that lacks a 1:1 HubSpot property
+
+  if (data?.collection_id)
+    bodyLines.push(`Collection ID: ${data.collection_id}`);
+  if (data?.site_id) bodyLines.push(`Site ID: ${data.site_id}`);
+  if (data?.fields_changed)
+    bodyLines.push(`Fields Changed: ${data.fields_changed}`);
+  if (data?.assigned) bodyLines.push(`Source Assignee ID: ${data.assigned}`);
+  if (data?.created_date)
+    bodyLines.push(`Source Created: ${data.created_date}`);
+  if (data?.modified_date)
+    bodyLines.push(`Source Modified: ${data.modified_date}`);
+
+  // 3. Construct the HubSpot Task Object
+  return {
+    properties: {
+      // If subject is blank, provide a fallback title so the task isn't nameless in HubSpot
+      hs_task_subject:
+        data?.subject ||
+        `Task Follow-up (ID: ${data?.collection_id || "Unknown"})`,
+
+      // Join the description and metadata into the rich text body
+      hs_task_body: bodyLines.join("\n"),
+
+      // Map the follow-up 'date' if it exists, otherwise fallback to current time
+      hs_timestamp: data?.date
+        ? new Date(data.date).toISOString()
+        : new Date().toISOString(),
+
+      hs_task_status: statusMap[data?.status] || "NOT_STARTED",
+      hs_task_priority: priorityMap[data?.priority] || "MEDIUM",
+      hs_task_type: "TODO",
+    },
+
+    associations: clientId
+      ? [
+          {
+            to: {
+              id: clientId,
+            },
+            types: [
+              {
+                associationCategory: "USER_DEFINED",
+                associationTypeId: 32,
+              },
+            ],
+          },
+        ]
+      : [],
+  };
+}
 
 function saveProgress(index) {
   fs.writeFileSync(progressFile, JSON.stringify({ index }), "utf-8");
@@ -3542,14 +3690,16 @@ function loadProgress() {
 }
 
 export {
+  buildHubSpotActivityPayloadBatch,
+  buildHubSpotTaskPayloadBatch,
   saveProgress,
   loadProgress,
-  buildHubSpotTaskPayload,
   buildOwnerMap,
   normalizeName,
   cleanProps,
   buildHubSpotInquirerPayload,
   buildHubSpotAffiliatePayload,
+  buildHubSpotTaskPayload,
   buildHubSpotActivityPayload,
   buildHubSpotInvoicePayload,
   buildHubSpotClientPayload,

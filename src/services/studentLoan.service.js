@@ -157,7 +157,7 @@ async function fetchActivityReords(perPage = 100) {
       );
 
       allRecords.push(...records);
-      // await syncActivity(allRecords, page);
+      // await syncActivity(allRecords);
 
       // stop if last page
       if (records.length < perPage) {

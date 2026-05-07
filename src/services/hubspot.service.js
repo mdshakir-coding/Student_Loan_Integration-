@@ -1226,7 +1226,43 @@ async function createTaskInHubSpot(payload) {
   }
 }
 
+async function makeBatchCall(payload, endpoint) {
+  // payload should be the array of task objects
+  if (!payload || !Array.isArray(payload) || !endpoint) return;
+
+  const url = `https://api.hubapi.com/crm/v3/objects/${endpoint}/batch/create`;
+
+  try {
+    const response = await hubspotExecutor(
+      () => {
+        // IMPORTANT: Added 'return' here so the executor can resolve the promise
+        return axios.post(
+          url,
+          { inputs: payload }, // Change 'payload' to 'inputs' to match HubSpot API
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      },
+      { name: `createBatch${endpoint}` } // Fixed typo 'namw'
+    );
+
+    return response?.data;
+  } catch (error) {
+    logger.error(`❌ Error in batch create for ${endpoint}:`, {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
+    return {};
+  }
+}
+
 export {
+  makeBatchCall,
   createTaskInHubSpot,
   createAffiliateInHubSpot,
   updateAffiliateInHubSpot,
