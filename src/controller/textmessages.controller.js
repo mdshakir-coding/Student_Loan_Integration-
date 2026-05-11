@@ -6,19 +6,24 @@ import {
 } from "../utils/testMessagesProgress.js";
 
 // import { fetchTextMessagesRecords } from "../service/studentLoan.service.js";
-import { buildTextMessagePayload } from "../utils/helper.js";
+import {
+  buildTextMessagePayload,
+  buildTextMessagePayloadBatch,
+} from "../utils/helper.js";
 
 import { searchCustomObjectInHubSpotBasedonCustomeField } from "../services/studentLoan.service.js";
 import {
   updateTextMessageInHubSpot,
   createTextMessageInHubSpot,
   searchTextMessageInHubSpot,
+  makeBatchCall,
 } from "../services/hubspot.service.js";
 import { getHubspotClient } from "../configs/hubspot.config.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
+import { buildLookupMap } from "./invoices.controller.js";
 // Recreate __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,40 +33,70 @@ const clientObject = "2-171843307";
 const affiliateObject = "2-171942530";
 const invoiceObject = "0-3";
 
+// Helper function for the 100-limit rule
+function chunkArray(array, size = 100) {
+  const chunked = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
 // New TextMessage controller
-async function syncTextMessages(records) {
+async function syncTextMessages(sourceData) {
   try {
-    // fetch all text message records
-    // const records = await fetchTextMessagesRecords();
-    logger.info(`TextMessages Records: ${JSON.stringify(records.length)}`);
-    const length = records.length;
+    const records = sourceData.filter((item) => item && item?.external_number);
 
-    let startIndex = await loadProgress();
+    const notesPayload = [];
 
-    for (let i = startIndex; i < records.length; i++) {
+    // 🚀 Extract Unique Values
+    const uniqueClients = [
+      ...new Set(records.map((r) => r.external_number).filter(Boolean)),
+    ];
+    logger.info(`Pre-fetching IDs for ${uniqueClients.length} Clients...`);
+    // 🚀 Pre-fetch Client IDs in bulk
+    const clientMap = await buildLookupMap(
+      "2-171843307",
+      uniqueClients,
+      "phone_1"
+    );
+
+    logger.info(
+      `Client : ${JSON.stringify(clientMap, null, 2)} |\n
+       ${JSON.stringify(Object.fromEntries(clientMap))}`
+    );
+
+    // --- Build Note Payloads ---
+    for (const note of records) {
       try {
-        const record = records[i];
+        // Instant lookup from the Map
+        const clientId = clientMap.get(note.external_number);
 
-        await processSIngleTextMessage(record, i, length);
-
-        // Save progress after success
+        if (clientId) {
+          const payload = buildTextMessagePayloadBatch(note, clientId);
+          notesPayload.push(payload);
+        }
       } catch (error) {
-        logger.error("Error processing TextMessage index", {
-          status: error?.status,
-          response: error.response?.data,
-          method: error?.method,
-          url: error?.config?.url,
+        logger.error(`Error creating note payload ${note.id || "unknown"}`, {
           message: error.message,
-          stack: error?.stack || error,
         });
+      }
+    }
 
-        // Save progress to resume later
-        // saveProgress(i);
-      } finally {
-        await saveProgress(i + 1);
-        await saveFailedCollectionId(
-          "textMessageCollectionId",
-          records[i].collection_id
+    // 🚀 Strip out any null/undefined payloads
+    const cleanNotesPayload = notesPayload.filter(Boolean);
+
+    logger.info(`Payload : ${JSON.stringify(cleanNotesPayload, null, 2)}`);
+
+    if (cleanNotesPayload.length > 0) {
+      const noteChunks = chunkArray(cleanNotesPayload, 100);
+      for (const [index, chunk] of noteChunks.entries()) {
+        logger.info(`Sending Note Batch ${index + 1} of ${noteChunks.length}`);
+        const res = await makeBatchCall(chunk, "notes");
+        logger.info(
+          `Note Payload ${JSON.stringify(
+            chunk
+          )}\n and Response ${JSON.stringify(res)}`
         );
       }
     }

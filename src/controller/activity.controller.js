@@ -22,6 +22,7 @@ import {
 } from "../services/hubspot.service.js";
 
 import { getHubspotClient } from "../configs/hubspot.config.js";
+import { buildLookupMap } from "./invoices.controller.js";
 
 const inquirerObject = "0-1";
 const clientObject = "2-171843307";
@@ -390,6 +391,29 @@ async function syncActivityBatchwithChunks(records) {
   try {
     if (!records || records.length === 0) return;
 
+    // Optional: Add the timeLabel definition so your console.timeEnd works
+    const timeLabel = `ActivityBatchProcessing_${Date.now()}`;
+    console.time(timeLabel);
+
+    // 🚀 Extract Unique Values
+    const uniqueClients = [
+      ...new Set(records.map((r) => r.assigned).filter(Boolean)),
+    ];
+
+    logger.info(`Pre-fetching IDs for ${uniqueClients.length} Clients...`);
+    // 🚀 Pre-fetch Client IDs in bulk
+    const clientMap = await buildLookupMap(
+      "2-171843307",
+      uniqueClients,
+      "collection_id"
+    );
+
+    logger.info(
+      `Client : ${clientMap.size} | ${JSON.stringify(
+        Object.fromEntries(clientMap)
+      )}`
+    );
+
     // Separate tasks and notes
     const tasks = records.filter((rec) => rec && rec?.date && rec?.assigned);
     const notes = records.filter((rec) => rec && !rec?.date && rec?.assigned);
@@ -397,32 +421,11 @@ async function syncActivityBatchwithChunks(records) {
     const tasksPayload = [];
     const notesPayload = [];
 
-    // --- CACHE TO PREVENT API RATE LIMITS ---
-    const clientCache = new Map();
-
-    async function getClientId(assignedValue) {
-      if (!assignedValue) return null;
-      if (clientCache.has(assignedValue)) {
-        return clientCache.get(assignedValue); // Return instantly if already searched
-      }
-
-      const client = await searchCustomObjectInHubSpotBasedonCustomeField(
-        "2-171843307",
-        "collection_id",
-        assignedValue
-      );
-
-      const clientId = client && client[0]?.id ? client[0].id : null;
-      if (clientId) {
-        clientCache.set(assignedValue, clientId); // Save for the next record
-      }
-      return clientId;
-    }
-
     // --- Build Task Payloads ---
     for (const task of tasks) {
       try {
-        const clientId = await getClientId(task.assigned);
+        // Instant lookup from the Map
+        const clientId = clientMap.get(task.assigned);
 
         if (clientId) {
           const payload = buildHubSpotTaskPayloadBatch(task, clientId);
@@ -430,10 +433,6 @@ async function syncActivityBatchwithChunks(records) {
         }
       } catch (error) {
         logger.error(`Error creating task payload ${task.id || "unknown"}`, {
-          status: error?.status,
-          response: error.response?.data,
-          method: error?.config?.method, // Fixed duplicate
-          url: error?.config?.url,
           message: error.message,
         });
       }
@@ -442,7 +441,8 @@ async function syncActivityBatchwithChunks(records) {
     // --- Build Note Payloads ---
     for (const note of notes) {
       try {
-        const clientId = await getClientId(note.assigned);
+        // Instant lookup from the Map
+        const clientId = clientMap.get(note.assigned);
 
         if (clientId) {
           const payload = buildHubSpotActivityPayloadBatch(note, clientId);
@@ -450,32 +450,51 @@ async function syncActivityBatchwithChunks(records) {
         }
       } catch (error) {
         logger.error(`Error creating note payload ${note.id || "unknown"}`, {
-          status: error?.status,
-          response: error.response?.data,
-          method: error?.config?.method, // Fixed duplicate
-          url: error?.config?.url,
           message: error.message,
         });
       }
     }
 
+    // 🚀 Strip out any null/undefined payloads
+    const cleanTasksPayload = tasksPayload.filter(Boolean);
+
+    logger.info(`cleanTasksPayload length: ${cleanTasksPayload.length}`);
+    logger.info(
+      `cleanTasksPayload content: ${JSON.stringify(cleanTasksPayload)}`
+    );
+
     // --- Execute Batch Calls in Chunks of 100 ---
-    if (tasksPayload.length > 0) {
-      const taskChunks = chunkArray(tasksPayload, 100);
+    if (cleanTasksPayload.length > 0) {
+      const taskChunks = chunkArray(cleanTasksPayload, 100);
       for (const [index, chunk] of taskChunks.entries()) {
         logger.info(`Sending Task Batch ${index + 1} of ${taskChunks.length}`);
-        await makeBatchCall(chunk, "tasks");
+        const res = await makeBatchCall(chunk, "tasks");
+
+        logger.info(
+          `Task Payload ${JSON.stringify(chunk)} and Response ${JSON.stringify(
+            res
+          )}`
+        );
       }
     }
 
-    if (notesPayload.length > 0) {
-      const noteChunks = chunkArray(notesPayload, 100);
+    // 🚀 Strip out any null/undefined payloads
+    const cleanNotesPayload = notesPayload.filter(Boolean);
+
+    if (cleanNotesPayload.length > 0) {
+      const noteChunks = chunkArray(cleanNotesPayload, 100);
       for (const [index, chunk] of noteChunks.entries()) {
         logger.info(`Sending Note Batch ${index + 1} of ${noteChunks.length}`);
-        await makeBatchCall(chunk, "notes");
+        const res = await makeBatchCall(chunk, "notes");
+        logger.info(
+          `Note Payload ${JSON.stringify(chunk)} and Response ${JSON.stringify(
+            res
+          )}`
+        );
       }
     }
 
+    // Successfully end the timer
     console.timeEnd(timeLabel);
   } catch (error) {
     logger.error("Error fetching activity records", {
@@ -491,7 +510,7 @@ async function syncActivityBatchwithChunks(records) {
 
 export {
   syncActivity,
-  processActivity,
+  // processActivity,
   syncActivityBatch,
   syncActivityBatchwithChunks,
 };

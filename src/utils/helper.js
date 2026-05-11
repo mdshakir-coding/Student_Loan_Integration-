@@ -3689,7 +3689,231 @@ function loadProgress() {
   return 0;
 }
 
+function buildHubSpotInvoicePayloadNew(
+  data = {},
+  clientId,
+  affiliateId,
+  inquirerId
+) {
+  const properties = cleanProps({
+    clients_tutor__only_sel: data?.clients_tutor__only_sel1 || null,
+    collection_id: data?.collection_id || null,
+    site_id: data?.site_id || null,
+    fields_changed: data?.fields_changed || null,
+    dont_use_setter_if_25_: data?.dont_use_setter_if_25_ || null,
+    hours_spent: data?.hours_spent || null,
+    created_by: data?.created_by || null,
+    project_description: data?.project_description || null,
+    amount_of_expense_receip: data?.amount_of_expense_receip || null,
+    expense_description: data?.expense_description || null,
+    review_bonuses__processi: data?.review_bonuses__processi || null,
+    marketing_bonuses: data?.marketing_bonuses || null,
+    advanced_planning_activit: data?.advanced_planning_activit || null,
+    affiliate_bonus: data?.affiliate_bonus || null,
+    related_client: data?.related_client || null,
+    no_sale_bonus_to_setter_: data?.no_sale_bonus_to_setter_ || null,
+    hourly_rate: data?.hourly_rate || null,
+    setter_name: data?.setter_name || null,
+    sale_financing___recurri: data?.sale_financing___recurri || null,
+    special_details: data?.special_details || null,
+    amount_charged_today: data?.amount_charged_today || null,
+    commission_: data?.commission_ || null,
+    sales_commission: data?.sales_commission || null,
+    clients_tutor__only_sel: data?.clients_tutor__only_sel || null,
+    related_affiliate: data?.related_affiliate || null,
+    additional_work_completed: data?.additional_work_completed || null,
+    payment_type: data?.payment_type || null,
+    date_reconciled: data?.date_reconciled || null,
+    related_inquirer: data?.related_inquirer || null,
+    related_client_processin: data?.related_client_processin || null,
+    special_notes: data?.special_notes || null,
+    related_client_recertifc: data?.related_client_recertifc || null,
+    aar_sale_amount: data?.aar_sale_amount || null,
+    payment_arrangementtrade: data?.payment_arrangementtrade || null,
+    modified_date: data?.modified_date || null,
+    modified_by: data?.modified_by || null,
+    tutor_sale_amount: data?.tutor_sale_amount || null,
+    payment_arrangement: data?.payment_arrangement || null,
+    dont_use__setter_if_50_: data?.dont_use__setter_if_50_ || null,
+    special_arrangements_deta: data?.special_arrangements_deta || null,
+    created_date: data?.created_date || null,
+    date_of_activity: data?.date_of_activity || null,
+    contractor_name: data?.contractor_name || null,
+    sales_category_report_cc: data?.sales_category_report_cc || null,
+    invoice_category: data?.invoice_category || null,
+    total_sale_amount: data?.total_sale_amount || null,
+    total_invoice_amount: data?.total_invoice_amount || null,
+    first_name: data?.first_name,
+    last_name: data?.last_name || null,
+    aar_activity_commission: data?.aar_activity_commission || null,
+    processing_activity: data?.processing_activity || null,
+    clients_tutor__only_sel0: data?.clients_tutor__only_sel0 || null,
+  });
+
+  if (!Object.keys(properties).length) {
+    throw new Error("❌ Invoice payload is empty");
+  }
+
+  const payload = { properties };
+  const associations = [];
+
+  // Add Client Association
+  if (clientId) {
+    associations.push({
+      to: { id: clientId },
+      types: [{ associationCategory: "USER_DEFINED", associationTypeId: 79 }],
+    });
+  }
+
+  // Add Affiliate Association
+  // if (affiliateId) {
+  //   associations.push({
+  //     to: { id: affiliateId },
+  //     types: [{ associationCategory: "USER_DEFINED", associationTypeId: 72 }],
+  //   });
+  // }
+
+  // Add Inquirer Association
+  if (inquirerId) {
+    associations.push({
+      to: { id: inquirerId },
+      // Assuming 3 is a HubSpot-defined association based on your previous code
+      types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 3 }],
+    });
+  }
+
+  // Attach associations to payload if any exist
+  if (associations.length > 0) {
+    payload.associations = associations;
+  }
+
+  return payload;
+}
+
+// function buildTextMessagePayloadBatch(data = {}, clientId) {
+//   const lines = [];
+
+//   if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
+//   if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
+//   if (data?.fields_changed)
+//     lines.push(`Fields Changed: ${data?.fields_changed}`);
+
+//   if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
+//   if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
+//   if (data?.modified_date) lines.push(`Modified Date: ${data?.modified_date}`);
+//   if (data?.created_date) lines.push(`Created Date: ${data?.created_date}`);
+
+//   if (data?.read_status) lines.push(`Read Status: ${data?.read_status}`);
+//   if (data?.status) lines.push(`Status: ${data?.status}`);
+
+//   if (data?.message) lines.push(`Message: ${data?.message}`);
+
+//   if (data?.text_number) lines.push(`Text Number: ${data?.text_number}`);
+//   if (data?.external_number)
+//     lines.push(`External Number: ${data?.external_number}`);
+
+//   if (data?.external_id) lines.push(`External ID: ${data?.external_id}`);
+
+//   if (data?.client) lines.push(`Client: ${data?.client}`);
+
+//   if (data?.group_text) lines.push(`Group Text: ${data?.group_text}`);
+//   if (data?.group_text_parent)
+//     lines.push(`Group Text Parent: ${data?.group_text_parent}`);
+
+//   if (lines.length === 0) {
+//     throw new Error("❌ Text message payload is empty");
+//   }
+
+//   const properties = cleanProps({
+//     properties: {
+//       hs_note_body: lines.join("\n"),
+//       hs_timestamp: new Date().toISOString(),
+//     },
+//   });
+
+//   const payload = properties;
+//   const associations = [];
+
+//   // Add Client Association
+//   if (clientId) {
+//     associations.push({
+//       to: { id: clientId },
+//       types: [{ associationCategory: "USER_DEFINED", associationTypeId: 26 }],
+//     });
+//   }
+
+//   // Attach associations to payload if any exist
+//   if (associations.length > 0) {
+//     payload.associations = associations;
+//   }
+
+//   return payload;
+// }
+
+function buildTextMessagePayloadBatch(data = {}, clientId) {
+  const lines = [];
+
+  if (data?.collection_id) lines.push(`Collection ID: ${data?.collection_id}`);
+  if (data?.site_id) lines.push(`Site ID: ${data?.site_id}`);
+  if (data?.fields_changed)
+    lines.push(`Fields Changed: ${data?.fields_changed}`);
+
+  if (data?.created_by) lines.push(`Created By: ${data?.created_by}`);
+  if (data?.modified_by) lines.push(`Modified By: ${data?.modified_by}`);
+  if (data?.modified_date) lines.push(`Modified Date: ${data?.modified_date}`);
+  if (data?.created_date) lines.push(`Created Date: ${data?.created_date}`);
+
+  if (data?.read_status) lines.push(`Read Status: ${data?.read_status}`);
+  if (data?.status) lines.push(`Status: ${data?.status}`);
+
+  if (data?.message) lines.push(`Message: ${data?.message}`);
+
+  if (data?.text_number) lines.push(`Text Number: ${data?.text_number}`);
+  if (data?.external_number)
+    lines.push(`External Number: ${data?.external_number}`);
+
+  if (data?.external_id) lines.push(`External ID: ${data?.external_id}`);
+
+  if (data?.client) lines.push(`Client: ${data?.client}`);
+
+  if (data?.group_text) lines.push(`Group Text: ${data?.group_text}`);
+  if (data?.group_text_parent)
+    lines.push(`Group Text Parent: ${data?.group_text_parent}`);
+
+  if (lines.length === 0) {
+    throw new Error("❌ Text message payload is empty");
+  }
+
+  // ✅ Build the raw object directly instead of passing the whole structure through cleanProps.
+  // If cleanProps is strictly needed to remove undefined values, apply it ONLY to the inner properties object,
+  // and ensure cleanProps does not use JSON.stringify().
+  const payload = {
+    properties: {
+      hs_note_body: lines.join("\n"),
+      hs_timestamp: new Date().toISOString(),
+    },
+  };
+
+  const associations = [];
+
+  // Add Client Association
+  if (clientId) {
+    associations.push({
+      to: { id: clientId },
+      types: [{ associationCategory: "USER_DEFINED", associationTypeId: 26 }],
+    });
+  }
+
+  // Attach associations to payload if any exist
+  if (associations.length > 0) {
+    payload.associations = associations;
+  }
+
+  return payload;
+}
 export {
+  buildTextMessagePayloadBatch,
+  buildHubSpotInvoicePayloadNew,
   buildHubSpotActivityPayloadBatch,
   buildHubSpotTaskPayloadBatch,
   saveProgress,
